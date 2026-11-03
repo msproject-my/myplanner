@@ -252,9 +252,13 @@
               <h3 class="font-extrabold text-slate-900 text-base md:text-lg mt-0.5">Takwim Akademik Politeknik & Kolej Komuniti</h3>
               <p class="text-xs text-slate-500">Sesi I & Sesi II: 2026/2027 (Program Diploma dan Sijil)</p>
             </div>
-            <div class="flex items-center gap-1.5 self-start sm:self-auto">
+            <div class="flex items-center gap-1.5 flex-wrap self-start sm:self-auto">
               <button id="btnPoliSesi2" class="px-3 py-1.5 text-xs font-bold bg-indigo-600 text-white rounded-xl shadow-xs">Sesi II: 2026/2027</button>
               <button id="btnPoliSesi1" class="px-3 py-1.5 text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 rounded-xl transition">Sesi I: 2026/2027</button>
+              <button id="btnManagePoliModal" class="px-3 py-1.5 text-xs font-bold bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-xs flex items-center gap-1 transition">
+                <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                <span>Urus / Kemaskini Takwim</span>
+              </button>
             </div>
           </div>
 
@@ -398,7 +402,6 @@
               <option value="kursus">🎓 Kursus / Bengkel / Latihan</option>
               <option value="tugasan">📋 Tugasan / Deadline Projek</option>
               <option value="peribadi">👤 Urusan Peribadi / Temu Janji</option>
-              <option value="peribadi">🗂️ Pengumuman / Lain-lain</option>
             </select>
           </div>
 
@@ -445,6 +448,147 @@
           </div>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal: Pengurus Takwim Poli Fleksibel (Editor & Import Data) -->
+  <div id="managePoliModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-3xl w-full max-h-[92vh] flex flex-col overflow-hidden animate-in fade-in duration-200">
+      
+      <!-- Header -->
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/80">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+            <i data-lucide="calendar-cog" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">Pengurus Fleksibel Takwim Poli</h3>
+            <p class="text-[11px] text-slate-500">Tambah minggu, ubah tarikh, atau import takwim sesi baharu</p>
+          </div>
+        </div>
+        <button id="btnClosePoliModal" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Content Body -->
+      <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs">
+        
+        <!-- Tab Sub-Navigasi (Tambah/Edit Baris ATAU Import/Eksport JSON) -->
+        <div class="flex items-center border-b border-slate-200 gap-2 pb-2">
+          <button id="tabPoliEditor" class="px-3 py-1.5 font-bold rounded-lg bg-indigo-50 text-indigo-700">Editor Baris Takwim</button>
+          <button id="tabPoliJSON" class="px-3 py-1.5 font-semibold text-slate-500 hover:text-slate-800 rounded-lg">Import / Backup JSON</button>
+        </div>
+
+        <!-- Bahagian 1: Form Tambah/Kemaskini Baris Takwim -->
+        <div id="sectionPoliForm" class="space-y-4">
+          <form id="poliRowForm" class="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3">
+            <h4 class="font-bold text-slate-800 text-xs flex items-center gap-1.5">
+              <i data-lucide="plus-circle" class="w-4 h-4 text-indigo-600"></i>
+              <span>Tambah / Kemaskini Minggu Takwim</span>
+            </h4>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Sesi *</label>
+                <select id="formPoliSesiTarget" class="w-full p-2 bg-white rounded-xl border border-slate-200 font-medium">
+                  <option value="sesi2">Sesi II: 2026/2027</option>
+                  <option value="sesi1">Sesi I: 2026/2027</option>
+                </select>
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Kod Minggu (cth: M1, M15, Cuti) *</label>
+                <input type="text" id="formPoliWeek" required placeholder="cth: M1" class="w-full p-2 bg-white rounded-xl border border-slate-200">
+              </div>
+              <div>
+                <label class="block font-bold text-slate-700 mb-1">Kategori Takwim *</label>
+                <select id="formPoliTagType" class="w-full p-2 bg-white rounded-xl border border-slate-200 font-medium">
+                  <option value="kuliah">Perkuliahan</option>
+                  <option value="exam">Peperiksaan / Pentaksiran</option>
+                  <option value="ulangkaji">Minggu Ulang Kaji</option>
+                  <option value="cuti_sem">Cuti Pertengahan / Akhir Sem</option>
+                  <option value="cuti_perayaan">Cuti Perayaan</option>
+                  <option value="suaikenal">Suai Kenal / Pendaftaran</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div class="p-2.5 bg-white rounded-xl border border-slate-200/90 space-y-1.5">
+                <span class="font-bold text-slate-700 block">Tarikh Institusi B (Selangor, Perak, dll)</span>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <span class="text-[10px] text-slate-400">Mula:</span>
+                    <input type="date" id="formPoliStartB" required class="w-full p-1.5 bg-slate-50 rounded-lg border border-slate-200">
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-400">Tamat:</span>
+                    <input type="date" id="formPoliEndB" required class="w-full p-1.5 bg-slate-50 rounded-lg border border-slate-200">
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-2.5 bg-white rounded-xl border border-slate-200/90 space-y-1.5">
+                <span class="font-bold text-slate-700 block">Tarikh Institusi A (Kedah, Kelantan, Terengganu)</span>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <span class="text-[10px] text-slate-400">Mula:</span>
+                    <input type="date" id="formPoliStartA" required class="w-full p-1.5 bg-slate-50 rounded-lg border border-slate-200">
+                  </div>
+                  <div>
+                    <span class="text-[10px] text-slate-400">Tamat:</span>
+                    <input type="date" id="formPoliEndA" required class="w-full p-1.5 bg-slate-50 rounded-lg border border-slate-200">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Nama Aktiviti / Butiran *</label>
+              <input type="text" id="formPoliActivity" required placeholder="cth: Minggu Perkuliahan (Kuliah 15) / Bengkel Projek" class="w-full p-2 bg-white rounded-xl border border-slate-200">
+            </div>
+
+            <div>
+              <label class="block font-bold text-slate-700 mb-1">Catatan Tambahan / Cuti Terlibat</label>
+              <input type="text" id="formPoliNotes" placeholder="cth: Cuti Peristiwa / Penyerahan Markah" class="w-full p-2 bg-white rounded-xl border border-slate-200">
+            </div>
+
+            <div class="flex items-center justify-end gap-2 pt-2">
+              <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl shadow-xs transition">
+                Simpan Baris Takwim
+              </button>
+            </div>
+          </form>
+
+          <!-- Tindakan Pantas Reset -->
+          <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <span class="text-slate-600">Ingin pulihkan jadual kembali kepada data rasmi lalai?</span>
+            <button id="btnResetPoliDefault" type="button" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl border border-rose-200 transition">
+              Reset Ke Asal
+            </button>
+          </div>
+        </div>
+
+        <!-- Bahagian 2: Import & Eksport JSON -->
+        <div id="sectionPoliJSON" class="hidden space-y-3">
+          <p class="text-slate-600">
+            Anda boleh menyalin kod takwim di bawah untuk disimpan sebagai sandaran atau menampal (*paste*) data sesi baru untuk dikemaskini sekaligus:
+          </p>
+          <textarea id="poliJSONTextarea" rows="12" class="w-full p-3 font-mono text-[11px] bg-slate-900 text-emerald-400 rounded-2xl border border-slate-700 focus:outline-none"></textarea>
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <button id="btnDownloadPoliJSON" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition flex items-center gap-1.5">
+              <i data-lucide="download" class="w-3.5 h-3.5"></i>
+              <span>Muat Turun Fail JSON</span>
+            </button>
+            <button id="btnApplyPoliJSON" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl transition shadow-xs flex items-center gap-1.5">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i>
+              <span>Terapkan / Simpan Data JSON</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
@@ -634,7 +778,7 @@
        1.1 DATA TAKWIM AKADEMIK POLITEKNIK & KOLEJ KOMUNITI (KPT JPPKK)
        Berdasarkan Dokumen Rasmi Sesi 2026/2027
        ===================================================================== */
-    const TAKWIM_POLI_SESI_2 = [
+    const DEFAULT_TAKWIM_POLI_SESI_2 = [
       {
         week: "M0",
         label: "Minggu 0",
@@ -857,7 +1001,7 @@
       }
     ];
 
-    const TAKWIM_POLI_SESI_1 = [
+    const DEFAULT_TAKWIM_POLI_SESI_1 = [
       {
         week: "M0", label: "Minggu 0",
         startDateA: "2026-06-21", endDateA: "2026-06-27",
@@ -909,11 +1053,16 @@
       }
     ];
 
+    let TAKWIM_POLI_SESI_1 = [];
+    let TAKWIM_POLI_SESI_2 = [];
+
     /* =====================================================================
        2. LOCALSTORAGE & DEFAULT DATA
        ===================================================================== */
     const STORAGE_KEY_EVENTS = 'my_planner_events_v2';
     const STORAGE_KEY_LOGS = 'my_planner_logs_v2';
+    const STORAGE_KEY_POLI_S1 = 'my_planner_poli_s1_v1';
+    const STORAGE_KEY_POLI_S2 = 'my_planner_poli_s2_v1';
 
     const DEFAULT_EVENTS = [
       {
@@ -950,10 +1099,18 @@
         dailyLogs = savedLogs ? JSON.parse(savedLogs) : {
           "2026-11-03": "Hari pertama menyusun perancangan menggunakan sistem kalendar sendiri."
         };
+
+        const savedPoliS1 = localStorage.getItem(STORAGE_KEY_POLI_S1);
+        TAKWIM_POLI_SESI_1 = savedPoliS1 ? JSON.parse(savedPoliS1) : JSON.parse(JSON.stringify(DEFAULT_TAKWIM_POLI_SESI_1));
+
+        const savedPoliS2 = localStorage.getItem(STORAGE_KEY_POLI_S2);
+        TAKWIM_POLI_SESI_2 = savedPoliS2 ? JSON.parse(savedPoliS2) : JSON.parse(JSON.stringify(DEFAULT_TAKWIM_POLI_SESI_2));
       } catch (e) {
         console.error("Gagal membaca simpanan", e);
         events = DEFAULT_EVENTS;
         dailyLogs = {};
+        TAKWIM_POLI_SESI_1 = JSON.parse(JSON.stringify(DEFAULT_TAKWIM_POLI_SESI_1));
+        TAKWIM_POLI_SESI_2 = JSON.parse(JSON.stringify(DEFAULT_TAKWIM_POLI_SESI_2));
       }
     }
 
@@ -963,6 +1120,11 @@
 
     function saveLocalLogs() {
       localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(dailyLogs));
+    }
+
+    function saveLocalPoliData() {
+      localStorage.setItem(STORAGE_KEY_POLI_S1, JSON.stringify(TAKWIM_POLI_SESI_1));
+      localStorage.setItem(STORAGE_KEY_POLI_S2, JSON.stringify(TAKWIM_POLI_SESI_2));
     }
 
     /* =====================================================================
@@ -1583,7 +1745,7 @@
         const isCurrentRow = (selectedPoliGroup === 'A' && todayTime >= startA && todayTime <= endA) ||
                              (selectedPoliGroup === 'B' && todayTime >= startB && todayTime <= endB);
 
-        row.className = `${item.bgColor} hover:bg-indigo-50/60 transition ${isCurrentRow ? 'ring-2 ring-indigo-600 font-medium' : ''}`;
+        row.className = `${item.bgColor || 'bg-white'} hover:bg-indigo-50/60 transition ${isCurrentRow ? 'ring-2 ring-indigo-600 font-medium' : ''}`;
         
         let formatPeriodA = `${formatShortDate(item.startDateA)} - ${formatShortDate(item.endDateA)}`;
         let formatPeriodB = `${formatShortDate(item.startDateB)} - ${formatShortDate(item.endDateB)}`;
@@ -1618,9 +1780,14 @@
             ${item.notes || '-'}
           </td>
           <td class="py-2.5 px-2 text-center">
-            <button onclick="jumpToDate('${selectedPoliGroup === 'A' ? item.startDateA : item.startDateB}')" class="px-2 py-1 text-[10px] font-bold bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-lg transition shadow-2xs">
-              Lihat
-            </button>
+            <div class="flex items-center justify-center gap-1">
+              <button onclick="jumpToDate('${selectedPoliGroup === 'A' ? item.startDateA : item.startDateB}')" class="px-2 py-1 text-[10px] font-bold bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-lg transition shadow-2xs">
+                Lihat
+              </button>
+              <button onclick="deletePoliRow('${item.week}', '${item.startDateB}')" class="p-1 text-slate-400 hover:text-rose-600 rounded" title="Padam Baris">
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
           </td>
         `;
         tableBody.appendChild(row);
@@ -1639,6 +1806,17 @@
       viewMonth = target.getMonth();
       setView('month');
       showToast(`Menuju ke tarikh: ${getMalayFormattedDate(dateStr)}`);
+    };
+
+    window.deletePoliRow = function(week, startB) {
+      const activeList = (currentTakwimSesi === 'sesi1') ? TAKWIM_POLI_SESI_1 : TAKWIM_POLI_SESI_2;
+      const idx = activeList.findIndex(item => item.week === week && item.startDateB === startB);
+      if (idx !== -1) {
+        activeList.splice(idx, 1);
+        saveLocalPoliData();
+        renderApp();
+        showToast(`Baris minggu ${week} telah dipadam`);
+      }
     };
 
     window.editEvent = function(id) {
@@ -1808,6 +1986,163 @@
       renderApp();
       showToast(`Institusi ditukar kepada Kumpulan ${selectedPoliGroup}`);
     });
+
+    // MODAL PENGURUS TAKWIM POLI
+    const btnManagePoliModal = document.getElementById('btnManagePoliModal');
+    const managePoliModal = document.getElementById('managePoliModal');
+    const btnClosePoliModal = document.getElementById('btnClosePoliModal');
+    const tabPoliEditor = document.getElementById('tabPoliEditor');
+    const tabPoliJSON = document.getElementById('tabPoliJSON');
+    const sectionPoliForm = document.getElementById('sectionPoliForm');
+    const sectionPoliJSON = document.getElementById('sectionPoliJSON');
+    const poliJSONTextarea = document.getElementById('poliJSONTextarea');
+
+    if (btnManagePoliModal) {
+      btnManagePoliModal.addEventListener('click', () => {
+        managePoliModal.classList.remove('hidden');
+        updatePoliJSONDisplay();
+        lucide.createIcons();
+      });
+    }
+
+    if (btnClosePoliModal) {
+      btnClosePoliModal.addEventListener('click', () => {
+        managePoliModal.classList.add('hidden');
+      });
+    }
+
+    function updatePoliJSONDisplay() {
+      const fullTakwimData = {
+        sesi1: TAKWIM_POLI_SESI_1,
+        sesi2: TAKWIM_POLI_SESI_2
+      };
+      if (poliJSONTextarea) {
+        poliJSONTextarea.value = JSON.stringify(fullTakwimData, null, 2);
+      }
+    }
+
+    if (tabPoliEditor && tabPoliJSON) {
+      tabPoliEditor.addEventListener('click', () => {
+        tabPoliEditor.className = 'px-3 py-1.5 font-bold rounded-lg bg-indigo-50 text-indigo-700';
+        tabPoliJSON.className = 'px-3 py-1.5 font-semibold text-slate-500 hover:text-slate-800 rounded-lg';
+        sectionPoliForm.classList.remove('hidden');
+        sectionPoliJSON.classList.add('hidden');
+      });
+
+      tabPoliJSON.addEventListener('click', () => {
+        tabPoliJSON.className = 'px-3 py-1.5 font-bold rounded-lg bg-indigo-50 text-indigo-700';
+        tabPoliEditor.className = 'px-3 py-1.5 font-semibold text-slate-500 hover:text-slate-800 rounded-lg';
+        sectionPoliJSON.classList.remove('hidden');
+        sectionPoliForm.classList.add('hidden');
+        updatePoliJSONDisplay();
+      });
+    }
+
+    // Submit Baris Takwim Baru/Kemaskini
+    const poliRowForm = document.getElementById('poliRowForm');
+    if (poliRowForm) {
+      poliRowForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const sesi = document.getElementById('formPoliSesiTarget').value;
+        const week = document.getElementById('formPoliWeek').value.trim();
+        const tagType = document.getElementById('formPoliTagType').value;
+        const startDateB = document.getElementById('formPoliStartB').value;
+        const endDateB = document.getElementById('formPoliEndB').value;
+        const startDateA = document.getElementById('formPoliStartA').value;
+        const endDateA = document.getElementById('formPoliEndA').value;
+        const activity = document.getElementById('formPoliActivity').value.trim();
+        const notes = document.getElementById('formPoliNotes').value.trim();
+
+        let bgColor = "bg-white";
+        if (tagType === 'exam') bgColor = "bg-emerald-100/50";
+        else if (tagType === 'cuti_sem' || tagType === 'cuti_perayaan') bgColor = "bg-amber-100/50";
+        else if (tagType === 'ulangkaji') bgColor = "bg-rose-100/50";
+        else if (tagType === 'suaikenal') bgColor = "bg-blue-50/60";
+
+        const newRow = {
+          week,
+          label: week,
+          startDateA,
+          endDateA,
+          startDateB,
+          endDateB,
+          activity,
+          tagType,
+          notes,
+          bgColor
+        };
+
+        const targetList = (sesi === 'sesi1') ? TAKWIM_POLI_SESI_1 : TAKWIM_POLI_SESI_2;
+        // Kemaskini jika ada padanan minggu & tarikh
+        const existingIdx = targetList.findIndex(item => item.week === week);
+        if (existingIdx !== -1) {
+          targetList[existingIdx] = newRow;
+        } else {
+          targetList.push(newRow);
+        }
+
+        // Susun tarikh ikut turutan
+        targetList.sort((a, b) => new Date(a.startDateB) - new Date(b.startDateB));
+
+        saveLocalPoliData();
+        renderApp();
+        showToast(`Baris takwim ${week} berjaya disimpan`);
+        poliRowForm.reset();
+      });
+    }
+
+    // Reset ke Asal
+    const btnResetPoliDefault = document.getElementById('btnResetPoliDefault');
+    if (btnResetPoliDefault) {
+      btnResetPoliDefault.addEventListener('click', () => {
+        TAKWIM_POLI_SESI_1 = JSON.parse(JSON.stringify(DEFAULT_TAKWIM_POLI_SESI_1));
+        TAKWIM_POLI_SESI_2 = JSON.parse(JSON.stringify(DEFAULT_TAKWIM_POLI_SESI_2));
+        saveLocalPoliData();
+        renderApp();
+        updatePoliJSONDisplay();
+        showToast('Takwim berjaya dipulihkan kepada data rasmi');
+      });
+    }
+
+    // Muat Turun JSON
+    const btnDownloadPoliJSON = document.getElementById('btnDownloadPoliJSON');
+    if (btnDownloadPoliJSON) {
+      btnDownloadPoliJSON.addEventListener('click', () => {
+        const fullTakwimData = {
+          sesi1: TAKWIM_POLI_SESI_1,
+          sesi2: TAKWIM_POLI_SESI_2
+        };
+        const blob = new Blob([JSON.stringify(fullTakwimData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `takwim_poli_data_${formatDate(new Date())}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showToast('Fail data takwim dimuat turun');
+      });
+    }
+
+    // Terapkan JSON dari Textarea
+    const btnApplyPoliJSON = document.getElementById('btnApplyPoliJSON');
+    if (btnApplyPoliJSON) {
+      btnApplyPoliJSON.addEventListener('click', () => {
+        try {
+          const parsed = JSON.parse(poliJSONTextarea.value);
+          if (parsed.sesi1 && parsed.sesi2 && Array.isArray(parsed.sesi1) && Array.isArray(parsed.sesi2)) {
+            TAKWIM_POLI_SESI_1 = parsed.sesi1;
+            TAKWIM_POLI_SESI_2 = parsed.sesi2;
+            saveLocalPoliData();
+            renderApp();
+            showToast('Semua data takwim berjaya dikemaskini!');
+          } else {
+            showToast('Format JSON tidak sah. Sila pastikan ada struktur sesi1 dan sesi2.');
+          }
+        } catch (err) {
+          showToast('Ralat format JSON! Sila pastikan tiada ralat tanda baca.');
+        }
+      });
+    }
 
     // Filter Kategori, Toggle Takwim Poli & Toggle Cuti
     document.getElementById('filterCategory').addEventListener('change', (e) => {
