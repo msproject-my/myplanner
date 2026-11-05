@@ -23,33 +23,33 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     
-    /* Sel Kalendar yang kemas di mobile & luas selesa di PC */
+    /* Sel Kalendar: Kemas di mobile & luas selesa di PC */
     .calendar-cell { 
-      min-height: 48px;
-      height: 52px;
+      min-height: 52px;
+      height: auto;
     }
     @media (min-width: 768px) {
       .calendar-cell {
-        min-height: 108px;
+        min-height: 104px;
         height: auto;
       }
     }
     @media (min-width: 1280px) {
       .calendar-cell {
-        min-height: 118px;
+        min-height: 114px;
         height: auto;
       }
     }
     .pb-safe {
       padding-bottom: env(safe-area-inset-bottom, 1rem);
     }
-    /* Had maksimum lebar mobile mockup */
+    /* Simulasi paparan mobile khas jika diuji di PC */
     .mobile-frame-mode {
       max-width: 412px !important;
       margin: 1rem auto !important;
-      border-radius: 2.25rem !important;
+      border-radius: 2rem !important;
       box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25) !important;
-      border: 8px solid #0f172a !important;
+      border: 6px solid #0f172a !important;
       background: #f8fafc !important;
       overflow-x: hidden !important;
     }
@@ -57,51 +57,70 @@
 </head>
 <body class="bg-slate-100 min-h-screen text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-800">
 
-  <!-- Main Responsive Container (Luas & Cantik di PC, Kompak di Mobile) -->
+  <!-- Main Responsive Container -->
   <div class="w-full max-w-[1680px] mx-auto min-h-screen flex flex-col transition-all duration-300">
 
     <!-- Header Navigasi -->
     <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-3 md:px-8 h-14 md:h-16 flex items-center justify-between shadow-xs">
-      <!-- Logo & Tajuk My Smart Planner & Calendar -->
+      <!-- Logo & Tajuk -->
       <div class="flex items-center space-x-2.5">
         <div class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-blue-600 flex items-center justify-center text-white shadow-md shadow-indigo-200">
           <i data-lucide="calendar" class="w-4 h-4 md:w-5 md:h-5"></i>
         </div>
         <div>
           <h1 class="font-black text-sm md:text-xl text-slate-900 tracking-tight leading-none">My Smart Planner & Calendar</h1>
-          <span class="hidden sm:inline-block text-[11px] text-slate-400 font-medium mt-0.5">Jadual & Aktiviti</span>
+          <span class="hidden sm:inline-block text-[11px] text-slate-400 font-medium mt-0.5">Jadual, Aktiviti & Takwim Poli</span>
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div class="flex items-center space-x-1 md:space-x-2">
-        <!-- Switcher Manual PC / Mobile View -->
-        <div class="bg-slate-100 p-0.5 rounded-xl border border-slate-200 flex items-center">
-          <button id="btnSwitchPC" title="Paparan PC / Desktop" class="px-2 py-1 md:px-2.5 md:py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-white shadow-xs flex items-center space-x-1 transition">
+        <!-- Switcher Manual PC / Mobile View (Hanya di PC/Skrin Besar) -->
+        <div class="hidden md:flex bg-slate-100 p-0.5 rounded-xl border border-slate-200 items-center">
+          <button id="btnSwitchPC" title="Paparan PC / Desktop" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-indigo-700 bg-white shadow-xs flex items-center space-x-1 transition">
             <i data-lucide="monitor" class="w-3.5 h-3.5"></i>
-            <span class="hidden sm:inline">PC</span>
+            <span>PC</span>
           </button>
-          <button id="btnSwitchMobile" title="Paparan Mobile App" class="px-2 py-1 md:px-2.5 md:py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center space-x-1 transition">
+          <button id="btnSwitchMobile" title="Paparan Mobile App" class="px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-800 flex items-center space-x-1 transition">
             <i data-lucide="smartphone" class="w-3.5 h-3.5"></i>
-            <span class="hidden sm:inline">Mobile</span>
+            <span>Mobile</span>
           </button>
         </div>
 
+        <!-- Butang Tambah Jadual -->
         <button id="btnOpenNewEvent" class="inline-flex items-center space-x-1 px-2.5 py-1.5 md:px-3.5 md:py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:scale-95 rounded-xl shadow-xs transition">
           <i data-lucide="plus" class="w-3.5 h-3.5"></i>
           <span>Tambah</span>
         </button>
 
+        <!-- Butang Integrasi Google Hub -->
+        <button id="btnOpenGoogleHub" title="Integrasi Google Calendar & Google Tasks" class="inline-flex items-center space-x-1.5 px-2.5 py-1.5 md:px-3 md:py-2 text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200 active:scale-95 rounded-xl shadow-2xs transition">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span class="hidden sm:inline">Google</span>
+        </button>
+
+        <!-- Butang Cloud Sync -->
+        <button id="btnOpenCloudSync" title="Penyegerakan Awan (Sync Kod Rahsia)" class="inline-flex items-center space-x-1.5 px-2.5 py-1.5 md:px-3 md:py-2 text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-200 active:scale-95 rounded-xl shadow-2xs transition">
+          <i data-lucide="cloud" class="w-3.5 h-3.5 text-sky-600"></i>
+          <span id="cloudSyncStatusBadge" class="hidden sm:inline">Cloud Sync</span>
+        </button>
+
+        <!-- Butang Install PWA -->
         <button id="btnInstallApp" title="Jadikan Icon Aplikasi" class="p-1.5 md:p-2 text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition">
           <i data-lucide="download" class="w-4 h-4 md:w-5 md:h-5"></i>
         </button>
       </div>
     </header>
 
-    <!-- Main Content Grid (PC: 2 Column Luas Penuh, Mobile: 1 Column) -->
+    <!-- Main Content Grid -->
     <main class="flex-1 p-2.5 sm:p-4 md:p-6 lg:p-7 grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 pb-24 md:pb-8">
       
-      <!-- Bahagian Kiri: Kalendar & Kawalan (Lebar Penuh di PC: 8 Kolum) -->
+      <!-- Bahagian Kiri: Kalendar & Kawalan (8 Kolum di PC) -->
       <section class="lg:col-span-8 space-y-3.5 md:space-y-4">
         
         <!-- Bar Navigasi Bulan & Paparan -->
@@ -123,7 +142,7 @@
           </h2>
 
           <div class="flex items-center space-x-2">
-            <!-- View Switcher Tabs (Hari / Bulan / Tahun / Agenda / Takwim Poli) -->
+            <!-- View Switcher Tabs -->
             <div class="bg-slate-100 p-0.5 md:p-1 rounded-xl flex items-center text-[11px] md:text-xs font-bold gap-0.5">
               <button id="btnViewDay" class="px-2 md:px-2.5 py-1 rounded-lg text-slate-600 hover:text-slate-900 transition">Hari</button>
               <button id="btnViewMonth" class="px-2 md:px-2.5 py-1 rounded-lg bg-white text-indigo-700 shadow-xs transition">Bulan</button>
@@ -184,7 +203,7 @@
             <span class="text-rose-500">Ahd</span>
           </div>
           <!-- Grid Hari -->
-          <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 md:gap-2 bg-slate-50/80 p-1 md:p-2 rounded-xl border border-slate-200/80">
+          <div id="calendarGrid" class="grid grid-cols-7 gap-1 md:gap-2 bg-slate-50/80 p-1 md:p-2 rounded-xl border border-slate-200/80">
             <!-- Dynamic calendar cells -->
           </div>
 
@@ -212,10 +231,7 @@
               <span>Tambah Acara</span>
             </button>
           </div>
-          <!-- Garis Masa Jam Harian -->
-          <div id="dayTimelineList" class="space-y-3">
-            <!-- Jam render secara dinamik -->
-          </div>
+          <div id="dayTimelineList" class="space-y-3"></div>
         </div>
 
         <!-- Semakan Pandangan Tahunan (Year View Container) -->
@@ -227,10 +243,7 @@
             </div>
             <span id="yearTotalEventsBadge" class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full font-bold">0 Aktiviti</span>
           </div>
-          <!-- 12 Bulan Grid -->
-          <div id="yearMonthsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- 12 Bulan mini kalendar -->
-          </div>
+          <div id="yearMonthsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
         </div>
 
         <!-- Agenda View Container -->
@@ -239,9 +252,7 @@
             <h3 class="font-extrabold text-slate-900 text-sm md:text-base uppercase tracking-wider">Senarai Aktiviti & Cuti</h3>
             <span id="agendaCountBadge" class="text-xs bg-indigo-50 text-indigo-700 px-2.5 py-1 rounded-full font-bold">0 Rekod</span>
           </div>
-          <div id="agendaList" class="space-y-2.5">
-            <!-- Dynamic agenda items -->
-          </div>
+          <div id="agendaList" class="space-y-2.5"></div>
         </div>
 
         <!-- MODUL KHAS: Paparan Takwim Akademik Politeknik & Kolej Komuniti -->
@@ -317,7 +328,7 @@
             </div>
           </div>
 
-          <!-- Log Catatan Harian -->
+          <!-- Log Catatan Harian (Auto-Save Pintar) -->
           <div class="pt-3.5 border-t border-slate-100">
             <div class="flex items-center justify-between mb-2">
               <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
@@ -442,7 +453,18 @@
           <button type="button" id="btnDeleteEvent" class="hidden px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition">
             Padam
           </button>
+          
           <div class="flex items-center space-x-2 ml-auto">
+            <!-- Butang Hantar Segera ke Google Calendar -->
+            <button type="button" id="btnSendToGoogleFromModal" class="px-3 py-2 text-xs font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition flex items-center gap-1.5" title="Hantar ke Google Calendar">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+              </svg>
+              <span>Ke Google</span>
+            </button>
             <button type="button" id="btnCancelModal" class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition">
               Batal
             </button>
@@ -478,7 +500,7 @@
       <!-- Content Body -->
       <div class="p-5 sm:p-6 overflow-y-auto space-y-5 text-xs">
         
-        <!-- Tab Sub-Navigasi (Tambah/Edit Baris ATAU Import/Eksport JSON) -->
+        <!-- Tab Sub-Navigasi -->
         <div class="flex items-center border-b border-slate-200 gap-2 pb-2">
           <button id="tabPoliEditor" class="px-3 py-1.5 font-bold rounded-lg bg-indigo-50 text-indigo-700">Editor Baris Takwim</button>
           <button id="tabPoliJSON" class="px-3 py-1.5 font-semibold text-slate-500 hover:text-slate-800 rounded-lg">Import / Backup JSON</button>
@@ -564,7 +586,6 @@
             </div>
           </form>
 
-          <!-- Tindakan Pantas Reset -->
           <div class="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-200">
             <span class="text-slate-600">Ingin pulihkan jadual kembali kepada data rasmi lalai?</span>
             <button id="btnResetPoliDefault" type="button" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl border border-rose-200 transition">
@@ -596,7 +617,157 @@
     </div>
   </div>
 
-  <!-- Modal: Panduan Pasang Jadi Aplikasi (Icon di Skrin Telefon / PC) -->
+  <!-- Modal: Hub Integrasi Google (Calendar & Tasks) -->
+  <div id="googleHubModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-lg w-full max-h-[92vh] flex flex-col overflow-hidden animate-in fade-in duration-200">
+      
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/70">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center">
+            <svg class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">Integrasi Google Workspace</h3>
+            <p class="text-[11px] text-slate-500">Google Calendar & Google Tasks Sync</p>
+          </div>
+        </div>
+        <button id="btnCloseGoogleHub" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+        <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-100 space-y-2">
+          <p class="font-bold text-indigo-950 flex items-center gap-1.5">
+            <i data-lucide="zap" class="w-4 h-4 text-indigo-600"></i>
+            <span>Penyegerakan Segera 1-Klik</span>
+          </p>
+          <p class="text-slate-600 leading-relaxed text-[11px]">
+            Semasa menambah atau melihat sebarang jadual mesyuarat atau kursus, klik ikon <strong>"Ke Google"</strong>. Sistem akan membuka Google Calendar secara automatik dengan butiran yang telah siap diisi tanpa perlu taip semula!
+          </p>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <p class="font-bold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="download" class="w-4 h-4 text-slate-700"></i>
+            <span>Eksport Semua Acara ke Google Calendar (.ics)</span>
+          </p>
+          <p class="text-[11px] text-slate-600">
+            Muat turun fail kalendar penuh yang mengandungi semua aktiviti anda, cuti umum Malaysia, dan Takwim Poli untuk dimasukkan terus ke Google Calendar telefon atau komputer anda.
+          </p>
+          <button id="btnExportFullGoogleICS" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition flex items-center justify-center space-x-1.5 shadow-xs">
+            <i data-lucide="calendar-arrow-down" class="w-4 h-4"></i>
+            <span>Muat Turun Fail Google Calendar (.ics)</span>
+          </button>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+          <p class="font-bold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-4 h-4 text-emerald-600"></i>
+            <span>Akses Pantas Google Tasks</span>
+          </p>
+          <p class="text-[11px] text-slate-600">
+            Buka senarai semak tugasan Google Tasks rasmi anda dalam tab baharu.
+          </p>
+          <a href="https://tasks.google.com/embed/list/~default" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 bg-white border border-slate-200 px-3 py-2 rounded-xl transition shadow-2xs">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Buka Google Tasks Rasmi</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="px-5 py-3 border-t border-slate-100 bg-slate-50 flex justify-end">
+        <button id="btnDismissGoogleHub" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition text-xs">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Cloud Sync (Penyegerakan Awan Kod Rahsia) -->
+  <div id="cloudSyncModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-md w-full max-h-[92vh] flex flex-col overflow-hidden animate-in fade-in duration-200">
+      
+      <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between bg-sky-50/70">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-8 h-8 rounded-xl bg-sky-100 text-sky-700 flex items-center justify-center">
+            <i data-lucide="cloud-cog" class="w-4 h-4"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-sm sm:text-base leading-tight">Penyegerakan Awan Pintar</h3>
+            <p class="text-[11px] text-slate-500">Akses jadual yang sama di Telefon & PC</p>
+          </div>
+        </div>
+        <button id="btnCloseCloudSync" class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="p-4 sm:p-6 overflow-y-auto space-y-4 text-xs">
+        <div>
+          <label class="block text-xs font-bold text-slate-800 mb-1">Kod Rahsia Peribadi Anda *</label>
+          <div class="relative">
+            <input type="text" id="cloudSyncKeyInput" placeholder="cth: nombor telefon anda / nama unik" class="w-full text-xs sm:text-sm pl-9 pr-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-sky-500 font-semibold tracking-wide bg-slate-50 focus:bg-white transition">
+            <i data-lucide="key-round" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+          </div>
+          <p class="text-[10px] text-slate-500 mt-1.5 leading-relaxed">
+            * Gunakan kod rahsia yang sama di komputer pejabat dan di telefon bimbit anda untuk menyelaraskan jadual secara automatik.
+          </p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+          <div class="text-[11px] font-bold text-slate-700 flex items-center justify-between">
+            <span>Tindakan Manual</span>
+            <span id="cloudLastSyncTime" class="text-[10px] text-slate-400 font-normal">Belum diselaraskan</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <button id="btnPushToCloud" class="py-2.5 px-3 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center space-x-1.5">
+              <i data-lucide="upload-cloud" class="w-4 h-4"></i>
+              <span>Hantar ke Awan</span>
+            </button>
+            <button id="btnPullFromCloud" class="py-2.5 px-3 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold rounded-xl shadow-xs transition flex items-center justify-center space-x-1.5">
+              <i data-lucide="download-cloud" class="w-4 h-4"></i>
+              <span>Tarik dari Awan</span>
+            </button>
+          </div>
+        </div>
+
+        <label class="flex items-center space-x-2.5 p-3 rounded-xl border border-slate-200 bg-white cursor-pointer hover:bg-slate-50 transition">
+          <input type="checkbox" id="chkAutoCloudSync" class="w-4 h-4 text-sky-600 rounded focus:ring-sky-500">
+          <div>
+            <span class="block text-xs font-bold text-slate-800">Auto-Hantar ke Awan</span>
+            <span class="block text-[10px] text-slate-500">Kemas kini awan secara automatik setiap kali jadual ditambah atau dipadam.</span>
+          </div>
+        </label>
+
+        <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+          <span class="text-[11px] text-slate-600">Simpan fail fizikal di peranti:</span>
+          <button id="btnDownloadJsonBackup" class="py-1.5 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold rounded-lg transition flex items-center space-x-1">
+            <i data-lucide="save" class="w-3.5 h-3.5"></i>
+            <span>Backup (.json)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="px-5 py-3 border-t border-slate-100 bg-slate-50 flex items-center justify-between">
+        <span id="cloudStatusIndicator" class="text-[11px] text-slate-500 font-medium flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-slate-300"></span>
+          <span>Sedia</span>
+        </span>
+        <button id="btnDismissCloudSync" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl transition text-xs">
+          Selesai
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Panduan Pasang Jadi Aplikasi -->
   <div id="installGuideModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-md w-full p-6 space-y-4">
       <div class="flex items-center justify-between pb-3 border-b border-slate-100">
@@ -612,7 +783,6 @@
       </div>
 
       <div class="space-y-3.5 text-xs text-slate-600">
-        <!-- Telefon Android -->
         <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200">
           <p class="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
             <i data-lucide="chrome" class="w-3.5 h-3.5 text-blue-600"></i> Telefon Android (Google Chrome):
@@ -620,20 +790,18 @@
           <p>Tekan <strong>Tiga Titik (⋮)</strong> di penjuru atas kanan browser &gt; Pilih <strong>"Add to Home screen"</strong> atau <strong>"Install app"</strong>.</p>
         </div>
 
-        <!-- iPhone / iPad (Safari) -->
         <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200">
           <p class="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
             <i data-lucide="compass" class="w-3.5 h-3.5 text-indigo-600"></i> iPhone / iPad (Safari):
           </p>
-          <p>Tekan butang <strong>Kongsi (Share / kotak bertanda panah ke atas)</strong> di bahagian bawah &gt; Pilih <strong>"Add to Home Screen"</strong>.</p>
+          <p>Tekan butang <strong>Kongsi (Share)</strong> di bahagian bawah &gt; Pilih <strong>"Add to Home Screen"</strong>.</p>
         </div>
 
-        <!-- Komputer / Laptop PC -->
         <div class="p-3 rounded-2xl bg-slate-50 border border-slate-200">
           <p class="font-bold text-slate-900 flex items-center gap-1.5 mb-1">
             <i data-lucide="monitor" class="w-3.5 h-3.5 text-emerald-600"></i> Komputer / Laptop (PC):
           </p>
-          <p>Klik butang <strong>"Jadikan Apps"</strong> di atas atau ikon komputer kecil di bilah URL Chrome/Edge untuk pasang ke Desktop.</p>
+          <p>Klik butang <strong>"Jadikan Apps"</strong> di atas atau ikon komputer kecil di bilah URL Chrome/Edge.</p>
         </div>
       </div>
 
@@ -653,7 +821,6 @@
     /* =====================================================================
        0. PWA & APP INSTALL SETUP (STANDALONE SINGLE-FILE)
        ===================================================================== */
-    // Dynamic Web App Manifest Injection
     (function setupPWA() {
       const manifestData = {
         name: "My Smart Planner & Calendar",
@@ -699,7 +866,6 @@
           }
           deferredPrompt = null;
         } else {
-          // Tunjukkan modal panduan sekiranya browser belum menyokong prompt automatik
           const modal = document.getElementById('installGuideModal');
           if (modal) modal.classList.remove('hidden');
         }
@@ -731,10 +897,9 @@
     }
 
     /* =====================================================================
-       1. DATA CUTI UMUM & CUTI SEKOLAH MALAYSIA (2025 - 2026 Data Terkini)
+       1. DATA CUTI UMUM MALAYSIA
        ===================================================================== */
     const MALAYSIA_HOLIDAYS = [
-      // 2026 Cuti Kebangsaan & Utama
       { date: "2026-01-01", title: "Tahun Baharu 2026", category: "holiday", type: "Cuti Am" },
       { date: "2026-01-20", title: "Hari Thaipusam", category: "holiday", type: "Cuti Am" },
       { date: "2026-02-01", title: "Hari Wilayah Persekutuan", category: "holiday", type: "Cuti Negeri" },
@@ -753,7 +918,6 @@
       { date: "2026-11-08", title: "Hari Deepavali", category: "holiday", type: "Cuti Am" },
       { date: "2026-12-25", title: "Hari Krismas", category: "holiday", type: "Cuti Am" },
 
-      // Cuti Tambahan 2027 (Merangkumi Takwim Politeknik Sesi II)
       { date: "2027-01-01", title: "Tahun Baharu 2027", category: "holiday", type: "Cuti Am" },
       { date: "2027-02-06", title: "Tahun Baharu Cina (Hari 1)", category: "holiday", type: "Cuti Am" },
       { date: "2027-02-07", title: "Tahun Baharu Cina (Hari 2)", category: "holiday", type: "Cuti Am" },
@@ -765,7 +929,6 @@
       { date: "2027-06-06", title: "Awal Muharram", category: "holiday", type: "Cuti Am" },
       { date: "2027-06-07", title: "Hari Keputeraan YDP Agong", category: "holiday", type: "Cuti Am" },
 
-      // Cuti Penggal Persekolahan Malaysia KPM
       { date: "2026-01-16", title: "Cuti Akhir Persekolahan (Mula)", category: "school_holiday", type: "Cuti Sekolah" },
       { date: "2026-01-17", title: "Cuti Akhir Persekolahan", category: "school_holiday", type: "Cuti Sekolah" },
       { date: "2026-01-18", title: "Cuti Akhir Persekolahan", category: "school_holiday", type: "Cuti Sekolah" },
@@ -779,294 +942,56 @@
     ];
 
     /* =====================================================================
-       1.1 DATA TAKWIM AKADEMIK POLITEKNIK & KOLEJ KOMUNITI (KPT JPPKK)
-       Berdasarkan Dokumen Rasmi Sesi 2026/2027
+       2. DATA TAKWIM AKADEMIK POLITEKNIK & KOLEJ KOMUNITI (KPT JPPKK)
        ===================================================================== */
     const DEFAULT_TAKWIM_POLI_SESI_2 = [
-      {
-        week: "M0",
-        label: "Minggu 0",
-        startDateA: "2026-11-22", endDateA: "2026-11-28",
-        startDateB: "2026-11-23", endDateB: "2026-11-29",
-        activity: "Pendaftaran Pelajar Baharu / Aktiviti Suai Kenal",
-        tagType: "suaikenal",
-        notes: "Pendaftaran Pelajar & Minggu Suai Kenal",
-        bgColor: "bg-blue-50/60"
-      },
-      {
-        week: "M1",
-        label: "Minggu 1",
-        startDateA: "2026-11-29", endDateA: "2026-12-05",
-        startDateB: "2026-11-30", endDateB: "2026-12-06",
-        activity: "Minggu Perkuliahan (Kuliah 1)",
-        tagType: "kuliah",
-        notes: "Mula Kuliah Semester",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M2",
-        label: "Minggu 2",
-        startDateA: "2026-12-06", endDateA: "2026-12-12",
-        startDateB: "2026-12-07", endDateB: "2026-12-13",
-        activity: "Minggu Perkuliahan (Kuliah 2)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M3",
-        label: "Minggu 3",
-        startDateA: "2026-12-13", endDateA: "2026-12-19",
-        startDateB: "2026-12-14", endDateB: "2026-12-20",
-        activity: "Minggu Perkuliahan (Kuliah 3)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M4",
-        label: "Minggu 4",
-        startDateA: "2026-12-20", endDateA: "2026-12-26",
-        startDateB: "2026-12-21", endDateB: "2026-12-27",
-        activity: "Minggu Perkuliahan (Kuliah 4)",
-        tagType: "kuliah",
-        notes: "Hari Krismas: 25/12/2026 (Jumaat)",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M5",
-        label: "Minggu 5",
-        startDateA: "2026-12-27", endDateA: "2027-01-02",
-        startDateB: "2026-12-28", endDateB: "2027-01-03",
-        activity: "Minggu Perkuliahan (Kuliah 5)",
-        tagType: "kuliah",
-        notes: "Tahun Baru: 01/01/2027 (Jumaat)",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M6",
-        label: "Minggu 6",
-        startDateA: "2027-01-03", endDateA: "2027-01-09",
-        startDateB: "2027-01-04", endDateB: "2027-01-10",
-        activity: "Minggu Perkuliahan (Kuliah 6)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M7",
-        label: "Minggu 7",
-        startDateA: "2027-01-10", endDateA: "2027-01-16",
-        startDateB: "2027-01-11", endDateB: "2027-01-17",
-        activity: "Minggu Perkuliahan (Kuliah 7)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M8",
-        label: "Minggu 8",
-        startDateA: "2027-01-17", endDateA: "2027-01-23",
-        startDateB: "2027-01-18", endDateB: "2027-01-24",
-        activity: "Minggu Perkuliahan (Kuliah 8)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M9",
-        label: "Minggu 9",
-        startDateA: "2027-01-24", endDateA: "2027-01-30",
-        startDateB: "2027-01-25", endDateB: "2027-01-31",
-        activity: "Minggu Perkuliahan (Kuliah 9)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M10",
-        label: "Minggu 10",
-        startDateA: "2027-01-31", endDateA: "2027-02-06",
-        startDateB: "2027-02-01", endDateB: "2027-02-07",
-        activity: "Minggu Perkuliahan (Kuliah 10)",
-        tagType: "kuliah",
-        notes: "Tahun Baru Cina: 06 & 07/02/2027",
-        bgColor: "bg-white"
-      },
-      {
-        week: "-",
-        label: "Cuti",
-        startDateA: "2027-02-07", endDateA: "2027-02-13",
-        startDateB: "2027-02-08", endDateB: "2027-02-14",
-        activity: "Cuti Pertengahan Semester",
-        tagType: "cuti_sem",
-        notes: "Rehat 1 Minggu",
-        bgColor: "bg-amber-100/50"
-      },
-      {
-        week: "M11",
-        label: "Minggu 11",
-        startDateA: "2027-02-14", endDateA: "2027-02-20",
-        startDateB: "2027-02-15", endDateB: "2027-02-21",
-        activity: "Minggu Perkuliahan (Kuliah 11)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M12",
-        label: "Minggu 12",
-        startDateA: "2027-02-21", endDateA: "2027-02-27",
-        startDateB: "2027-02-22", endDateB: "2027-02-28",
-        activity: "Minggu Perkuliahan (Kuliah 12)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "M13",
-        label: "Minggu 13",
-        startDateA: "2027-02-28", endDateA: "2027-03-06",
-        startDateB: "2027-03-01", endDateB: "2027-03-07",
-        activity: "Minggu Perkuliahan (Kuliah 13)",
-        tagType: "kuliah",
-        notes: "",
-        bgColor: "bg-white"
-      },
-      {
-        week: "-",
-        label: "Cuti",
-        startDateA: "2027-03-07", endDateA: "2027-03-13",
-        startDateB: "2027-03-08", endDateB: "2027-03-14",
-        activity: "Cuti Perayaan (Hari Raya Aidilfitri)",
-        tagType: "cuti_perayaan",
-        notes: "Hari Raya Aidilfitri: 10 & 11/03/2027 (Rabu & Khamis)",
-        bgColor: "bg-amber-100/50"
-      },
-      {
-        week: "M14",
-        label: "Minggu 14",
-        startDateA: "2027-03-14", endDateA: "2027-03-20",
-        startDateB: "2027-03-15", endDateB: "2027-03-21",
-        activity: "Minggu Perkuliahan (Kuliah 14 - Akhir)",
-        tagType: "kuliah",
-        notes: "Kuliah Terakhir Semester",
-        bgColor: "bg-white"
-      },
-      {
-        week: "-",
-        label: "Ulangkaji",
-        startDateA: "2027-03-21", endDateA: "2027-03-26",
-        startDateB: "2027-03-22", endDateB: "2027-03-26",
-        activity: "Minggu Ulang Kaji",
-        tagType: "ulangkaji",
-        notes: "Persiapan Peperiksaan Akhir",
-        bgColor: "bg-rose-100/50"
-      },
-      {
-        week: "-",
-        label: "Exam 1",
-        startDateA: "2027-03-27", endDateA: "2027-04-03",
-        startDateB: "2027-03-27", endDateB: "2027-04-04",
-        activity: "Peperiksaan Akhir Semester / Pentaksiran (Minggu 1)",
-        tagType: "exam",
-        notes: "Peperiksaan Akhir (kecuali STE)",
-        bgColor: "bg-emerald-100/50"
-      },
-      {
-        week: "-",
-        label: "Exam 2",
-        startDateA: "2027-04-04", endDateA: "2027-04-10",
-        startDateB: "2027-04-05", endDateB: "2027-04-11",
-        activity: "Peperiksaan Akhir Semester / Pentaksiran (Minggu 2)",
-        tagType: "exam",
-        notes: "Peperiksaan Akhir Berterusan",
-        bgColor: "bg-emerald-100/50"
-      },
-      {
-        week: "-",
-        label: "Exam 3",
-        startDateA: "2027-04-11", endDateA: "2027-04-17",
-        startDateB: "2027-04-12", endDateB: "2027-04-18",
-        activity: "Peperiksaan Akhir Semester / Pentaksiran (Minggu 3)",
-        tagType: "exam",
-        notes: "Minggu Terakhir Peperiksaan",
-        bgColor: "bg-emerald-100/50"
-      },
-      {
-        week: "-",
-        label: "Cuti Sem",
-        startDateA: "2027-04-18", endDateA: "2027-06-12",
-        startDateB: "2027-04-19", endDateB: "2027-06-20",
-        activity: "Cuti Akhir Semester / Pelaksanaan Semester Pendek",
-        tagType: "cuti_sem",
-        notes: "9 Minggu Cuti / Sem Pendek (Mula 19/04/2027)",
-        bgColor: "bg-amber-100/40"
-      }
+      { week: "M0", label: "Minggu 0", startDateA: "2026-11-22", endDateA: "2026-11-28", startDateB: "2026-11-23", endDateB: "2026-11-29", activity: "Pendaftaran Pelajar Baharu / Aktiviti Suai Kenal", tagType: "suaikenal", notes: "Pendaftaran Pelajar & Minggu Suai Kenal", bgColor: "bg-blue-50/60" },
+      { week: "M1", label: "Minggu 1", startDateA: "2026-11-29", endDateA: "2026-12-05", startDateB: "2026-11-30", endDateB: "2026-12-06", activity: "Minggu Perkuliahan (Kuliah 1)", tagType: "kuliah", notes: "Mula Kuliah Semester", bgColor: "bg-white" },
+      { week: "M2", label: "Minggu 2", startDateA: "2026-12-06", endDateA: "2026-12-12", startDateB: "2026-12-07", endDateB: "2026-12-13", activity: "Minggu Perkuliahan (Kuliah 2)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M3", label: "Minggu 3", startDateA: "2026-12-13", endDateA: "2026-12-19", startDateB: "2026-12-14", endDateB: "2026-12-20", activity: "Minggu Perkuliahan (Kuliah 3)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M4", label: "Minggu 4", startDateA: "2026-12-20", endDateA: "2026-12-26", startDateB: "2026-12-21", endDateB: "2026-12-27", activity: "Minggu Perkuliahan (Kuliah 4)", tagType: "kuliah", notes: "Hari Krismas: 25/12/2026 (Jumaat)", bgColor: "bg-white" },
+      { week: "M5", label: "Minggu 5", startDateA: "2026-12-27", endDateA: "2027-01-02", startDateB: "2026-12-28", endDateB: "2027-01-03", activity: "Minggu Perkuliahan (Kuliah 5)", tagType: "kuliah", notes: "Tahun Baru: 01/01/2027 (Jumaat)", bgColor: "bg-white" },
+      { week: "M6", label: "Minggu 6", startDateA: "2027-01-03", endDateA: "2027-01-09", startDateB: "2027-01-04", endDateB: "2027-01-10", activity: "Minggu Perkuliahan (Kuliah 6)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M7", label: "Minggu 7", startDateA: "2027-01-10", endDateA: "2027-01-16", startDateB: "2027-01-11", endDateB: "2027-01-17", activity: "Minggu Perkuliahan (Kuliah 7)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M8", label: "Minggu 8", startDateA: "2027-01-17", endDateA: "2027-01-23", startDateB: "2027-01-18", endDateB: "2027-01-24", activity: "Minggu Perkuliahan (Kuliah 8)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M9", label: "Minggu 9", startDateA: "2027-01-24", endDateA: "2027-01-30", startDateB: "2027-01-25", endDateB: "2027-01-31", activity: "Minggu Perkuliahan (Kuliah 9)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M10", label: "Minggu 10", startDateA: "2027-01-31", endDateA: "2027-02-06", startDateB: "2027-02-01", endDateB: "2027-02-07", activity: "Minggu Perkuliahan (Kuliah 10)", tagType: "kuliah", notes: "Tahun Baru Cina: 06 & 07/02/2027", bgColor: "bg-white" },
+      { week: "-", label: "Cuti", startDateA: "2027-02-07", endDateA: "2027-02-13", startDateB: "2027-02-08", endDateB: "2027-02-14", activity: "Cuti Pertengahan Semester", tagType: "cuti_sem", notes: "Rehat 1 Minggu", bgColor: "bg-amber-100/50" },
+      { week: "M11", label: "Minggu 11", startDateA: "2027-02-14", endDateA: "2027-02-20", startDateB: "2027-02-15", endDateB: "2027-02-21", activity: "Minggu Perkuliahan (Kuliah 11)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M12", label: "Minggu 12", startDateA: "2027-02-21", endDateA: "2027-02-27", startDateB: "2027-02-22", endDateB: "2027-02-28", activity: "Minggu Perkuliahan (Kuliah 12)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "M13", label: "Minggu 13", startDateA: "2027-02-28", endDateA: "2027-03-06", startDateB: "2027-03-01", endDateB: "2027-03-07", activity: "Minggu Perkuliahan (Kuliah 13)", tagType: "kuliah", notes: "", bgColor: "bg-white" },
+      { week: "-", label: "Cuti", startDateA: "2027-03-07", endDateA: "2027-03-13", startDateB: "2027-03-08", endDateB: "2027-03-14", activity: "Cuti Perayaan (Hari Raya Aidilfitri)", tagType: "cuti_perayaan", notes: "Hari Raya Aidilfitri: 10 & 11/03/2027 (Rabu & Khamis)", bgColor: "bg-amber-100/50" },
+      { week: "M14", label: "Minggu 14", startDateA: "2027-03-14", endDateA: "2027-03-20", startDateB: "2027-03-15", endDateB: "2027-03-21", activity: "Minggu Perkuliahan (Kuliah 14 - Akhir)", tagType: "kuliah", notes: "Kuliah Terakhir Semester", bgColor: "bg-white" },
+      { week: "-", label: "Ulangkaji", startDateA: "2027-03-21", endDateA: "2027-03-26", startDateB: "2027-03-22", endDateB: "2027-03-26", activity: "Minggu Ulang Kaji", tagType: "ulangkaji", notes: "Persiapan Peperiksaan Akhir", bgColor: "bg-rose-100/50" },
+      { week: "-", label: "Exam 1", startDateA: "2027-03-27", endDateA: "2027-04-03", startDateB: "2027-03-27", endDateB: "2027-04-04", activity: "Peperiksaan Akhir Semester / Pentaksiran (Minggu 1)", tagType: "exam", notes: "Peperiksaan Akhir (kecuali STE)", bgColor: "bg-emerald-100/50" },
+      { week: "-", label: "Exam 2", startDateA: "2027-04-04", endDateA: "2027-04-10", startDateB: "2027-04-05", endDateB: "2027-04-11", activity: "Peperiksaan Akhir Semester / Pentaksiran (Minggu 2)", tagType: "exam", notes: "Peperiksaan Akhir Berterusan", bgColor: "bg-emerald-100/50" },
+      { week: "-", label: "Exam 3", startDateA: "2027-04-11", endDateA: "2027-04-17", startDateB: "2027-04-12", endDateB: "2027-04-18", activity: "Peperiksaan Akhir Semester / Pentaksiran (Minggu 3)", tagType: "exam", notes: "Minggu Terakhir Peperiksaan", bgColor: "bg-emerald-100/50" },
+      { week: "-", label: "Cuti Sem", startDateA: "2027-04-18", endDateA: "2027-06-12", startDateB: "2027-04-19", endDateB: "2027-06-20", activity: "Cuti Akhir Semester / Pelaksanaan Semester Pendek", tagType: "cuti_sem", notes: "9 Minggu Cuti / Sem Pendek (Mula 19/04/2027)", bgColor: "bg-amber-100/40" }
     ];
 
     const DEFAULT_TAKWIM_POLI_SESI_1 = [
-      {
-        week: "M0", label: "Minggu 0",
-        startDateA: "2026-06-21", endDateA: "2026-06-27",
-        startDateB: "2026-06-22", endDateB: "2026-06-28",
-        activity: "Pendaftaran Pelajar Baharu / Suai Kenal",
-        tagType: "suaikenal", notes: "Sesi I 2026/2027 Bermula", bgColor: "bg-blue-50/60"
-      },
-      {
-        week: "Kuliah", label: "Kuliah (9 Mggu)",
-        startDateA: "2026-06-28", endDateA: "2026-08-29",
-        startDateB: "2026-06-29", endDateB: "2026-08-30",
-        activity: "Minggu Perkuliahan Sesi I (9 Minggu)",
-        tagType: "kuliah", notes: "Maulidur Rasul: 25/08/2026 | Hari Kebangsaan: 31/08/2026", bgColor: "bg-white"
-      },
-      {
-        week: "Cuti", label: "Cuti Sem",
-        startDateA: "2026-08-30", endDateA: "2026-09-05",
-        startDateB: "2026-08-31", endDateB: "2026-09-06",
-        activity: "Cuti Pertengahan Semester Sesi I",
-        tagType: "cuti_sem", notes: "1 Minggu", bgColor: "bg-amber-100/50"
-      },
-      {
-        week: "Kuliah", label: "Kuliah (5 Mggu)",
-        startDateA: "2026-09-06", endDateA: "2026-10-10",
-        startDateB: "2026-09-07", endDateB: "2026-10-11",
-        activity: "Minggu Perkuliahan Sesi I (Sambungan 5 Minggu)",
-        tagType: "kuliah", notes: "Hari Malaysia: 16/09/2026", bgColor: "bg-white"
-      },
-      {
-        week: "Ulangkaji", label: "Ulangkaji",
-        startDateA: "2026-10-11", endDateA: "2026-10-16",
-        startDateB: "2026-10-12", endDateB: "2026-10-16",
-        activity: "Minggu Ulang Kaji Sesi I",
-        tagType: "ulangkaji", notes: "Persiapan Peperiksaan", bgColor: "bg-rose-100/50"
-      },
-      {
-        week: "Exam", label: "Exam Sesi I",
-        startDateA: "2026-10-17", endDateA: "2026-11-06",
-        startDateB: "2026-10-17", endDateB: "2026-11-08",
-        activity: "Peperiksaan Akhir Semester Sesi I (3 Minggu)",
-        tagType: "exam", notes: "Hari Deepavali: 08/11/2026", bgColor: "bg-emerald-100/50"
-      },
-      {
-        week: "Cuti", label: "Cuti Akhir",
-        startDateA: "2026-11-07", endDateA: "2026-11-21",
-        startDateB: "2026-11-09", endDateB: "2026-11-21",
-        activity: "Cuti Akhir Semester Sesi I (3 Minggu)",
-        tagType: "cuti_sem", notes: "Rehat sebelum Sesi II", bgColor: "bg-amber-100/40"
-      }
+      { week: "M0", label: "Minggu 0", startDateA: "2026-06-21", endDateA: "2026-06-27", startDateB: "2026-06-22", endDateB: "2026-06-28", activity: "Pendaftaran Pelajar Baharu / Suai Kenal", tagType: "suaikenal", notes: "Sesi I 2026/2027 Bermula", bgColor: "bg-blue-50/60" },
+      { week: "Kuliah", label: "Kuliah (9 Mggu)", startDateA: "2026-06-28", endDateA: "2026-08-29", startDateB: "2026-06-29", endDateB: "2026-08-30", activity: "Minggu Perkuliahan Sesi I (9 Minggu)", tagType: "kuliah", notes: "Maulidur Rasul: 25/08/2026 | Hari Kebangsaan: 31/08/2026", bgColor: "bg-white" },
+      { week: "Cuti", label: "Cuti Sem", startDateA: "2026-08-30", endDateA: "2026-09-05", startDateB: "2026-08-31", endDateB: "2026-09-06", activity: "Cuti Pertengahan Semester Sesi I", tagType: "cuti_sem", notes: "1 Minggu", bgColor: "bg-amber-100/50" },
+      { week: "Kuliah", label: "Kuliah (5 Mggu)", startDateA: "2026-09-06", endDateA: "2026-10-10", startDateB: "2026-09-07", endDateB: "2026-10-11", activity: "Minggu Perkuliahan Sesi I (Sambungan 5 Minggu)", tagType: "kuliah", notes: "Hari Malaysia: 16/09/2026", bgColor: "bg-white" },
+      { week: "Ulangkaji", label: "Ulangkaji", startDateA: "2026-10-11", endDateA: "2026-10-16", startDateB: "2026-10-12", endDateB: "2026-10-16", activity: "Minggu Ulang Kaji Sesi I", tagType: "ulangkaji", notes: "Persiapan Peperiksaan", bgColor: "bg-rose-100/50" },
+      { week: "Exam", label: "Exam Sesi I", startDateA: "2026-10-17", endDateA: "2026-11-06", startDateB: "2026-10-17", endDateB: "2026-11-08", activity: "Peperiksaan Akhir Semester Sesi I (3 Minggu)", tagType: "exam", notes: "Hari Deepavali: 08/11/2026", bgColor: "bg-emerald-100/50" },
+      { week: "Cuti", label: "Cuti Akhir", startDateA: "2026-11-07", endDateA: "2026-11-21", startDateB: "2026-11-09", endDateB: "2026-11-21", activity: "Cuti Akhir Semester Sesi I (3 Minggu)", tagType: "cuti_sem", notes: "Rehat sebelum Sesi II", bgColor: "bg-amber-100/40" }
     ];
 
     let TAKWIM_POLI_SESI_1 = [];
     let TAKWIM_POLI_SESI_2 = [];
 
     /* =====================================================================
-       2. LOCALSTORAGE & DEFAULT DATA
+       3. STORAGE & APPLICATION STATE
        ===================================================================== */
     const STORAGE_KEY_EVENTS = 'my_planner_events_v2';
     const STORAGE_KEY_LOGS = 'my_planner_logs_v2';
     const STORAGE_KEY_POLI_S1 = 'my_planner_poli_s1_v1';
     const STORAGE_KEY_POLI_S2 = 'my_planner_poli_s2_v1';
+    const STORAGE_KEY_CLOUD_PIN = 'my_planner_cloud_pin';
+    const STORAGE_KEY_AUTO_SYNC = 'my_planner_auto_sync';
+    const STORAGE_KEY_LAST_SYNC = 'my_planner_last_sync';
 
     const DEFAULT_EVENTS = [
       {
@@ -1120,30 +1045,30 @@
 
     function saveLocalEvents() {
       localStorage.setItem(STORAGE_KEY_EVENTS, JSON.stringify(events));
+      triggerAutoCloudSync();
     }
 
     function saveLocalLogs() {
       localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(dailyLogs));
+      triggerAutoCloudSync();
     }
 
     function saveLocalPoliData() {
       localStorage.setItem(STORAGE_KEY_POLI_S1, JSON.stringify(TAKWIM_POLI_SESI_1));
       localStorage.setItem(STORAGE_KEY_POLI_S2, JSON.stringify(TAKWIM_POLI_SESI_2));
+      triggerAutoCloudSync();
     }
 
-    /* =====================================================================
-       3. CURRENT VIEW STATE
-       ===================================================================== */
     let currentDate = new Date();
     let viewYear = currentDate.getFullYear();
     let viewMonth = currentDate.getMonth();
     let selectedDateStr = formatDate(currentDate);
     let currentFilter = 'all';
     let showHolidays = true;
-    let showPoliEvents = true; // Toggle Takwim Poli
-    let selectedPoliGroup = 'B'; // 'A' or 'B'
-    let currentTakwimSesi = 'sesi2'; // 'sesi1' or 'sesi2'
-    let activeView = 'month'; // 'day' | 'month' | 'year' | 'agenda' | 'takwim_poli'
+    let showPoliEvents = true;
+    let selectedPoliGroup = 'B';
+    let currentTakwimSesi = 'sesi2';
+    let activeView = 'month';
 
     const MONTH_NAMES_MS = [
       "Januari", "Februari", "Mac", "April", "Mei", "Jun",
@@ -1192,7 +1117,7 @@
         case 'tugasan':
           return { bg: 'bg-amber-100 text-amber-800 border-amber-200', dot: 'bg-amber-500', label: 'Tugasan' };
         case 'umum':
-          return { bg: 'bg-slate-100 text-slate-800 border-slate-300', dot: 'bg-slate-500', label: 'Umum' };
+          return { bg: 'bg-slate-200 text-slate-800 border-slate-300', dot: 'bg-slate-500', label: 'Umum' };
         case 'poli':
           return { bg: 'bg-sky-100 text-sky-800 border-sky-200', dot: 'bg-sky-500', label: 'Takwim Poli' };
         case 'poli_exam':
@@ -1209,7 +1134,6 @@
       }
     }
 
-    // Tukar format tarikh Takwim Poli kepada senarai acara kalendar per tarikh
     function getPoliCalendarEventsForDate(dateStr) {
       if (!showPoliEvents) return [];
       const currentD = parseDate(dateStr).getTime();
@@ -1294,7 +1218,6 @@
         renderAgendaView();
       }
       renderSelectedDateInfo();
-      renderUpcomingHolidays();
       lucide.createIcons();
     }
 
@@ -1336,30 +1259,26 @@
       return result;
     }
 
-    /* Semakan Pilihan: PANDANGAN BULANAN (MONTH GRID) */
     function renderMonthGrid() {
       const grid = document.getElementById('calendarGrid');
       grid.innerHTML = '';
 
-      // Laraskan supaya minggu bermula dari Isnin (0: Isnin ... 6: Ahad)
-      const rawFirstDay = new Date(viewYear, viewMonth, 1).getDay(); // 0 = Ahad, 1 = Isnin, ...
+      const rawFirstDay = new Date(viewYear, viewMonth, 1).getDay();
       const firstDayOfMonth = (rawFirstDay === 0) ? 6 : rawFirstDay - 1;
 
       const daysInCurrentMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
       const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
 
-      // Penuhkan padding hari dari bulan sebelumnya
       for (let i = firstDayOfMonth - 1; i >= 0; i--) {
         const prevDayNum = daysInPrevMonth - i;
         const cell = document.createElement('div');
-        cell.className = 'calendar-cell p-1.5 rounded-xl border border-transparent bg-slate-50/50 text-slate-300 text-xs flex flex-col justify-start select-none opacity-40';
+        cell.className = 'calendar-cell p-1 rounded-xl border border-transparent bg-slate-50/50 text-slate-300 text-xs flex flex-col justify-start select-none opacity-40';
         cell.innerHTML = `<span class="font-semibold">${prevDayNum}</span>`;
         grid.appendChild(cell);
       }
 
       const todayStr = formatDate(new Date());
 
-      // Render setiap hari dalam bulan semasa
       for (let d = 1; d <= daysInCurrentMonth; d++) {
         const monthStr = String(viewMonth + 1).padStart(2, '0');
         const dayStrNum = String(d).padStart(2, '0');
@@ -1375,7 +1294,6 @@
             : 'bg-white border-slate-200/70 hover:border-indigo-300 hover:bg-slate-50'
         }`;
 
-        // Top bar nombor hari (font lebih kecil & kemas)
         const numHeader = document.createElement('div');
         numHeader.className = 'flex items-center justify-between';
         numHeader.innerHTML = `
@@ -1389,7 +1307,6 @@
         `;
         cell.appendChild(numHeader);
 
-        // Kontena aktiviti dalam kotak tarikh (Font dipadatkan & lebih jelas dalam mobile)
         const dayEvents = getCombinedEventsForDate(dayStr);
         const badgesContainer = document.createElement('div');
         badgesContainer.className = 'mt-1 space-y-1 overflow-hidden';
@@ -1398,7 +1315,6 @@
 
         if (isMobileScreen) {
           if (dayEvents.length > 0) {
-            // Paparkan label mini untuk acara pertama dengan font bersaiz kecil dan jelas
             const firstEvt = dayEvents[0];
             const badge = getCategoryBadge(firstEvt.category);
             const miniLabel = document.createElement('div');
@@ -1406,7 +1322,6 @@
             miniLabel.innerHTML = `<span class="w-1 h-1 rounded-full ${badge.dot} flex-shrink-0"></span><span class="truncate">${firstEvt.title}</span>`;
             badgesContainer.appendChild(miniLabel);
 
-            // Jika ada lebih daripada 1 acara, tunjukkan titik penunjuk tambahan
             if (dayEvents.length > 1) {
               const dotsWrapper = document.createElement('div');
               dotsWrapper.className = 'flex items-center gap-0.5 mt-0.5 pl-0.5';
@@ -1423,14 +1338,14 @@
           dayEvents.slice(0, 3).forEach(item => {
             const badge = getCategoryBadge(item.category);
             const badgeEl = document.createElement('div');
-            badgeEl.className = `text-[10px] lg:text-[11px] px-2 py-1 rounded-lg truncate font-medium ${badge.bg} flex items-center gap-1.5 shadow-2xs`;
+            badgeEl.className = `text-[10px] lg:text-[11px] px-2 py-0.5 rounded-lg truncate font-medium ${badge.bg} flex items-center gap-1.5 shadow-2xs`;
             badgeEl.innerHTML = `<span class="w-1.5 h-1.5 rounded-full ${badge.dot} flex-shrink-0"></span><span class="truncate font-semibold">${item.title}</span>`;
             badgesContainer.appendChild(badgeEl);
           });
 
           if (dayEvents.length > 3) {
             const moreEl = document.createElement('div');
-            moreEl.className = 'text-[10px] font-bold text-slate-400 pl-1.5';
+            moreEl.className = 'text-[9px] font-bold text-slate-400 pl-1.5';
             moreEl.textContent = `+${dayEvents.length - 3} lagi`;
             badgesContainer.appendChild(moreEl);
           }
@@ -1438,7 +1353,6 @@
 
         cell.appendChild(badgesContainer);
 
-        // Klik tarikh
         cell.addEventListener('click', () => {
           selectedDateStr = dayStr;
           renderApp();
@@ -1447,7 +1361,6 @@
         grid.appendChild(cell);
       }
 
-      // Penuhkan baki grid supaya genap (padding bulan hadapan)
       const totalCellsRendered = firstDayOfMonth + daysInCurrentMonth;
       const remainingCells = (totalCellsRendered % 7 === 0) ? 0 : 7 - (totalCellsRendered % 7);
       for (let j = 1; j <= remainingCells; j++) {
@@ -1458,7 +1371,6 @@
       }
     }
 
-    /* Semakan Pilihan: PANDANGAN HARIAN (DAY VIEW) */
     function renderDayView() {
       const title = document.getElementById('dayViewHeaderTitle');
       const container = document.getElementById('dayTimelineList');
@@ -1532,7 +1444,6 @@
       });
     }
 
-    /* Semakan Pilihan: PANDANGAN TAHUNAN (YEAR VIEW) */
     function renderYearView() {
       const yearTitle = document.getElementById('yearViewHeaderTitle');
       const totalBadge = document.getElementById('yearTotalEventsBadge');
@@ -1541,7 +1452,6 @@
       yearTitle.textContent = `Tahun ${viewYear}`;
       container.innerHTML = '';
 
-      // Kumpul bilangan aktiviti tahun berkenaan
       let totalEventsInYear = 0;
       events.forEach(e => {
         if (e.date.startsWith(`${viewYear}-`)) totalEventsInYear++;
@@ -1553,17 +1463,14 @@
       }
       totalBadge.textContent = `${totalEventsInYear} Aktiviti & Cuti`;
 
-      // Render 12 bulan mini
       for (let m = 0; m < 12; m++) {
         const monthCard = document.createElement('div');
         monthCard.className = 'p-3 bg-white border border-slate-200 hover:border-indigo-300 rounded-2xl shadow-xs transition cursor-pointer hover:shadow-md';
         
-        // Laraskan supaya minggu bermula dari Isnin (0: Isnin ... 6: Ahad)
         const rawFirstDay = new Date(viewYear, m, 1).getDay();
         const firstDay = (rawFirstDay === 0) ? 6 : rawFirstDay - 1;
         const daysInMonth = new Date(viewYear, m + 1, 0).getDate();
 
-        // Cari aktiviti dalam bulan ini
         const monthStr = String(m + 1).padStart(2, '0');
         const monthPrefix = `${viewYear}-${monthStr}`;
         const countInMonth = events.filter(e => e.date.startsWith(monthPrefix)).length + 
@@ -1580,12 +1487,10 @@
           <div class="grid grid-cols-7 gap-0.5 text-center text-[9px]">
         `;
 
-        // Padded days
         for (let b = 0; b < firstDay; b++) {
           miniGridHtml += `<span class="p-1 opacity-10">·</span>`;
         }
 
-        // Actual days
         for (let d = 1; d <= daysInMonth; d++) {
           const dStr = String(d).padStart(2, '0');
           const fullDStr = `${viewYear}-${monthStr}-${dStr}`;
@@ -1604,7 +1509,6 @@
         miniGridHtml += `</div>`;
         monthCard.innerHTML = miniGridHtml;
 
-        // Klik bulan untuk lompat terus ke paparan bulan tersebut
         monthCard.addEventListener('click', () => {
           viewMonth = m;
           setView('month');
@@ -1713,6 +1617,14 @@
             </div>
             ${!isHoliday ? `
               <div class="flex items-center space-x-1 flex-shrink-0">
+                <button onclick="sendToGoogleCalendarDirect('${evt.title.replace(/'/g, "\\'")}', '${evt.date}', '${evt.startTime || '09:00'}', '${evt.endTime || '10:00'}', '${(evt.location || '').replace(/'/g, "\\'")}', '${(evt.description || '').replace(/'/g, "\\'")}')" class="p-1 text-slate-400 hover:text-blue-600 rounded" title="Hantar ke Google Calendar">
+                  <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                </button>
                 <button onclick="editEvent('${evt.id}')" class="p-1 text-slate-400 hover:text-indigo-600 rounded">
                   <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
                 </button>
@@ -1727,11 +1639,6 @@
       logTextarea.value = dailyLogs[selectedDateStr] || '';
     }
 
-    function renderUpcomingHolidays() {
-      // Fungsi bantuan paparan ringkas jika diperlukan
-    }
-
-    /* Semakan Pilihan: MODUL KHAS TAKWIM POLITEKNIK */
     function renderTakwimPoliView() {
       const tableBody = document.getElementById('takwimTableBody');
       const badge = document.getElementById('takwimPoliGroupBadge');
@@ -1801,6 +1708,7 @@
     }
 
     function formatShortDate(str) {
+      if (!str) return '-';
       const p = str.split('-');
       return `${p[2]}.${p[1]}.${p[0].substring(2)}`;
     }
@@ -1838,9 +1746,191 @@
     };
 
     /* =====================================================================
+       GOOGLE SYNC & INTENT GENERATION
+       ===================================================================== */
+    function sendToGoogleCalendarDirect(title, date, startTime, endTime, location, description) {
+      const startClean = (date || selectedDateStr).replace(/-/g, '');
+      const sTime = (startTime || '09:00').replace(':', '') + '00';
+      const eTime = (endTime || '10:00').replace(':', '') + '00';
+
+      const dtStart = `${startClean}T${sTime}`;
+      const dtEnd = `${startClean}T${eTime}`;
+
+      const googleUrl = new URL('https://calendar.google.com/calendar/render');
+      googleUrl.searchParams.append('action', 'TEMPLATE');
+      googleUrl.searchParams.append('text', title);
+      googleUrl.searchParams.append('dates', `${dtStart}/${dtEnd}`);
+      if (location) googleUrl.searchParams.append('location', location);
+      if (description) googleUrl.searchParams.append('details', description);
+
+      window.open(googleUrl.toString(), '_blank');
+      showToast('Membuka Google Calendar...');
+    }
+
+    /* =====================================================================
+       CLOUD SYNC VIA KOD RAHSIA (PANTRY CLOUD STORAGE)
+       ===================================================================== */
+    const CLOUD_BASE_ENDPOINT = 'https://getpantry.cloud/apiv1/pantry/1a221f78-2fe4-406e-8260-2ffc4da2c2a0/basket/';
+
+    function sanitizeKey(rawKey) {
+      return (rawKey || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '_');
+    }
+
+    function initCloudSyncUI() {
+      const savedPin = localStorage.getItem(STORAGE_KEY_CLOUD_PIN) || '';
+      const isAuto = localStorage.getItem(STORAGE_KEY_AUTO_SYNC) === 'true';
+      const lastSync = localStorage.getItem(STORAGE_KEY_LAST_SYNC) || '';
+
+      const pinInput = document.getElementById('cloudSyncKeyInput');
+      const autoChk = document.getElementById('chkAutoCloudSync');
+      const lastTimeEl = document.getElementById('cloudLastSyncTime');
+
+      if (pinInput) pinInput.value = savedPin;
+      if (autoChk) autoChk.checked = isAuto;
+      if (lastTimeEl && lastSync) lastTimeEl.textContent = lastSync;
+
+      updateCloudBadge(savedPin);
+    }
+
+    function updateCloudBadge(pin) {
+      const badge = document.getElementById('cloudSyncStatusBadge');
+      if (!badge) return;
+      if (pin) {
+        badge.textContent = `Awan: ${pin.substring(0, 8)}`;
+      } else {
+        badge.textContent = 'Cloud Sync';
+      }
+    }
+
+    function setCloudStatus(msg, isSuccess = true, isLoading = false) {
+      const indicator = document.getElementById('cloudStatusIndicator');
+      if (!indicator) return;
+      if (isLoading) {
+        indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span><span>${msg}</span>`;
+      } else if (isSuccess) {
+        indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span class="text-emerald-700 font-semibold">${msg}</span>`;
+      } else {
+        indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-rose-500"></span><span class="text-rose-700 font-semibold">${msg}</span>`;
+      }
+    }
+
+    async function pushDataToCloud(silent = false) {
+      const pinInput = document.getElementById('cloudSyncKeyInput');
+      const pin = sanitizeKey(pinInput ? pinInput.value : localStorage.getItem(STORAGE_KEY_CLOUD_PIN));
+      if (!pin) {
+        if (!silent) {
+          alert('Sila masukkan Kod Rahsia Peribadi anda terlebih dahulu.');
+          if (pinInput) pinInput.focus();
+        }
+        return false;
+      }
+
+      localStorage.setItem(STORAGE_KEY_CLOUD_PIN, pin);
+      updateCloudBadge(pin);
+
+      if (!silent) setCloudStatus('Sedang memuat naik data...', true, true);
+
+      const payload = {
+        pin: pin,
+        updatedAt: new Date().toISOString(),
+        events: events,
+        dailyLogs: dailyLogs,
+        takwimPoliSesi1: TAKWIM_POLI_SESI_1,
+        takwimPoliSesi2: TAKWIM_POLI_SESI_2
+      };
+
+      try {
+        const response = await fetch(`${CLOUD_BASE_ENDPOINT}mp_${pin}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const nowFormatted = new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+          localStorage.setItem(STORAGE_KEY_LAST_SYNC, nowFormatted);
+          const lastEl = document.getElementById('cloudLastSyncTime');
+          if (lastEl) lastEl.textContent = nowFormatted;
+          setCloudStatus('Data berjaya disimpan ke awan! ✓', true, false);
+          if (!silent) showToast('Data berjaya dihantar ke Awan');
+          return true;
+        } else {
+          throw new Error('Gagal menyimpan data.');
+        }
+      } catch (err) {
+        console.error('Push error:', err);
+        setCloudStatus('Gagal menyambung ke awan.', false, false);
+        if (!silent) showToast('Ralat sambungan awan');
+        return false;
+      }
+    }
+
+    async function pullDataFromCloud() {
+      const pinInput = document.getElementById('cloudSyncKeyInput');
+      const pin = sanitizeKey(pinInput ? pinInput.value : localStorage.getItem(STORAGE_KEY_CLOUD_PIN));
+      if (!pin) {
+        alert('Sila masukkan Kod Rahsia Peribadi anda.');
+        if (pinInput) pinInput.focus();
+        return;
+      }
+
+      localStorage.setItem(STORAGE_KEY_CLOUD_PIN, pin);
+      updateCloudBadge(pin);
+      setCloudStatus('Sedang menarik data dari awan...', true, true);
+
+      try {
+        const response = await fetch(`${CLOUD_BASE_ENDPOINT}mp_${pin}`);
+        if (!response.ok) throw new Error('Data belum wujud di awan.');
+
+        const data = await response.json();
+        if (data && data.events) {
+          events = Array.isArray(data.events) ? data.events : [];
+          dailyLogs = data.dailyLogs || {};
+          
+          if (Array.isArray(data.takwimPoliSesi1)) {
+            TAKWIM_POLI_SESI_1.length = 0;
+            data.takwimPoliSesi1.forEach(item => TAKWIM_POLI_SESI_1.push(item));
+          }
+          if (Array.isArray(data.takwimPoliSesi2)) {
+            TAKWIM_POLI_SESI_2.length = 0;
+            data.takwimPoliSesi2.forEach(item => TAKWIM_POLI_SESI_2.push(item));
+          }
+
+          saveLocalEvents();
+          saveLocalLogs();
+          saveLocalPoliData();
+
+          const nowFormatted = new Date().toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' });
+          localStorage.setItem(STORAGE_KEY_LAST_SYNC, nowFormatted);
+          const lastEl = document.getElementById('cloudLastSyncTime');
+          if (lastEl) lastEl.textContent = nowFormatted;
+
+          setCloudStatus('Data berjaya diselaraskan! ✓', true, false);
+          renderApp();
+          showToast('Data dari Awan berjaya dimuat turun!');
+        }
+      } catch (err) {
+        console.error('Pull error:', err);
+        setCloudStatus('Kod tidak dijumpai atau tiada data.', false, false);
+        showToast('Pastikan anda pernah menekan "Hantar ke Awan" terlebih dahulu.');
+      }
+    }
+
+    let autoSyncTimer = null;
+    function triggerAutoCloudSync() {
+      const isAuto = localStorage.getItem(STORAGE_KEY_AUTO_SYNC) === 'true';
+      const pin = localStorage.getItem(STORAGE_KEY_CLOUD_PIN);
+      if (isAuto && pin) {
+        clearTimeout(autoSyncTimer);
+        autoSyncTimer = setTimeout(() => {
+          pushDataToCloud(true);
+        }, 1500);
+      }
+    }
+
+    /* =====================================================================
        7. EVENT LISTENERS
        ===================================================================== */
-    // Navigasi Bulan / Tahun / Hari
     document.getElementById('prevMonthBtn').addEventListener('click', () => {
       if (activeView === 'year') {
         viewYear--;
@@ -1887,7 +1977,6 @@
       renderApp();
     });
 
-    // View toggles (Hari, Bulan, Tahun, Agenda, Takwim Poli)
     function setView(view) {
       activeView = view;
       const allTabs = [btnViewDay, btnViewMonth, btnViewYear, btnViewAgenda, btnViewTakwimPoli];
@@ -1903,7 +1992,6 @@
         if (c) c.classList.add('hidden');
       });
 
-      // Reset mobile icons
       ['mobileNavDay', 'mobileNavCalendar', 'mobileNavYear', 'mobileNavAgenda', 'mobileNavTakwimPoli'].forEach(id => {
         const btn = document.getElementById(id);
         if (btn) {
@@ -1959,7 +2047,6 @@
     btnViewAgenda.addEventListener('click', () => setView('agenda'));
     btnViewTakwimPoli.addEventListener('click', () => setView('takwim_poli'));
 
-    // Mobile Bottom Navigation Bar Events
     document.getElementById('mobileNavDay').addEventListener('click', () => setView('day'));
     document.getElementById('mobileNavCalendar').addEventListener('click', () => setView('month'));
     document.getElementById('mobileNavYear').addEventListener('click', () => setView('year'));
@@ -2079,7 +2166,6 @@
         };
 
         const targetList = (sesi === 'sesi1') ? TAKWIM_POLI_SESI_1 : TAKWIM_POLI_SESI_2;
-        // Kemaskini jika ada padanan minggu & tarikh
         const existingIdx = targetList.findIndex(item => item.week === week);
         if (existingIdx !== -1) {
           targetList[existingIdx] = newRow;
@@ -2087,7 +2173,6 @@
           targetList.push(newRow);
         }
 
-        // Susun tarikh ikut turutan
         targetList.sort((a, b) => new Date(a.startDateB) - new Date(b.startDateB));
 
         saveLocalPoliData();
@@ -2097,7 +2182,7 @@
       });
     }
 
-    // Reset ke Asal
+    // Reset Takwim ke Asal
     const btnResetPoliDefault = document.getElementById('btnResetPoliDefault');
     if (btnResetPoliDefault) {
       btnResetPoliDefault.addEventListener('click', () => {
@@ -2110,7 +2195,7 @@
       });
     }
 
-    // Muat Turun JSON
+    // Muat Turun JSON Takwim
     const btnDownloadPoliJSON = document.getElementById('btnDownloadPoliJSON');
     if (btnDownloadPoliJSON) {
       btnDownloadPoliJSON.addEventListener('click', () => {
@@ -2164,7 +2249,6 @@
       renderApp();
     });
 
-    // Modal Triggers dengan semakan keselamatan (Null-safe)
     const btnOpenNew = document.getElementById('btnOpenNewEvent');
     if (btnOpenNew) {
       btnOpenNew.addEventListener('click', () => openEventModal());
@@ -2229,7 +2313,22 @@
       renderApp();
     });
 
-    // Auto-Save Catatan Harian (Tiada butang manual diperlukan lagi)
+    // Butang Google Calendar dari Modal
+    const btnSendToGoogleFromModal = document.getElementById('btnSendToGoogleFromModal');
+    if (btnSendToGoogleFromModal) {
+      btnSendToGoogleFromModal.addEventListener('click', () => {
+        const title = document.getElementById('eventTitle').value.trim() || 'Aktiviti MyPlanner';
+        const date = document.getElementById('eventDate').value || selectedDateStr;
+        const startTime = document.getElementById('eventStartTime').value || '09:00';
+        const endTime = document.getElementById('eventEndTime').value || '10:00';
+        const location = document.getElementById('eventLocation').value.trim();
+        const description = document.getElementById('eventDescription').value.trim();
+
+        sendToGoogleCalendarDirect(title, date, startTime, endTime, location, description);
+      });
+    }
+
+    // Auto-Save Catatan Harian
     let autoSaveTimeout = null;
     const dailyLogInput = document.getElementById('dailyLogInput');
     if (dailyLogInput) {
@@ -2250,59 +2349,96 @@
             status.classList.replace('text-amber-500', 'text-emerald-600');
             setTimeout(() => status.classList.add('hidden'), 2000);
           }
-        }, 500); // Simpan setengah saat selepas selesai menaip
+        }, 500);
       });
     }
 
-    // Eksport Fail Backup (JSON)
-    const btnBackup = document.getElementById('btnBackup');
-    if (btnBackup) {
-      btnBackup.addEventListener('click', () => {
+    // Modals: Google Hub
+    const googleHubModal = document.getElementById('googleHubModal');
+    const btnOpenGoogleHub = document.getElementById('btnOpenGoogleHub');
+    if (btnOpenGoogleHub && googleHubModal) {
+      btnOpenGoogleHub.addEventListener('click', () => {
+        googleHubModal.classList.remove('hidden');
+        lucide.createIcons();
+      });
+      document.getElementById('btnCloseGoogleHub').addEventListener('click', () => googleHubModal.classList.add('hidden'));
+      document.getElementById('btnDismissGoogleHub').addEventListener('click', () => googleHubModal.classList.add('hidden'));
+    }
+
+    // Modals: Cloud Sync
+    const cloudSyncModal = document.getElementById('cloudSyncModal');
+    const btnOpenCloudSync = document.getElementById('btnOpenCloudSync');
+    if (btnOpenCloudSync && cloudSyncModal) {
+      btnOpenCloudSync.addEventListener('click', () => {
+        initCloudSyncUI();
+        cloudSyncModal.classList.remove('hidden');
+        lucide.createIcons();
+      });
+      document.getElementById('btnCloseCloudSync').addEventListener('click', () => cloudSyncModal.classList.add('hidden'));
+      document.getElementById('btnDismissCloudSync').addEventListener('click', () => cloudSyncModal.classList.add('hidden'));
+      document.getElementById('btnPushToCloud').addEventListener('click', () => pushDataToCloud(false));
+      document.getElementById('btnPullFromCloud').addEventListener('click', () => pullDataFromCloud());
+
+      document.getElementById('chkAutoCloudSync').addEventListener('change', (e) => {
+        localStorage.setItem(STORAGE_KEY_AUTO_SYNC, e.target.checked ? 'true' : 'false');
+        if (e.target.checked) {
+          pushDataToCloud(true);
+          showToast('Auto-Sync diaktifkan');
+        }
+      });
+
+      document.getElementById('cloudSyncKeyInput').addEventListener('change', (e) => {
+        const pin = sanitizeKey(e.target.value);
+        localStorage.setItem(STORAGE_KEY_CLOUD_PIN, pin);
+        updateCloudBadge(pin);
+      });
+    }
+
+    // Backup JSON & Google ICS
+    const btnDownloadJsonBackup = document.getElementById('btnDownloadJsonBackup');
+    if (btnDownloadJsonBackup) {
+      btnDownloadJsonBackup.addEventListener('click', () => {
         const dataToExport = {
           exportedAt: new Date().toISOString(),
           events: events,
-          dailyLogs: dailyLogs
+          dailyLogs: dailyLogs,
+          takwimPoliSesi1: TAKWIM_POLI_SESI_1,
+          takwimPoliSesi2: TAKWIM_POLI_SESI_2
         };
         const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `my_agenda_backup_${formatDate(new Date())}.json`;
+        a.download = `myplanner_backup_${formatDate(new Date())}.json`;
         a.click();
         URL.revokeObjectURL(url);
-        showToast('Salinan sandaran dimuat turun');
+        showToast('Fail backup .json berjaya dimuat turun');
       });
     }
 
-    // Eksport Fail iCalendar (.ics)
-    const btnExportICS = document.getElementById('btnExportICS');
-    if (btnExportICS) {
-      btnExportICS.addEventListener('click', () => {
-        let icsContent = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//MyAgenda Malaysia//Standalone Planner//EN\nCALSCALE:GREGORIAN\n";
+    const btnExportFullGoogleICS = document.getElementById('btnExportFullGoogleICS');
+    if (btnExportFullGoogleICS) {
+      btnExportFullGoogleICS.addEventListener('click', () => {
+        let ics = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//My Smart Planner//MS\nCALSCALE:GREGORIAN\n";
         events.forEach(evt => {
-          const cleanDate = evt.date.replace(/-/g, '');
-          const start = evt.startTime ? evt.startTime.replace(':', '') + '00' : '090000';
-          const end = evt.endTime ? evt.endTime.replace(':', '') + '00' : '100000';
-          
-          icsContent += "BEGIN:VEVENT\n";
-          icsContent += `SUMMARY:${evt.title}\n`;
-          icsContent += `DTSTART:${cleanDate}T${start}\n`;
-          icsContent += `DTEND:${cleanDate}T${end}\n`;
-          if (evt.location) icsContent += `LOCATION:${evt.location}\n`;
-          if (evt.description) icsContent += `DESCRIPTION:${evt.description}\n`;
-          icsContent += "STATUS:CONFIRMED\n";
-          icsContent += "END:VEVENT\n";
+          const d = evt.date.replace(/-/g, '');
+          const st = (evt.startTime || '09:00').replace(':', '') + '00';
+          const et = (evt.endTime || '10:00').replace(':', '') + '00';
+          ics += `BEGIN:VEVENT\nSUMMARY:${evt.title}\nDTSTART:${d}T${st}\nDTEND:${d}T${et}\n`;
+          if (evt.location) ics += `LOCATION:${evt.location}\n`;
+          if (evt.description) ics += `DESCRIPTION:${evt.description}\n`;
+          ics += `END:VEVENT\n`;
         });
-        icsContent += "END:VCALENDAR";
+        ics += "END:VCALENDAR";
 
-        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `my_agenda_malaysia_${formatDate(new Date())}.ics`;
+        a.download = `myplanner_google_calendar.ics`;
         a.click();
         URL.revokeObjectURL(url);
-        showToast('Fail iCal (.ics) dijana');
+        showToast('Fail .ics dijana untuk Google Calendar');
       });
     }
 
@@ -2311,23 +2447,19 @@
        ===================================================================== */
     const btnSwitchPC = document.getElementById('btnSwitchPC');
     const btnSwitchMobile = document.getElementById('btnSwitchMobile');
-    const rootContainer = document.querySelector('.max-w-\\[1680px\\]') || document.querySelector('.max-w-7xl') || document.querySelector('.mobile-frame-mode');
+    const rootContainer = document.querySelector('.max-w-\\[1680px\\]') || document.querySelector('.mobile-frame-mode');
 
     function applyViewMode(mode) {
       if (mode === 'mobile') {
-        // Gantikan saiz menjadi perkadaran skrin smartphone sebenar (412px, tiada regangan)
-        rootContainer.classList.remove('max-w-[1680px]', 'max-w-7xl', 'w-full');
+        rootContainer.classList.remove('max-w-[1680px]', 'w-full');
         rootContainer.classList.add('mobile-frame-mode');
-        
         btnSwitchMobile.classList.add('bg-white', 'text-indigo-700', 'shadow-xs');
         btnSwitchMobile.classList.remove('text-slate-500');
         btnSwitchPC.classList.remove('bg-white', 'text-indigo-700', 'shadow-xs');
         btnSwitchPC.classList.add('text-slate-500');
       } else {
-        // Kembalikan ke paparan lebar PC/Desktop penuh
         rootContainer.classList.add('max-w-[1680px]', 'w-full');
         rootContainer.classList.remove('mobile-frame-mode');
-
         btnSwitchPC.classList.add('bg-white', 'text-indigo-700', 'shadow-xs');
         btnSwitchPC.classList.remove('text-slate-500');
         btnSwitchMobile.classList.remove('bg-white', 'text-indigo-700', 'shadow-xs');
@@ -2341,7 +2473,6 @@
       btnSwitchMobile.addEventListener('click', () => applyViewMode('mobile'));
     }
 
-    // Auto update apabila window saiz bertukar
     window.addEventListener('resize', () => {
       renderCalendarHeader();
       if (activeView === 'month') renderMonthGrid();
@@ -2352,6 +2483,7 @@
        ===================================================================== */
     window.addEventListener('DOMContentLoaded', () => {
       loadLocalData();
+      initCloudSyncUI();
       renderApp();
     });
   </script>
