@@ -54,7 +54,7 @@
         <div>
           <div class="flex items-center gap-2">
             <h1 class="text-lg sm:text-xl font-bold tracking-tight">PoliPlanner Sync</h1>
-            <span class="bg-indigo-700 text-indigo-200 text-xs px-2 py-0.5 rounded-full font-medium">Polytechnic & MOE</span>
+            <span class="bg-indigo-700 text-indigo-200 text-xs px-2 py-0.5 rounded-full font-medium">Politeknik Port Dickson (Sesi I & II 2026/2027)</span>
           </div>
           <p class="text-xs text-indigo-300 hidden sm:block">Access anytime from mobile or office computer</p>
         </div>
@@ -537,7 +537,7 @@
   <!-- Application Logic -->
   <script>
     /* ====================================================================
-       1. PRELOADED DATA: POLYTECHNIC SCHEDULE, HOLIDAYS & MOE BREAKS
+       1. PRELOADED DATA: POLYTECHNIC PORT DICKSON & JPPKK TAKWIM
        ==================================================================== */
     const PUBLIC_HOLIDAYS_MALAYSIA = [
       { date: "2026-01-01", title: "New Year's Day 2026", type: "holiday" },
@@ -550,34 +550,64 @@
       { date: "2026-05-27", title: "Hari Raya Haji (Aidiladha)", type: "holiday" },
       { date: "2026-05-31", title: "Wesak Day", type: "holiday" },
       { date: "2026-06-01", title: "Agong's Birthday", type: "holiday" },
-      { date: "2026-06-16", title: "Awal Muharram (Islamic New Year)", type: "holiday" },
-      { date: "2026-08-25", title: "Prophet Muhammad's Birthday (Maulidur Rasul)", type: "holiday" },
-      { date: "2026-08-31", title: "Malaysia National Day (69th)", type: "holiday" },
-      { date: "2026-09-16", title: "Malaysia Day", type: "holiday" },
-      { date: "2026-11-08", title: "Deepavali", type: "holiday" },
+      { date: "2026-06-16", title: "Awal Muharram", type: "holiday" },
+      { date: "2026-08-25", title: "Maulidur Rasul (Prophet's Birthday)", type: "holiday" },
+      { date: "2026-08-31", title: "Hari Kebangsaan (National Day)", type: "holiday" },
+      { date: "2026-09-16", title: "Hari Malaysia (Malaysia Day)", type: "holiday" },
+      { date: "2026-11-08", title: "Hari Deepavali", type: "holiday" },
       { date: "2026-12-25", title: "Christmas Day", type: "holiday" },
       { date: "2027-01-01", title: "New Year's Day 2027", type: "holiday" },
-      { date: "2027-02-06", title: "Chinese New Year", type: "holiday" },
-      { date: "2027-03-10", title: "Hari Raya Aidilfitri", type: "holiday" }
+      { date: "2027-02-06", title: "Chinese New Year (Day 1)", type: "holiday" },
+      { date: "2027-02-07", title: "Chinese New Year (Day 2)", type: "holiday" },
+      { date: "2027-03-10", title: "Hari Raya Aidilfitri (Day 1)", type: "holiday" },
+      { date: "2027-03-11", title: "Hari Raya Aidilfitri (Day 2)", type: "holiday" },
+      { date: "2027-05-01", title: "Labour Day", type: "holiday" },
+      { date: "2027-05-17", title: "Hari Raya Aidiladha", type: "holiday" },
+      { date: "2027-05-20", title: "Wesak Day", type: "holiday" },
+      { date: "2027-06-06", title: "Awal Muharram", type: "holiday" },
+      { date: "2027-06-07", title: "Hari Keputeraan YDP Agong", type: "holiday" }
     ];
 
     const KPM_SCHOOL_HOLIDAYS = [
-      { start: "2026-03-14", end: "2026-03-22", title: "MOE Term 1 School Break", type: "kpm" },
-      { start: "2026-05-23", end: "2026-06-07", title: "MOE Term 2 School Break", type: "kpm" },
-      { start: "2026-09-12", end: "2026-09-20", title: "MOE Term 3 School Break", type: "kpm" },
-      { start: "2026-12-19", end: "2027-01-10", title: "MOE Year-End School Break", type: "kpm" }
+      { start: "2026-03-14", end: "2026-03-22", title: "MOE Term 1 Break", type: "kpm" },
+      { start: "2026-05-23", end: "2026-06-07", title: "MOE Term 2 Break", type: "kpm" },
+      { start: "2026-09-12", end: "2026-09-20", title: "MOE Term 3 Break", type: "kpm" },
+      { start: "2026-12-19", end: "2027-01-10", title: "MOE Year-End Break", type: "kpm" }
     ];
 
+    // Official Takwim from JPPKK & Politeknik Port Dickson (01 JHEP)
     const POLITEKNIK_TAKWIM = [
-      { date: "2026-08-03", title: "Student Registration (Session I)", type: "politeknik", detail: "Orientation & Course Registration" },
-      { start: "2026-08-10", end: "2026-09-25", title: "Lectures Part 1 (Weeks 1 - 7)", type: "politeknik", detail: "Academic Teaching Period" },
-      { start: "2026-09-26", end: "2026-10-04", title: "Mid-Semester Break (Session I)", type: "politeknik", detail: "1-Week Break" },
-      { start: "2026-10-05", end: "2026-11-20", title: "Lectures Part 2 (Weeks 8 - 14)", type: "politeknik", detail: "Coursework & Final Projects" },
-      { start: "2026-11-21", end: "2026-11-29", title: "Revision Week", type: "politeknik", detail: "Study Week" },
-      { start: "2026-11-30", end: "2026-12-18", title: "Final Examination (Session I)", type: "politeknik", detail: "Assessments & Exams" },
-      { start: "2026-12-19", end: "2027-01-24", title: "End of Semester Break (Session I)", type: "politeknik", detail: "Semester Vacation" },
-      { date: "2027-01-25", title: "Student Registration (Session II: 2026/2027)", type: "politeknik", detail: "Registration Day" },
-      { start: "2027-02-01", end: "2027-03-26", title: "Lectures Part 1 (Session II: Weeks 1 - 8)", type: "politeknik", detail: "New Semester Lectures" }
+      // --- SESI I : 2026/2027 ---
+      { start: "2026-06-22", end: "2026-06-28", title: "Pendaftaran Pelajar Baharu / Suai Kenal (Sesi I)", type: "politeknik", detail: "Orientation & Course Registration" },
+      { start: "2026-06-29", end: "2026-08-30", title: "Kuliah Minggu 1 - 9 (Sesi I)", type: "politeknik", detail: "Perkuliahan Bahagian 1" },
+      { start: "2026-08-31", end: "2026-09-06", title: "Cuti Pertengahan Semester (Sesi I)", type: "politeknik", detail: "1-Week Mid-Semester Break" },
+      { start: "2026-09-07", end: "2026-10-11", title: "Kuliah Minggu 10 - 14 (Sesi I)", type: "politeknik", detail: "Perkuliahan Bahagian 2" },
+      { start: "2026-10-12", end: "2026-10-16", title: "Minggu Ulangkaji (Sesi I)", type: "politeknik", detail: "Study Week" },
+      { start: "2026-10-17", end: "2026-11-08", title: "Peperiksaan Akhir Semester (Sesi I)", type: "politeknik", detail: "Final Exams & Assessment" },
+      { start: "2026-11-09", end: "2026-11-29", title: "Cuti Akhir Semester (Sesi I)", type: "politeknik", detail: "3-Week Semester Vacation" },
+
+      // --- SESI II : 2026/2027 (POLITEKNIK PORT DICKSON - 01 JHEP) ---
+      { start: "2026-11-23", end: "2026-11-29", title: "M0 - Pendaftaran Pelajar Baharu / Aktiviti Suai Kenal", type: "politeknik", detail: "Orientation Week" },
+      { start: "2026-11-30", end: "2026-12-06", title: "M1 - Minggu Perkuliahan 1", type: "politeknik", detail: "Sesi II Kuliah M1" },
+      { start: "2026-12-07", end: "2026-12-13", title: "M2 - Minggu Perkuliahan 2", type: "politeknik", detail: "Sesi II Kuliah M2" },
+      { start: "2026-12-14", end: "2026-12-20", title: "M3 - Minggu Perkuliahan 3", type: "politeknik", detail: "Sesi II Kuliah M3" },
+      { start: "2026-12-21", end: "2026-12-27", title: "M4 - Minggu Perkuliahan 4", type: "politeknik", detail: "Sesi II Kuliah M4 (Christmas 25/12)" },
+      { start: "2026-12-28", end: "2027-01-03", title: "M5 - Minggu Perkuliahan 5", type: "politeknik", detail: "Sesi II Kuliah M5 (New Year 01/01)" },
+      { start: "2027-01-04", end: "2027-01-10", title: "M6 - Minggu Perkuliahan 6", type: "politeknik", detail: "Sesi II Kuliah M6" },
+      { start: "2027-01-11", end: "2027-01-17", title: "M7 - Minggu Perkuliahan 7", type: "politeknik", detail: "Sesi II Kuliah M7" },
+      { start: "2027-01-18", end: "2027-01-24", title: "M8 - Minggu Perkuliahan 8", type: "politeknik", detail: "Sesi II Kuliah M8" },
+      { start: "2027-01-25", end: "2027-01-31", title: "M9 - Minggu Perkuliahan 9", type: "politeknik", detail: "Sesi II Kuliah M9" },
+      { start: "2027-02-01", end: "2027-02-07", title: "M10 - Minggu Perkuliahan 10", type: "politeknik", detail: "Sesi II Kuliah M10 (CNY 06-07/02)" },
+      { start: "2027-02-08", end: "2027-02-14", title: "Cuti Pertengahan Semester (Sesi II)", type: "politeknik", detail: "1-Week Mid-Semester Break" },
+      { start: "2027-02-15", end: "2027-02-21", title: "M11 - Minggu Perkuliahan 11", type: "politeknik", detail: "Sesi II Kuliah M11" },
+      { start: "2027-02-22", end: "2027-02-28", title: "M12 - Minggu Perkuliahan 12", type: "politeknik", detail: "Sesi II Kuliah M12" },
+      { start: "2027-03-01", end: "2027-03-07", title: "M13 - Minggu Perkuliahan 13", type: "politeknik", detail: "Sesi II Kuliah M13" },
+      { start: "2027-03-08", end: "2027-03-14", title: "Cuti Perayaan (Hari Raya Aidilfitri)", type: "politeknik", detail: "Raya Aidilfitri Break (10 & 11 Mac)" },
+      { start: "2027-03-15", end: "2027-03-21", title: "M14 - Minggu Perkuliahan 14", type: "politeknik", detail: "Sesi II Kuliah M14" },
+      { start: "2027-03-22", end: "2027-03-26", title: "Minggu Ulangkaji (Sesi II)", type: "politeknik", detail: "Revision / Study Period" },
+      { start: "2027-03-27", end: "2027-04-18", title: "Peperiksaan Akhir Semester / Pentaksiran", type: "politeknik", detail: "Final Examination & Assessment (3 Weeks)" },
+      { start: "2027-04-19", end: "2027-06-20", title: "Cuti Akhir Semester / Semester Pendek", type: "politeknik", detail: "End of Semester Break (9 Weeks)" },
+      { start: "2027-06-14", end: "2027-06-20", title: "Pendaftaran Pelajar Baharu (Sesi I : 2027/2028)", type: "politeknik", detail: "New Intake Registration" }
     ];
 
     /* ====================================================================
@@ -599,36 +629,70 @@
       return targetStr >= startStr && targetStr <= endStr;
     }
 
+    // Exact Monday indicator matching Politeknik Port Dickson (01 JHEP sheet)
     function getPoliWeekLabelForMonday(targetDateStr) {
       const targetDate = parseYMD(targetDateStr);
       if (targetDate.getDay() !== 1) return null; // Monday only
 
-      if (isDateBetween(targetDateStr, "2026-08-10", "2026-09-25")) {
-        const start = parseYMD("2026-08-10");
-        const diffWeeks = Math.floor((targetDate - start) / (7 * 24 * 60 * 60 * 1000)) + 1;
-        return { label: `W${diffWeeks} Lecture`, detail: `Lecture Week ${diffWeeks}` };
+      // Exact Monday Mapping for Sesi II: 2026/2027 (PPD)
+      const mondayMapSesi2 = {
+        "2026-11-23": { label: "M0 Suai Kenal", detail: "Pendaftaran Pelajar Baharu / Suai Kenal" },
+        "2026-11-30": { label: "M1 Perkuliahan", detail: "Minggu Perkuliahan 1" },
+        "2026-12-07": { label: "M2 Perkuliahan", detail: "Minggu Perkuliahan 2" },
+        "2026-12-14": { label: "M3 Perkuliahan", detail: "Minggu Perkuliahan 3" },
+        "2026-12-21": { label: "M4 Perkuliahan", detail: "Minggu Perkuliahan 4" },
+        "2026-12-28": { label: "M5 Perkuliahan", detail: "Minggu Perkuliahan 5" },
+        "2027-01-04": { label: "M6 Perkuliahan", detail: "Minggu Perkuliahan 6" },
+        "2027-01-11": { label: "M7 Perkuliahan", detail: "Minggu Perkuliahan 7" },
+        "2027-01-18": { label: "M8 Perkuliahan", detail: "Minggu Perkuliahan 8" },
+        "2027-01-25": { label: "M9 Perkuliahan", detail: "Minggu Perkuliahan 9" },
+        "2027-02-01": { label: "M10 Perkuliahan", detail: "Minggu Perkuliahan 10" },
+        "2027-02-08": { label: "Cuti Pertengahan Sem", detail: "Cuti Pertengahan Semester (1 Minggu)" },
+        "2027-02-15": { label: "M11 Perkuliahan", detail: "Minggu Perkuliahan 11" },
+        "2027-02-22": { label: "M12 Perkuliahan", detail: "Minggu Perkuliahan 12" },
+        "2027-03-01": { label: "M13 Perkuliahan", detail: "Minggu Perkuliahan 13" },
+        "2027-03-08": { label: "Cuti Perayaan", detail: "Cuti Perayaan (Hari Raya Aidilfitri)" },
+        "2027-03-15": { label: "M14 Perkuliahan", detail: "Minggu Perkuliahan 14" },
+        "2027-03-22": { label: "Minggu Ulangkaji", detail: "Minggu Ulangkaji (Study Week)" },
+        "2027-03-29": { label: "M1 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 1)" },
+        "2027-04-05": { label: "M2 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 2)" },
+        "2027-04-12": { label: "M3 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 3)" },
+        "2027-04-19": { label: "Cuti Akhir Semester", detail: "Cuti Akhir Semester / Semester Pendek Bermula" }
+      };
+
+      if (mondayMapSesi2[targetDateStr]) {
+        return mondayMapSesi2[targetDateStr];
       }
-      if (isDateBetween(targetDateStr, "2026-09-26", "2026-10-04")) {
-        return { label: `Mid-Semester Break`, detail: `Mid-Semester Vacation (Session I)` };
+
+      // Monday Mapping for Sesi I: 2026/2027
+      const mondayMapSesi1 = {
+        "2026-06-22": { label: "M0 Suai Kenal", detail: "Pendaftaran Pelajar Baharu / Suai Kenal" },
+        "2026-06-29": { label: "M1 Perkuliahan", detail: "Minggu Perkuliahan 1" },
+        "2026-07-06": { label: "M2 Perkuliahan", detail: "Minggu Perkuliahan 2" },
+        "2026-07-13": { label: "M3 Perkuliahan", detail: "Minggu Perkuliahan 3" },
+        "2026-07-20": { label: "M4 Perkuliahan", detail: "Minggu Perkuliahan 4" },
+        "2026-07-27": { label: "M5 Perkuliahan", detail: "Minggu Perkuliahan 5" },
+        "2026-08-03": { label: "M6 Perkuliahan", detail: "Minggu Perkuliahan 6" },
+        "2026-08-10": { label: "M7 Perkuliahan", detail: "Minggu Perkuliahan 7" },
+        "2026-08-17": { label: "M8 Perkuliahan", detail: "Minggu Perkuliahan 8" },
+        "2026-08-24": { label: "M9 Perkuliahan", detail: "Minggu Perkuliahan 9" },
+        "2026-08-31": { label: "Cuti Pertengahan Sem", detail: "Cuti Pertengahan Semester (1 Minggu)" },
+        "2026-09-07": { label: "M10 Perkuliahan", detail: "Minggu Perkuliahan 10" },
+        "2026-09-14": { label: "M11 Perkuliahan", detail: "Minggu Perkuliahan 11" },
+        "2026-09-21": { label: "M12 Perkuliahan", detail: "Minggu Perkuliahan 12" },
+        "2026-09-28": { label: "M13 Perkuliahan", detail: "Minggu Perkuliahan 13" },
+        "2026-10-05": { label: "M14 Perkuliahan", detail: "Minggu Perkuliahan 14" },
+        "2026-10-12": { label: "Minggu Ulangkaji", detail: "Minggu Ulangkaji (Study Week)" },
+        "2026-10-19": { label: "M1 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 1)" },
+        "2026-10-26": { label: "M2 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 2)" },
+        "2026-11-02": { label: "M3 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 3)" },
+        "2026-11-09": { label: "Cuti Akhir Semester", detail: "Cuti Akhir Semester (3 Minggu)" }
+      };
+
+      if (mondayMapSesi1[targetDateStr]) {
+        return mondayMapSesi1[targetDateStr];
       }
-      if (isDateBetween(targetDateStr, "2026-10-05", "2026-11-20")) {
-        const start = parseYMD("2026-10-05");
-        const diffWeeks = Math.floor((targetDate - start) / (7 * 24 * 60 * 60 * 1000)) + 8;
-        return { label: `W${diffWeeks} Lecture`, detail: `Lecture Week ${diffWeeks} (Coursework/Projects)` };
-      }
-      if (isDateBetween(targetDateStr, "2026-11-21", "2026-11-29")) {
-        return { label: `Revision Week`, detail: `Study & Revision Week` };
-      }
-      if (isDateBetween(targetDateStr, "2026-11-30", "2026-12-18")) {
-        const start = parseYMD("2026-11-30");
-        const examWeek = Math.floor((targetDate - start) / (7 * 24 * 60 * 60 * 1000)) + 1;
-        return { label: `W${examWeek} Final Exams`, detail: `Final Examination Week ${examWeek}` };
-      }
-      if (isDateBetween(targetDateStr, "2027-02-01", "2027-03-26")) {
-        const start = parseYMD("2027-02-01");
-        const diffWeeks = Math.floor((targetDate - start) / (7 * 24 * 60 * 60 * 1000)) + 1;
-        return { label: `W${diffWeeks} Lecture (Session II)`, detail: `Lecture Week ${diffWeeks}` };
-      }
+
       return null;
     }
 
@@ -637,14 +701,14 @@
         const urlParams = new URLSearchParams(window.location.search);
         let pid = urlParams.get('p');
         if (!pid) {
-          pid = 'poli-' + Math.random().toString(36).substring(2, 9);
+          pid = 'ppd-' + Math.random().toString(36).substring(2, 8);
           const newUrl = new URL(window.location.href);
           newUrl.searchParams.set('p', pid);
           window.history.replaceState({}, '', newUrl.toString());
         }
         return pid;
       } catch (e) {
-        return 'poli-default';
+        return 'ppd-default';
       }
     }
 
