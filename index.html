@@ -4,22 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PoliPlanner - Polytechnic Academic Schedule & Task Manager</title>
+  <title>Politeknik Port Dickson Academic & Task Planner</title>
+  
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Google Fonts Inter -->
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <!-- Inter Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- PWA & Mobile App Meta Tags -->
-  <meta name="theme-color" content="#312e81">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="PoliPlanner">
-  <meta name="mobile-web-app-capable" content="yes">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -37,56 +33,37 @@
       background: #cbd5e1;
       border-radius: 4px;
     }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
+    .calendar-cell {
+      min-height: 105px;
+    }
+    @media (max-width: 640px) {
+      .calendar-cell {
+        min-height: 75px;
+      }
     }
   </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
 
-  <!-- Top Navigation Bar -->
-  <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-30">
-    <div class="max-w-7xl mx-auto px-4 py-3 sm:px-6 flex items-center justify-between flex-wrap gap-2">
-      <div class="flex items-center space-x-3">
-        <div class="bg-indigo-600 p-2.5 rounded-xl shadow-inner text-white flex items-center justify-center">
-          <i class="fa-solid fa-graduation-cap text-xl"></i>
+  <!-- Top Bar -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+          PPD
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg sm:text-xl font-bold tracking-tight">PoliPlanner Sync</h1>
-            <span class="bg-indigo-700 text-indigo-200 text-xs px-2 py-0.5 rounded-full font-medium">Politeknik Port Dickson (Sesi I & II 2026/2027)</span>
-          </div>
-          <p class="text-xs text-indigo-300 hidden sm:block">Access anytime from mobile or office computer</p>
+          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Politeknik Port Dickson Planner</h1>
+          <p class="text-xs text-slate-500">Takwim Pengajian & Pembelajaran (Sesi II: 2026/2027)</p>
         </div>
       </div>
 
-      <!-- Sync Status & Action Bar -->
       <div class="flex items-center gap-2">
-        <div id="syncIndicator" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-indigo-950/70 border border-indigo-700/50 text-indigo-200">
-          <span class="w-2 h-2 rounded-full bg-emerald-400" id="syncDot"></span>
-          <span id="syncText">Cloud Sync Ready</span>
-        </div>
-
-        <!-- Manual Sync Now Button -->
-        <button id="btnManualSync" class="bg-indigo-800 hover:bg-indigo-700 text-indigo-100 px-2.5 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow transition active:scale-95" title="Force Sync Now">
-          <i class="fa-solid fa-arrows-rotate" id="syncSpinIcon"></i>
-          <span class="hidden sm:inline">Sync Now</span>
-        </button>
-
-        <!-- Install App Button (PWA Trigger) -->
-        <button id="btnInstallApp" class="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow transition active:scale-95" title="Install as Mobile/Desktop App">
-          <i class="fa-solid fa-download"></i>
-          <span>Install App</span>
-        </button>
-
-        <!-- Share / Copy Link Button -->
-        <button id="btnSharePlanner" class="bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 shadow transition active:scale-95" title="Copy share link">
+        <button id="btnShareLink" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition flex items-center gap-1.5">
           <i class="fa-solid fa-share-nodes"></i>
-          <span class="hidden md:inline">Share Link</span>
+          <span>Share Link</span>
         </button>
-
-        <!-- Quick Add Modal Trigger -->
-        <button id="btnOpenAddTask" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-1.5 shadow transition active:scale-95">
+        <button id="btnOpenAddModal" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition flex items-center gap-1.5">
           <i class="fa-solid fa-plus"></i>
           <span>Add Task</span>
         </button>
@@ -94,1611 +71,903 @@
     </div>
   </header>
 
-  <!-- Notification Toast Banner -->
-  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 border border-slate-700 max-w-sm">
-    <div id="toastIcon" class="text-emerald-400 text-lg"><i class="fa-solid fa-circle-check"></i></div>
-    <div class="text-sm font-medium" id="toastMessage">Link copied successfully!</div>
-  </div>
-
   <!-- Main Container -->
-  <main class="max-w-7xl mx-auto w-full p-3 sm:p-6 flex-1 flex flex-col gap-6">
+  <main class="max-w-7xl mx-auto w-full px-3 sm:px-6 py-5 flex-1 flex flex-col gap-5">
 
-    <!-- Top Controls: Month Selector & Quick View Mode & Filter Toggles -->
-    <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <!-- Planner Controls Bar -->
+    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-wrap items-center justify-between gap-3">
       
-      <!-- Month & Year Navigation -->
-      <div class="flex items-center justify-between sm:justify-start gap-3">
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
-          <button id="btnPrevMonth" class="p-2 hover:bg-white rounded-lg transition text-slate-600 hover:text-slate-900 active:scale-95" title="Previous Month">
-            <i class="fa-solid fa-chevron-left text-sm"></i>
+      <!-- Month Navigation -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center bg-slate-100 rounded-xl p-1 border border-slate-200">
+          <button id="btnPrevMonth" class="px-2.5 py-1.5 rounded-lg hover:bg-white text-slate-700 transition" title="Previous Month">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
           </button>
-          <button id="btnToday" class="px-3 py-1.5 text-xs font-semibold hover:bg-white rounded-lg transition text-slate-700">
+          <button id="btnToday" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:bg-white transition">
             Today
           </button>
-          <button id="btnNextMonth" class="p-2 hover:bg-white rounded-lg transition text-slate-600 hover:text-slate-900 active:scale-95" title="Next Month">
-            <i class="fa-solid fa-chevron-right text-sm"></i>
+          <button id="btnNextMonth" class="px-2.5 py-1.5 rounded-lg hover:bg-white text-slate-700 transition" title="Next Month">
+            <i class="fa-solid fa-chevron-right text-xs"></i>
           </button>
         </div>
-        <h2 id="currentMonthYearLabel" class="text-lg sm:text-xl font-bold text-slate-800 tracking-tight ml-1"></h2>
+        <h2 id="currentMonthYearLabel" class="text-base sm:text-xl font-bold text-slate-800 tracking-tight min-w-[170px]">
+          November 2026
+        </h2>
       </div>
 
-      <!-- View Switcher (Split vs Full Calendar vs Agenda) -->
-      <div class="flex items-center bg-slate-100 p-1 rounded-xl self-start sm:self-auto">
-        <button id="viewBtnSplit" class="view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition bg-white text-indigo-700 shadow-sm flex items-center gap-1.5" title="Split Calendar & Tasks View">
-          <i class="fa-solid fa-table-columns"></i>
-          <span>Split</span>
-        </button>
-        <button id="viewBtnFull" class="view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5" title="Full Month Calendar View">
-          <i class="fa-solid fa-calendar-days"></i>
-          <span>Full</span>
-        </button>
-        <button id="viewBtnAgenda" class="view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5" title="Agenda & Timeline View">
-          <i class="fa-solid fa-list-ul"></i>
-          <span>Agenda</span>
-        </button>
+      <!-- Quick Semester Navigation Buttons -->
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class="text-xs font-bold text-slate-400 mr-1 hidden sm:inline">PPD Sesi II:</span>
+        <button class="jump-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 border border-slate-200 transition" data-year="2026" data-month="10">Nov '26 (M0/M1)</button>
+        <button class="jump-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 border border-slate-200 transition" data-year="2027" data-month="0">Jan '27 (M6)</button>
+        <button class="jump-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 border border-slate-200 transition" data-year="2027" data-month="1">Feb '27 (Mid Break)</button>
+        <button class="jump-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 border border-slate-200 transition" data-year="2027" data-month="2">Mar '27 (Raya & Exams)</button>
+        <button class="jump-btn px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 hover:bg-indigo-50 hover:text-indigo-600 text-slate-700 border border-slate-200 transition" data-year="2027" data-month="3">Apr '27 (Cuti Sem)</button>
       </div>
 
-      <!-- Category Filter Pills -->
-      <div class="flex flex-wrap items-center gap-2">
-        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 border border-emerald-200 text-emerald-800 select-none">
-          <input type="checkbox" id="filterTasks" checked class="rounded text-emerald-600 focus:ring-emerald-500 accent-emerald-600">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span> Your Tasks
+      <!-- Filter Checkboxes -->
+      <div class="flex items-center gap-2 flex-wrap text-xs">
+        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-800 border border-indigo-200 font-medium select-none">
+          <input type="checkbox" id="filterPoli" checked class="rounded text-indigo-600 accent-indigo-600">
+          <span>PPD Takwim</span>
         </label>
-        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-indigo-50 border border-indigo-200 text-indigo-800 select-none">
-          <input type="checkbox" id="filterPoliteknik" checked class="rounded text-indigo-600 focus:ring-indigo-500 accent-indigo-600">
-          <span class="w-2 h-2 rounded-full bg-indigo-600"></span> Polytechnic Schedule
+        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200 font-medium select-none">
+          <input type="checkbox" id="filterTasks" checked class="rounded text-emerald-600 accent-emerald-600">
+          <span>Tasks</span>
         </label>
-        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-amber-50 border border-amber-200 text-amber-800 select-none">
-          <input type="checkbox" id="filterKPM" checked class="rounded text-amber-600 focus:ring-amber-500 accent-amber-600">
-          <span class="w-2 h-2 rounded-full bg-amber-500"></span> MOE School Breaks
+        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200 font-medium select-none">
+          <input type="checkbox" id="filterKpm" checked class="rounded text-amber-600 accent-amber-600">
+          <span>KPM Breaks</span>
         </label>
-        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-50 border border-rose-200 text-rose-800 select-none">
-          <input type="checkbox" id="filterHolidays" checked class="rounded text-rose-600 focus:ring-rose-500 accent-rose-600">
-          <span class="w-2 h-2 rounded-full bg-rose-500"></span> Public Holidays
+        <label class="cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-rose-50 text-rose-800 border border-rose-200 font-medium select-none">
+          <input type="checkbox" id="filterHolidays" checked class="rounded text-rose-600 accent-rose-600">
+          <span>Holidays</span>
         </label>
       </div>
+
     </div>
 
-    <!-- Main Grid: Left Panel (Entry & Tasks), Right Panel (Calendar) -->
-    <div id="mainContentGrid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+    <!-- Main Grid: Left (Forms & Details) & Right (Calendar) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
       
-      <!-- LEFT PANEL: Quick Entry, Selected Date Details & Task List -->
-      <div id="sidebarContainerCol" class="lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1">
+      <!-- LEFT COLUMN (col-span-4) -->
+      <div class="lg:col-span-4 flex flex-col gap-5 order-2 lg:order-1">
         
-        <!-- Quick Task Entry Form -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-            <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
-              <i class="fa-solid fa-pen-to-square text-indigo-600"></i>
-              <span>Add New Activity / Task</span>
-            </h3>
-            <span class="text-[10px] bg-indigo-50 text-indigo-700 px-2 py-0.5 rounded-full font-semibold">Quick Entry</span>
+        <!-- Cross Device Link Box -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
+              <i class="fa-solid fa-mobile-screen-button text-indigo-600"></i>
+              <span>Device Sync Link</span>
+            </h4>
+            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Ready</span>
           </div>
+          <p class="text-xs text-slate-500">Buka link ini di fon atau komputer ofis untuk akses kalendar yang sama:</p>
+          <div class="flex items-center gap-2">
+            <input type="text" id="shareUrlBox" readonly class="text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-600 flex-1 outline-none font-mono truncate">
+            <button id="btnCopyBox" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition shrink-0">
+              Copy
+            </button>
+          </div>
+        </div>
+
+        <!-- Selected Date Schedule & Details -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col gap-3">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+            <div>
+              <span class="text-[10px] font-bold text-indigo-600 uppercase">Tarikh Dipilih</span>
+              <h3 id="selectedDateTitle" class="text-sm font-bold text-slate-800">Pilih mana-mana tarikh</h3>
+            </div>
+            <button id="btnAddSelectedDateTask" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-600 transition flex items-center gap-1">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <span>Tambah Task</span>
+            </button>
+          </div>
+
+          <div id="selectedDateEventsList" class="flex flex-col gap-2 max-h-80 overflow-y-auto custom-scrollbar pr-1">
+            <div class="text-xs text-slate-400 text-center py-6">
+              Klik pada mana-mana petak kalendar untuk melihat perincian jadual.
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Add Form -->
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200">
+          <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wide pb-2 border-b border-slate-100 mb-3 flex items-center gap-1.5">
+            <i class="fa-solid fa-pen-to-square text-indigo-600"></i>
+            <span>Borang Pengisian Pantas</span>
+          </h3>
 
           <form id="sideTaskForm" class="space-y-3">
             <div>
-              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Title *</label>
-              <input type="text" id="sideTaskTitle" required placeholder="e.g. Week 5 Lecture / CA Review" 
-                class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">Tajuk Tugasan / Aktiviti *</label>
+              <input type="text" id="sideTaskTitle" required placeholder="cth: Mesyuarat Jabatan, Semakan PB..." 
+                class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
 
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Date *</label>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Tarikh *</label>
                 <input type="date" id="sideTaskDate" required 
-                  class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+                  class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
               </div>
               <div>
-                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Time</label>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">Masa</label>
                 <input type="time" id="sideTaskTime" 
-                  class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-              </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-2">
-              <div>
-                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Category</label>
-                <select id="sideTaskCategory" class="w-full text-xs border border-slate-300 rounded-xl px-2 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-                  <option value="task">📝 Task</option>
-                  <option value="politeknik">🎓 Polytechnic</option>
-                  <option value="meeting">👥 Meeting</option>
-                  <option value="exam">📋 Assessment / Exam</option>
-                  <option value="other">📌 Other</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Priority</label>
-                <select id="sideTaskPriority" class="w-full text-xs border border-slate-300 rounded-xl px-2 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-                  <option value="medium">Medium</option>
-                  <option value="high">Urgent</option>
-                  <option value="low">Low</option>
-                </select>
+                  class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
               </div>
             </div>
 
             <div>
-              <label class="block text-[11px] font-bold text-slate-600 uppercase mb-1">Notes (Optional)</label>
-              <textarea id="sideTaskNotes" rows="2" placeholder="e.g. Lecture room, meeting link, attachments..." 
-                class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">Kategori</label>
+              <select id="sideTaskCategory" class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="task">📝 Tugasan Biasa (To-Do)</option>
+                <option value="lecture">🎓 Kuliah / Kelas / Bengkel</option>
+                <option value="meeting">👥 Mesyuarat / Perbincangan</option>
+                <option value="exam">📋 Peperiksaan / Pentaksiran / Kuiz</option>
+                <option value="assignment">📑 Semakan PB / Tugasan Pelajar</option>
+                <option value="event">🏆 Program / Majlis / Aktiviti</option>
+                <option value="deadline">⏰ Tarikh Akhir (Deadline)</option>
+                <option value="personal">🏡 Hal Peribadi / Keluarga</option>
+                <option value="other">📌 Lain-lain</option>
+              </select>
             </div>
 
-            <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-sm active:scale-95 flex items-center justify-center gap-1.5">
-              <i class="fa-solid fa-cloud-arrow-up text-xs"></i>
-              <span>Save & Sync</span>
+            <div>
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">Catatan</label>
+              <textarea id="sideTaskNotes" rows="2" placeholder="Bilik mesyuarat, pautan, lampiran dsb..." 
+                class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+            </div>
+
+            <button type="submit" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-sm flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-floppy-disk"></i>
+              <span>Simpan Tugasan</span>
             </button>
           </form>
         </div>
 
-        <!-- Active Selected Date Panel -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-            <div>
-              <span class="text-xs uppercase font-bold tracking-wider text-indigo-600" id="selectedDateDayName">Today</span>
-              <h3 class="text-base font-bold text-slate-800" id="selectedDateFormatted">-</h3>
-            </div>
-            <button id="btnQuickAddForDay" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold px-2.5 py-1 rounded-lg transition flex items-center gap-1">
-              <i class="fa-solid fa-plus text-xs"></i> Add
-            </button>
-          </div>
-
-          <!-- Items for this specific selected day -->
-          <div id="selectedDayEventsList" class="space-y-2.5 max-h-72 overflow-y-auto custom-scrollbar pr-1">
-            <div class="text-center py-6 text-slate-400 text-xs">Select a date on the calendar to view activities.</div>
-          </div>
-        </div>
-
-        <!-- Pending Tasks Quick Board -->
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5">
-          <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
-            <div class="flex items-center gap-2">
-              <h3 class="text-sm font-bold text-slate-800">Pending Tasks</h3>
-              <span id="pendingCountBadge" class="bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-0.5 rounded-full">0</span>
-            </div>
-            <button id="btnClearDoneTasks" class="text-xs text-slate-400 hover:text-rose-600 transition" title="Clear all completed tasks">
-              Clear completed
-            </button>
-          </div>
-
-          <!-- Task Mini-List -->
-          <div id="pendingTasksList" class="space-y-2 max-h-80 overflow-y-auto custom-scrollbar pr-1">
-            <!-- Dynamic task items -->
-          </div>
-        </div>
-
-        <!-- Cross-device Sync Info Card -->
-        <div class="bg-gradient-to-br from-indigo-50 to-slate-100 rounded-2xl border border-indigo-100 p-4">
-          <div class="flex items-start gap-3">
-            <div class="bg-indigo-600 text-white p-2 rounded-xl text-sm mt-0.5">
-              <i class="fa-solid fa-cloud-arrow-up"></i>
-            </div>
-            <div class="text-xs text-slate-600 space-y-1.5 flex-1">
-              <div class="flex items-center justify-between">
-                <p class="font-bold text-slate-800">Live Cross-Device Sync</p>
-                <span class="text-[10px] text-emerald-600 font-semibold bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">Active</span>
-              </div>
-              <p>Bookmark or send this link to your phone or office PC. Data updates automatically every 10 seconds or when you add/edit tasks.</p>
-              
-              <div class="pt-1 flex items-center justify-between gap-1 font-mono text-[10px] text-indigo-900 bg-white/90 p-1.5 rounded-lg border border-indigo-200 overflow-hidden">
-                <span id="plannerUniqueIdDisplay" class="truncate font-semibold text-indigo-700">Planner ID: Initializing...</span>
-                <button id="btnCopyPlannerId" class="text-indigo-600 hover:text-indigo-800 font-sans text-[10px] font-semibold underline ml-1">Copy Link</button>
-              </div>
-
-              <!-- Quick Backup / Restore Buttons -->
-              <div class="flex items-center gap-2 pt-1 border-t border-indigo-100/60">
-                <button id="btnExportData" class="text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-2 py-1 rounded transition flex items-center gap-1">
-                  <i class="fa-solid fa-file-export"></i> Backup File
-                </button>
-                <button id="btnImportData" class="text-[10px] bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold px-2 py-1 rounded transition flex items-center gap-1">
-                  <i class="fa-solid fa-file-import"></i> Restore
-                </button>
-                <input type="file" id="fileImportInput" accept=".json" class="hidden">
-              </div>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- RIGHT PANEL: Planner Calendar Display -->
-      <div id="calendarContainerCol" class="lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col order-1 lg:order-2">
+      <!-- RIGHT COLUMN: FULL CALENDAR GRID (col-span-8) -->
+      <div class="lg:col-span-8 flex flex-col gap-4 order-1 lg:order-2">
         
-        <!-- Day Names Header (Starts on Monday) -->
-        <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50 text-center text-xs font-bold text-slate-500 py-3">
-          <span>Mon</span>
-          <span>Tue</span>
-          <span>Wed</span>
-          <span>Thu</span>
-          <span>Fri</span>
-          <span class="text-rose-600">Sat</span>
-          <span class="text-rose-600">Sun</span>
-        </div>
-
-        <!-- Calendar Days Grid -->
-        <div id="calendarDaysGrid" class="grid grid-cols-7 auto-rows-fr gap-px bg-slate-200 p-px">
-          <!-- Calendar cells injected by JavaScript -->
-        </div>
-
-        <!-- Legend / Quick Guide footer -->
-        <div class="p-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-500 gap-2">
-          <div class="flex items-center gap-3">
-            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-indigo-600 inline-block"></span> Polytechnic (Week Labels on Mondays: W1, W2...)</span>
-            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span> MOE Break</span>
-            <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span> Public Holiday</span>
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+          
+          <!-- Days of Week Header (Starts with MONDAY) -->
+          <div class="grid grid-cols-7 bg-slate-50 border-b border-slate-200 text-center text-xs font-bold text-slate-700 py-3 select-none">
+            <div class="text-indigo-700">Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div class="text-rose-600">Sat</div>
+            <div class="text-rose-600">Sun</div>
           </div>
-          <span class="italic text-slate-400">Click any date to view or add tasks</span>
+
+          <!-- Dynamic Calendar Grid Container -->
+          <div id="calendarGrid" class="grid grid-cols-7 bg-slate-200 gap-[1px]">
+            <!-- Generated by JS -->
+          </div>
+
         </div>
+
+        <!-- Takwim Color Legend -->
+        <div class="bg-white rounded-2xl p-3.5 border border-slate-200 text-xs text-slate-600 flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3 flex-wrap">
+            <span class="font-bold text-slate-800">Petunjuk:</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-indigo-600"></span> Takwim PPD (Setiap Isnin)</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500"></span> Cuti Pertengahan / KPM</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500"></span> Cuti Umum</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Tugasan Anda</span>
+          </div>
+          <div class="text-[11px] text-slate-400 font-medium">
+            Sesi II: 2026/2027 (JHEP Politeknik Port Dickson)
+          </div>
+        </div>
+
       </div>
 
     </div>
 
-    <!-- Agenda View Panel -->
-    <div id="agendaViewContainer" class="hidden bg-white rounded-2xl shadow-sm border border-slate-200/80 p-5">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
-        <div>
-          <h3 class="text-base font-bold text-slate-800">Monthly Timeline & Agenda</h3>
-          <p class="text-xs text-slate-500">Chronological list of all activities, academic milestones, and holidays for this month</p>
-        </div>
-      </div>
-      <div id="agendaItemsList" class="space-y-3">
-        <!-- Injected dynamically -->
-      </div>
-    </div>
   </main>
 
-  <!-- Add Task / Event Modal -->
-  <div id="taskModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity">
-    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
-      <div class="bg-indigo-900 text-white px-6 py-4 flex items-center justify-between">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-calendar-plus text-emerald-400"></i>
-          <span>Add New Event / Task</span>
+  <!-- Add Task Modal -->
+  <div id="taskModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-100 max-w-md w-full overflow-hidden">
+      <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-calendar-plus text-indigo-600"></i>
+          <span>Tambah Aktiviti / Tugasan</span>
         </h3>
-        <button id="btnCloseModal" class="text-indigo-300 hover:text-white transition text-lg p-1">
-          <i class="fa-solid fa-xmark"></i>
+        <button id="btnCloseModal" class="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+          <i class="fa-solid fa-xmark text-base"></i>
         </button>
       </div>
 
-      <form id="taskForm" class="p-6 space-y-4">
-        <!-- Title -->
+      <form id="modalTaskForm" class="p-5 space-y-3.5">
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Title *</label>
-          <input type="text" id="taskTitle" required placeholder="e.g. Set Test 1 Questions / Department Meeting" 
-            class="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+          <label class="block text-xs font-bold text-slate-700 mb-1">Tajuk *</label>
+          <input type="text" id="modalTaskTitle" required placeholder="cth: Kelas Minggu 1 / Semakan Markah" 
+            class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <!-- Date -->
+        <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Date *</label>
-            <input type="date" id="taskDate" required 
-              class="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
+            <label class="block text-xs font-bold text-slate-700 mb-1">Tarikh *</label>
+            <input type="date" id="modalTaskDate" required 
+              class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
-
-          <!-- Category -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Category</label>
-            <select id="taskCategory" class="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-              <option value="task">📝 Task / Personal</option>
-              <option value="politeknik">🎓 Polytechnic / Lecture</option>
-              <option value="meeting">👥 Meeting / Workshop</option>
-              <option value="exam">📋 Assessment / Exam</option>
-              <option value="other">📌 Other</option>
-            </select>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Masa</label>
+            <input type="time" id="modalTaskTime" 
+              class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
           </div>
         </div>
 
-        <!-- Time & Priority -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Time (Optional)</label>
-            <input type="time" id="taskTime" 
-              class="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Priority</label>
-            <select id="taskPriority" class="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-              <option value="medium">Medium</option>
-              <option value="high">High (Urgent)</option>
-              <option value="low">Low</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Notes / Remarks -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Additional Notes (Optional)</label>
-          <textarea id="taskNotes" rows="2" placeholder="e.g. Meeting Room 2, prepare marksheet..." 
-            class="w-full text-sm border border-slate-300 rounded-xl px-3.5 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
+          <select id="modalTaskCategory" class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+            <option value="task">📝 Tugasan Biasa (To-Do)</option>
+            <option value="lecture">🎓 Kuliah / Kelas / Bengkel</option>
+            <option value="meeting">👥 Mesyuarat / Perbincangan</option>
+            <option value="exam">📋 Peperiksaan / Pentaksiran / Kuiz</option>
+            <option value="assignment">📑 Semakan PB / Tugasan Pelajar</option>
+            <option value="event">🏆 Program / Majlis / Aktiviti</option>
+            <option value="deadline">⏰ Tarikh Akhir (Deadline)</option>
+            <option value="personal">🏡 Hal Peribadi / Keluarga</option>
+            <option value="other">📌 Lain-lain</option>
+          </select>
         </div>
 
-        <!-- Action buttons -->
-        <div class="pt-3 flex items-center justify-end gap-3 border-t border-slate-100">
-          <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
-            Cancel
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Catatan</label>
+          <textarea id="modalTaskNotes" rows="2" placeholder="Catatan tambahan..." 
+            class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2">
+          <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">
+            Batal
           </button>
-          <button type="submit" id="btnSubmitTask" class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white transition shadow-sm active:scale-95 flex items-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <span>Save & Sync</span>
+          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            Simpan
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- Share Link Modal -->
-  <div id="shareModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity">
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl border border-slate-100 p-6 space-y-4">
-      <div class="flex items-center justify-between border-b pb-3 border-slate-100">
-        <h3 class="font-bold text-base text-slate-800 flex items-center gap-2">
-          <i class="fa-solid fa-share-nodes text-indigo-600"></i>
-          <span>Your Planner Sync Link</span>
+  <!-- Share Modal -->
+  <div id="shareModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-5 space-y-4">
+      <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-link text-indigo-600"></i>
+          <span>Kongsi Pautan Planner</span>
         </h3>
-        <button id="btnCloseShareModal" class="text-slate-400 hover:text-slate-600 text-lg">
+        <button id="btnCloseShareModal" class="text-slate-400 hover:text-slate-600 text-base">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
-
       <p class="text-xs text-slate-600">
-        Copy the link below and open it in your browser on your phone, tablet, or office PC. All updates will appear in real time!
+        Salin pautan ini dan hantar ke telefon anda (WhatsApp/Telegram) atau buka di laptop ofis:
       </p>
-
       <div class="flex items-center gap-2">
-        <input type="text" id="shareUrlInput" readonly class="w-full text-xs font-mono bg-slate-50 border border-slate-300 rounded-xl px-3 py-2.5 text-slate-700 focus:outline-none">
-        <button id="btnCopyShareUrl" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2.5 rounded-xl text-xs font-semibold whitespace-nowrap active:scale-95 transition flex items-center gap-1.5">
-          <i class="fa-regular fa-copy"></i>
-          <span>Copy</span>
-        </button>
-      </div>
-
-      <div class="bg-amber-50 border border-amber-200/80 rounded-xl p-3 text-amber-800 text-xs flex gap-2">
-        <i class="fa-solid fa-lightbulb text-amber-600 mt-0.5"></i>
-        <span>Tip: You can use "Add to Home Screen" on your mobile browser for an app-like experience.</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Install App / How to Install Modal -->
-  <div id="installGuideModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity">
-    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all">
-      <div class="bg-indigo-900 text-white px-6 py-4 flex items-center justify-between">
-        <h3 class="font-bold text-base flex items-center gap-2">
-          <i class="fa-solid fa-mobile-screen-button text-amber-400"></i>
-          <span>How to Install as an App</span>
-        </h3>
-        <button id="btnCloseInstallGuide" class="text-indigo-300 hover:text-white transition text-lg p-1">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-
-      <div class="p-6 space-y-4 max-h-[75vh] overflow-y-auto custom-scrollbar">
-        <!-- Android Guide -->
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
-          <div class="flex items-center gap-2 text-slate-800 font-bold text-xs">
-            <i class="fa-brands fa-android text-emerald-600 text-base"></i>
-            <span>Android (Chrome / Samsung Internet)</span>
-          </div>
-          <ol class="list-decimal list-inside text-[11px] text-slate-600 space-y-1">
-            <li>Open the link in <b>Google Chrome</b> on your phone.</li>
-            <li>Tap the <b>three dots icon (⋮)</b> at the top right.</li>
-            <li>Select <b>"Install app"</b> or <b>"Add to Home screen"</b>.</li>
-            <li>PoliPlanner will now appear as an app icon on your home screen!</li>
-          </ol>
-        </div>
-
-        <!-- iPhone / iOS Guide -->
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
-          <div class="flex items-center gap-2 text-slate-800 font-bold text-xs">
-            <i class="fa-brands fa-apple text-slate-900 text-base"></i>
-            <span>iPhone / iPad (Safari)</span>
-          </div>
-          <ol class="list-decimal list-inside text-[11px] text-slate-600 space-y-1">
-            <li>Open the link in <b>Safari</b>.</li>
-            <li>Tap the <b>Share icon</b> (square with an arrow pointing up at the bottom).</li>
-            <li>Scroll down and tap <b>"Add to Home Screen"</b> (<i class="fa-regular fa-square-plus text-slate-700"></i>).</li>
-            <li>Tap <b>"Add"</b> at the top right.</li>
-          </ol>
-        </div>
-
-        <!-- PC / Office Laptop Guide -->
-        <div class="p-3.5 rounded-xl border border-slate-200 bg-slate-50 space-y-2">
-          <div class="flex items-center gap-2 text-slate-800 font-bold text-xs">
-            <i class="fa-solid fa-desktop text-indigo-600 text-base"></i>
-            <span>Office PC / Laptop (Chrome / Microsoft Edge)</span>
-          </div>
-          <ol class="list-decimal list-inside text-[11px] text-slate-600 space-y-1">
-            <li>Open the link in <b>Chrome</b> or <b>Edge</b>.</li>
-            <li>Look at the address bar (URL bar) on the right side and click the <b>Install App icon</b> (<i class="fa-solid fa-computer"></i>).</li>
-            <li>Or click <b>Settings (⋮) > Apps > Install PoliPlanner</b>.</li>
-            <li>It will launch in its own dedicated, clean window without browser tabs!</li>
-          </ol>
-        </div>
-      </div>
-
-      <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
-        <button id="btnDismissInstallGuide" class="px-4 py-2 rounded-xl text-xs font-semibold bg-indigo-600 text-white hover:bg-indigo-700 transition">
-          Got it
+        <input type="text" id="shareModalInput" readonly class="bg-slate-50 border border-slate-200 text-xs text-slate-700 px-3 py-2 rounded-xl flex-1 outline-none font-mono">
+        <button id="btnCopyShareModal" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold shrink-0">
+          Salin
         </button>
       </div>
     </div>
   </div>
 
-  <!-- Custom Confirmation Dialog Modal -->
-  <div id="confirmModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
-    <div class="bg-white w-full max-w-sm rounded-2xl shadow-2xl border border-slate-100 p-5 space-y-3">
-      <h3 class="font-bold text-sm text-slate-900" id="confirmTitle">Confirmation</h3>
-      <p class="text-xs text-slate-600" id="confirmMessage">Are you sure you want to delete this item?</p>
-      <div class="flex justify-end gap-2 pt-2">
-        <button id="btnConfirmCancel" class="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:bg-slate-100">Cancel</button>
-        <button id="btnConfirmAction" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-600 hover:bg-rose-700 text-white">Yes, Delete</button>
-      </div>
-    </div>
+  <!-- Toast Alert -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-800 text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <i id="toastIcon" class="fa-solid fa-check text-emerald-400"></i>
+    <span id="toastMsg">Tugasan berjaya disimpan</span>
   </div>
 
-  <!-- Application Logic -->
+  <!-- STABLE, BULLETPROOF SCRIPT -->
   <script>
-    /* ====================================================================
-       1. PRELOADED DATA: POLYTECHNIC PORT DICKSON & JPPKK TAKWIM
-       ==================================================================== */
-    const PUBLIC_HOLIDAYS_MALAYSIA = [
-      { date: "2026-01-01", title: "New Year's Day 2026", type: "holiday" },
-      { date: "2026-02-01", title: "Federal Territory Day", type: "holiday" },
-      { date: "2026-02-17", title: "Chinese New Year (Day 1)", type: "holiday" },
-      { date: "2026-02-18", title: "Chinese New Year (Day 2)", type: "holiday" },
-      { date: "2026-03-21", title: "Hari Raya Aidilfitri (Day 1)", type: "holiday" },
-      { date: "2026-03-22", title: "Hari Raya Aidilfitri (Day 2)", type: "holiday" },
-      { date: "2026-05-01", title: "Labour Day", type: "holiday" },
-      { date: "2026-05-27", title: "Hari Raya Haji (Aidiladha)", type: "holiday" },
-      { date: "2026-05-31", title: "Wesak Day", type: "holiday" },
-      { date: "2026-06-01", title: "Agong's Birthday", type: "holiday" },
-      { date: "2026-06-16", title: "Awal Muharram", type: "holiday" },
-      { date: "2026-08-25", title: "Maulidur Rasul (Prophet's Birthday)", type: "holiday" },
-      { date: "2026-08-31", title: "Hari Kebangsaan (National Day)", type: "holiday" },
-      { date: "2026-09-16", title: "Hari Malaysia (Malaysia Day)", type: "holiday" },
-      { date: "2026-11-08", title: "Hari Deepavali", type: "holiday" },
-      { date: "2026-12-25", title: "Christmas Day", type: "holiday" },
-      { date: "2027-01-01", title: "New Year's Day 2027", type: "holiday" },
-      { date: "2027-02-06", title: "Chinese New Year (Day 1)", type: "holiday" },
-      { date: "2027-02-07", title: "Chinese New Year (Day 2)", type: "holiday" },
-      { date: "2027-03-10", title: "Hari Raya Aidilfitri (Day 1)", type: "holiday" },
-      { date: "2027-03-11", title: "Hari Raya Aidilfitri (Day 2)", type: "holiday" },
-      { date: "2027-05-01", title: "Labour Day", type: "holiday" },
-      { date: "2027-05-17", title: "Hari Raya Aidiladha", type: "holiday" },
-      { date: "2027-05-20", title: "Wesak Day", type: "holiday" },
-      { date: "2027-06-06", title: "Awal Muharram", type: "holiday" },
-      { date: "2027-06-07", title: "Hari Keputeraan YDP Agong", type: "holiday" }
-    ];
+    // State
+    let currentYear = 2026;
+    let currentMonth = 10; // 0-indexed: 10 = November 2026
+    let selectedDateStr = "2026-11-23";
+    let plannerId = "";
+    let tasks = [];
 
-    const KPM_SCHOOL_HOLIDAYS = [
-      { start: "2026-03-14", end: "2026-03-22", title: "MOE Term 1 Break", type: "kpm" },
-      { start: "2026-05-23", end: "2026-06-07", title: "MOE Term 2 Break", type: "kpm" },
-      { start: "2026-09-12", end: "2026-09-20", title: "MOE Term 3 Break", type: "kpm" },
-      { start: "2026-12-19", end: "2027-01-10", title: "MOE Year-End Break", type: "kpm" }
-    ];
+    // Official Takwim Politeknik Port Dickson (Sesi II: 2026/2027) - Hari Isnin Sahaja
+    const PPD_TAKTIM_MONDAYS = {
+      "2026-11-23": { label: "M0 Pendaftaran Pelajar Baharu", type: "ppd" },
+      "2026-11-30": { label: "M1 Perkuliahan", type: "ppd" },
+      "2026-12-07": { label: "M2 Perkuliahan", type: "ppd" },
+      "2026-12-14": { label: "M3 Perkuliahan", type: "ppd" },
+      "2026-12-21": { label: "M4 Perkuliahan", type: "ppd" },
+      "2026-12-28": { label: "M5 Perkuliahan", type: "ppd" },
+      "2027-01-04": { label: "M6 Perkuliahan", type: "ppd" },
+      "2027-01-11": { label: "M7 Perkuliahan", type: "ppd" },
+      "2027-01-18": { label: "M8 Perkuliahan", type: "ppd" },
+      "2027-01-25": { label: "M9 Perkuliahan", type: "ppd" },
+      "2027-02-01": { label: "M10 Perkuliahan", type: "ppd" },
+      "2027-02-08": { label: "Cuti Pertengahan Semester", type: "ppd-break" },
+      "2027-02-15": { label: "M11 Perkuliahan", type: "ppd" },
+      "2027-02-22": { label: "M12 Perkuliahan", type: "ppd" },
+      "2027-03-01": { label: "M13 Perkuliahan", type: "ppd" },
+      "2027-03-08": { label: "Cuti Perayaan (Aidilfitri)", type: "ppd-break" },
+      "2027-03-15": { label: "M14 Perkuliahan", type: "ppd" },
+      "2027-03-22": { label: "Minggu Ulangkaji", type: "ppd" },
+      "2027-03-29": { label: "Peperiksaan Akhir (M1)", type: "ppd" },
+      "2027-04-05": { label: "Peperiksaan Akhir (M2)", type: "ppd" },
+      "2027-04-12": { label: "Peperiksaan Akhir (M3)", type: "ppd" },
+      "2027-04-19": { label: "Cuti Akhir Semester", type: "ppd-break" },
 
-    // Official Takwim from JPPKK & Politeknik Port Dickson (01 JHEP)
-    const POLITEKNIK_TAKWIM = [
-      // --- SESI I : 2026/2027 ---
-      { start: "2026-06-22", end: "2026-06-28", title: "Pendaftaran Pelajar Baharu / Suai Kenal (Sesi I)", type: "politeknik", detail: "Orientation & Course Registration" },
-      { start: "2026-06-29", end: "2026-08-30", title: "Kuliah Minggu 1 - 9 (Sesi I)", type: "politeknik", detail: "Perkuliahan Bahagian 1" },
-      { start: "2026-08-31", end: "2026-09-06", title: "Cuti Pertengahan Semester (Sesi I)", type: "politeknik", detail: "1-Week Mid-Semester Break" },
-      { start: "2026-09-07", end: "2026-10-11", title: "Kuliah Minggu 10 - 14 (Sesi I)", type: "politeknik", detail: "Perkuliahan Bahagian 2" },
-      { start: "2026-10-12", end: "2026-10-16", title: "Minggu Ulangkaji (Sesi I)", type: "politeknik", detail: "Study Week" },
-      { start: "2026-10-17", end: "2026-11-08", title: "Peperiksaan Akhir Semester (Sesi I)", type: "politeknik", detail: "Final Exams & Assessment" },
-      { start: "2026-11-09", end: "2026-11-29", title: "Cuti Akhir Semester (Sesi I)", type: "politeknik", detail: "3-Week Semester Vacation" },
-
-      // --- SESI II : 2026/2027 (POLITEKNIK PORT DICKSON - 01 JHEP) ---
-      { start: "2026-11-23", end: "2026-11-29", title: "M0 - Pendaftaran Pelajar Baharu / Aktiviti Suai Kenal", type: "politeknik", detail: "Orientation Week" },
-      { start: "2026-11-30", end: "2026-12-06", title: "M1 - Minggu Perkuliahan 1", type: "politeknik", detail: "Sesi II Kuliah M1" },
-      { start: "2026-12-07", end: "2026-12-13", title: "M2 - Minggu Perkuliahan 2", type: "politeknik", detail: "Sesi II Kuliah M2" },
-      { start: "2026-12-14", end: "2026-12-20", title: "M3 - Minggu Perkuliahan 3", type: "politeknik", detail: "Sesi II Kuliah M3" },
-      { start: "2026-12-21", end: "2026-12-27", title: "M4 - Minggu Perkuliahan 4", type: "politeknik", detail: "Sesi II Kuliah M4 (Christmas 25/12)" },
-      { start: "2026-12-28", end: "2027-01-03", title: "M5 - Minggu Perkuliahan 5", type: "politeknik", detail: "Sesi II Kuliah M5 (New Year 01/01)" },
-      { start: "2027-01-04", end: "2027-01-10", title: "M6 - Minggu Perkuliahan 6", type: "politeknik", detail: "Sesi II Kuliah M6" },
-      { start: "2027-01-11", end: "2027-01-17", title: "M7 - Minggu Perkuliahan 7", type: "politeknik", detail: "Sesi II Kuliah M7" },
-      { start: "2027-01-18", end: "2027-01-24", title: "M8 - Minggu Perkuliahan 8", type: "politeknik", detail: "Sesi II Kuliah M8" },
-      { start: "2027-01-25", end: "2027-01-31", title: "M9 - Minggu Perkuliahan 9", type: "politeknik", detail: "Sesi II Kuliah M9" },
-      { start: "2027-02-01", end: "2027-02-07", title: "M10 - Minggu Perkuliahan 10", type: "politeknik", detail: "Sesi II Kuliah M10 (CNY 06-07/02)" },
-      { start: "2027-02-08", end: "2027-02-14", title: "Cuti Pertengahan Semester (Sesi II)", type: "politeknik", detail: "1-Week Mid-Semester Break" },
-      { start: "2027-02-15", end: "2027-02-21", title: "M11 - Minggu Perkuliahan 11", type: "politeknik", detail: "Sesi II Kuliah M11" },
-      { start: "2027-02-22", end: "2027-02-28", title: "M12 - Minggu Perkuliahan 12", type: "politeknik", detail: "Sesi II Kuliah M12" },
-      { start: "2027-03-01", end: "2027-03-07", title: "M13 - Minggu Perkuliahan 13", type: "politeknik", detail: "Sesi II Kuliah M13" },
-      { start: "2027-03-08", end: "2027-03-14", title: "Cuti Perayaan (Hari Raya Aidilfitri)", type: "politeknik", detail: "Raya Aidilfitri Break (10 & 11 Mac)" },
-      { start: "2027-03-15", end: "2027-03-21", title: "M14 - Minggu Perkuliahan 14", type: "politeknik", detail: "Sesi II Kuliah M14" },
-      { start: "2027-03-22", end: "2027-03-26", title: "Minggu Ulangkaji (Sesi II)", type: "politeknik", detail: "Revision / Study Period" },
-      { start: "2027-03-27", end: "2027-04-18", title: "Peperiksaan Akhir Semester / Pentaksiran", type: "politeknik", detail: "Final Examination & Assessment (3 Weeks)" },
-      { start: "2027-04-19", end: "2027-06-20", title: "Cuti Akhir Semester / Semester Pendek", type: "politeknik", detail: "End of Semester Break (9 Weeks)" },
-      { start: "2027-06-14", end: "2027-06-20", title: "Pendaftaran Pelajar Baharu (Sesi I : 2027/2028)", type: "politeknik", detail: "New Intake Registration" }
-    ];
-
-    /* ====================================================================
-       2. DATE & SYNC ENGINE HELPERS
-       ==================================================================== */
-    function formatYMD(d) {
-      const year = d.getFullYear();
-      const month = String(d.getMonth() + 1).padStart(2, '0');
-      const day = String(d.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    function parseYMD(str) {
-      const parts = str.split('-');
-      return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-    }
-
-    function isDateBetween(targetStr, startStr, endStr) {
-      return targetStr >= startStr && targetStr <= endStr;
-    }
-
-    // Exact Monday indicator matching Politeknik Port Dickson (01 JHEP sheet)
-    function getPoliWeekLabelForMonday(targetDateStr) {
-      const targetDate = parseYMD(targetDateStr);
-      if (targetDate.getDay() !== 1) return null; // Monday only
-
-      // Exact Monday Mapping for Sesi II: 2026/2027 (PPD)
-      const mondayMapSesi2 = {
-        "2026-11-23": { label: "M0 Suai Kenal", detail: "Pendaftaran Pelajar Baharu / Suai Kenal" },
-        "2026-11-30": { label: "M1 Perkuliahan", detail: "Minggu Perkuliahan 1" },
-        "2026-12-07": { label: "M2 Perkuliahan", detail: "Minggu Perkuliahan 2" },
-        "2026-12-14": { label: "M3 Perkuliahan", detail: "Minggu Perkuliahan 3" },
-        "2026-12-21": { label: "M4 Perkuliahan", detail: "Minggu Perkuliahan 4" },
-        "2026-12-28": { label: "M5 Perkuliahan", detail: "Minggu Perkuliahan 5" },
-        "2027-01-04": { label: "M6 Perkuliahan", detail: "Minggu Perkuliahan 6" },
-        "2027-01-11": { label: "M7 Perkuliahan", detail: "Minggu Perkuliahan 7" },
-        "2027-01-18": { label: "M8 Perkuliahan", detail: "Minggu Perkuliahan 8" },
-        "2027-01-25": { label: "M9 Perkuliahan", detail: "Minggu Perkuliahan 9" },
-        "2027-02-01": { label: "M10 Perkuliahan", detail: "Minggu Perkuliahan 10" },
-        "2027-02-08": { label: "Cuti Pertengahan Sem", detail: "Cuti Pertengahan Semester (1 Minggu)" },
-        "2027-02-15": { label: "M11 Perkuliahan", detail: "Minggu Perkuliahan 11" },
-        "2027-02-22": { label: "M12 Perkuliahan", detail: "Minggu Perkuliahan 12" },
-        "2027-03-01": { label: "M13 Perkuliahan", detail: "Minggu Perkuliahan 13" },
-        "2027-03-08": { label: "Cuti Perayaan", detail: "Cuti Perayaan (Hari Raya Aidilfitri)" },
-        "2027-03-15": { label: "M14 Perkuliahan", detail: "Minggu Perkuliahan 14" },
-        "2027-03-22": { label: "Minggu Ulangkaji", detail: "Minggu Ulangkaji (Study Week)" },
-        "2027-03-29": { label: "M1 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 1)" },
-        "2027-04-05": { label: "M2 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 2)" },
-        "2027-04-12": { label: "M3 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 3)" },
-        "2027-04-19": { label: "Cuti Akhir Semester", detail: "Cuti Akhir Semester / Semester Pendek Bermula" }
-      };
-
-      if (mondayMapSesi2[targetDateStr]) {
-        return mondayMapSesi2[targetDateStr];
-      }
-
-      // Monday Mapping for Sesi I: 2026/2027
-      const mondayMapSesi1 = {
-        "2026-06-22": { label: "M0 Suai Kenal", detail: "Pendaftaran Pelajar Baharu / Suai Kenal" },
-        "2026-06-29": { label: "M1 Perkuliahan", detail: "Minggu Perkuliahan 1" },
-        "2026-07-06": { label: "M2 Perkuliahan", detail: "Minggu Perkuliahan 2" },
-        "2026-07-13": { label: "M3 Perkuliahan", detail: "Minggu Perkuliahan 3" },
-        "2026-07-20": { label: "M4 Perkuliahan", detail: "Minggu Perkuliahan 4" },
-        "2026-07-27": { label: "M5 Perkuliahan", detail: "Minggu Perkuliahan 5" },
-        "2026-08-03": { label: "M6 Perkuliahan", detail: "Minggu Perkuliahan 6" },
-        "2026-08-10": { label: "M7 Perkuliahan", detail: "Minggu Perkuliahan 7" },
-        "2026-08-17": { label: "M8 Perkuliahan", detail: "Minggu Perkuliahan 8" },
-        "2026-08-24": { label: "M9 Perkuliahan", detail: "Minggu Perkuliahan 9" },
-        "2026-08-31": { label: "Cuti Pertengahan Sem", detail: "Cuti Pertengahan Semester (1 Minggu)" },
-        "2026-09-07": { label: "M10 Perkuliahan", detail: "Minggu Perkuliahan 10" },
-        "2026-09-14": { label: "M11 Perkuliahan", detail: "Minggu Perkuliahan 11" },
-        "2026-09-21": { label: "M12 Perkuliahan", detail: "Minggu Perkuliahan 12" },
-        "2026-09-28": { label: "M13 Perkuliahan", detail: "Minggu Perkuliahan 13" },
-        "2026-10-05": { label: "M14 Perkuliahan", detail: "Minggu Perkuliahan 14" },
-        "2026-10-12": { label: "Minggu Ulangkaji", detail: "Minggu Ulangkaji (Study Week)" },
-        "2026-10-19": { label: "M1 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 1)" },
-        "2026-10-26": { label: "M2 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 2)" },
-        "2026-11-02": { label: "M3 Peperiksaan Akhir", detail: "Peperiksaan Akhir Semester (Minggu 3)" },
-        "2026-11-09": { label: "Cuti Akhir Semester", detail: "Cuti Akhir Semester (3 Minggu)" }
-      };
-
-      if (mondayMapSesi1[targetDateStr]) {
-        return mondayMapSesi1[targetDateStr];
-      }
-
-      return null;
-    }
-
-    function getOrCreatePlannerId() {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        let pid = urlParams.get('p');
-        if (!pid) {
-          pid = 'ppd-' + Math.random().toString(36).substring(2, 8);
-          const newUrl = new URL(window.location.href);
-          newUrl.searchParams.set('p', pid);
-          window.history.replaceState({}, '', newUrl.toString());
-        }
-        return pid;
-      } catch (e) {
-        return 'ppd-default';
-      }
-    }
-
-    const state = {
-      currentDate: new Date(),
-      selectedDateStr: formatYMD(new Date()),
-      userTasks: [],
-      viewMode: 'split',
-      filters: {
-        task: true,
-        politeknik: true,
-        kpm: true,
-        holiday: true
-      },
-      plannerId: getOrCreatePlannerId()
+      // Sesi I: 2026/2027
+      "2026-06-22": { label: "M0 Pendaftaran Pelajar Baharu", type: "ppd" },
+      "2026-06-29": { label: "M1 Perkuliahan", type: "ppd" },
+      "2026-07-06": { label: "M2 Perkuliahan", type: "ppd" },
+      "2026-07-13": { label: "M3 Perkuliahan", type: "ppd" },
+      "2026-07-20": { label: "M4 Perkuliahan", type: "ppd" },
+      "2026-07-27": { label: "M5 Perkuliahan", type: "ppd" },
+      "2026-08-03": { label: "M6 Perkuliahan", type: "ppd" },
+      "2026-08-10": { label: "M7 Perkuliahan", type: "ppd" },
+      "2026-08-17": { label: "M8 Perkuliahan", type: "ppd" },
+      "2026-08-24": { label: "M9 Perkuliahan", type: "ppd" },
+      "2026-08-31": { label: "Cuti Pertengahan Semester", type: "ppd-break" },
+      "2026-09-07": { label: "M10 Perkuliahan", type: "ppd" },
+      "2026-09-14": { label: "M11 Perkuliahan", type: "ppd" },
+      "2026-09-21": { label: "M12 Perkuliahan", type: "ppd" },
+      "2026-09-28": { label: "M13 Perkuliahan", type: "ppd" },
+      "2026-10-05": { label: "M14 Perkuliahan", type: "ppd" },
+      "2026-10-12": { label: "Minggu Ulangkaji", type: "ppd" },
+      "2026-10-19": { label: "Peperiksaan Akhir (M1)", type: "ppd" },
+      "2026-10-26": { label: "Peperiksaan Akhir (M2)", type: "ppd" },
+      "2026-11-02": { label: "Peperiksaan Akhir (M3)", type: "ppd" },
+      "2026-11-09": { label: "Cuti Akhir Semester", type: "ppd-break" }
     };
 
-    const LOCAL_STORAGE_KEY = `poli_tasks_${state.plannerId}`;
+    // Public Holidays Malaysia
+    const PUBLIC_HOLIDAYS = {
+      "2026-08-25": "Maulidur Rasul",
+      "2026-08-31": "Hari Kebangsaan",
+      "2026-09-16": "Hari Malaysia",
+      "2026-11-08": "Hari Deepavali",
+      "2026-12-25": "Hari Krismas",
+      "2027-01-01": "Tahun Baru 2027",
+      "2027-01-14": "Israk & Mikraj (N.Sembilan)",
+      "2027-02-06": "Tahun Baru Cina",
+      "2027-02-07": "Tahun Baru Cina (Hari Ke-2)",
+      "2027-03-10": "Hari Raya Aidilfitri",
+      "2027-03-11": "Hari Raya Aidilfitri (Hari Ke-2)",
+      "2027-05-01": "Hari Pekerja",
+      "2027-05-17": "Hari Raya Aidiladha",
+      "2027-05-20": "Hari Wesak",
+      "2027-06-06": "Awal Muharram",
+      "2027-06-07": "Hari Keputeraan Agong"
+    };
 
-    function loadLocalTasks() {
-      try {
-        const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (stored) {
-          state.userTasks = JSON.parse(stored);
-        }
-      } catch (e) {
-        console.warn("Local storage fallback:", e);
-      }
-    }
+    // Cuti Sekolah KPM
+    const KPM_HOLIDAYS = {
+      "2026-08-29": "Cuti Penggal 2 KPM",
+      "2026-08-30": "Cuti Penggal 2 KPM",
+      "2026-08-31": "Cuti Penggal 2 KPM",
+      "2026-09-01": "Cuti Penggal 2 KPM",
+      "2026-09-02": "Cuti Penggal 2 KPM",
+      "2026-09-03": "Cuti Penggal 2 KPM",
+      "2026-09-04": "Cuti Penggal 2 KPM",
+      "2026-09-05": "Cuti Penggal 2 KPM",
+      "2026-09-06": "Cuti Penggal 2 KPM",
+      "2026-12-19": "Cuti Akhir Tahun KPM",
+      "2026-12-20": "Cuti Akhir Tahun KPM",
+      "2026-12-26": "Cuti Akhir Tahun KPM",
+      "2026-12-27": "Cuti Akhir Tahun KPM",
+      "2027-03-08": "Cuti Khas Aidilfitri KPM",
+      "2027-03-09": "Cuti Khas Aidilfitri KPM",
+      "2027-03-12": "Cuti Khas Aidilfitri KPM"
+    };
 
-    function saveLocalTasks() {
-      try {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state.userTasks));
-      } catch (e) {
-        console.warn("Failed saving local tasks:", e);
-      }
-    }
-
-    let isSyncing = false;
-    async function pushToCloud() {
-      saveLocalTasks();
-      if (isSyncing) return;
-      isSyncing = true;
-      const syncDot = document.getElementById('syncDot');
-      const syncText = document.getElementById('syncText');
-      if (syncDot) syncDot.className = 'w-2 h-2 rounded-full bg-amber-400 animate-ping';
-      if (syncText) syncText.textContent = 'Syncing...';
-
-      try {
-        const payload = JSON.stringify(state.userTasks);
-        await fetch(`https://kvdb.io/4y9q2uQ1e8A7F48zK9L8P4/poli_${state.plannerId}`, {
-          method: 'POST',
-          body: payload
-        });
-        if (syncDot) syncDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
-        if (syncText) syncText.textContent = 'Cloud Synced';
-      } catch (err) {
-        if (syncDot) syncDot.className = 'w-2 h-2 rounded-full bg-emerald-400';
-        if (syncText) syncText.textContent = 'Saved Locally';
-      } finally {
-        isSyncing = false;
-      }
-    }
-
-    async function pullFromCloud(silent = true) {
-      if (isSyncing) return;
-      const spinIcon = document.getElementById('syncSpinIcon');
-      if (spinIcon) spinIcon.classList.add('fa-spin');
-
-      try {
-        const res = await fetch(`https://kvdb.io/4y9q2uQ1e8A7F48zK9L8P4/poli_${state.plannerId}`);
-        if (res.ok) {
-          const remoteTasks = await res.json();
-          if (Array.isArray(remoteTasks)) {
-            const localStr = JSON.stringify(state.userTasks);
-            const remoteStr = JSON.stringify(remoteTasks);
-            if (localStr !== remoteStr) {
-              state.userTasks = remoteTasks;
-              saveLocalTasks();
-              renderCalendar();
-              renderSelectedDayView();
-              renderPendingTaskList();
-              if (!silent) showToast("Updated with latest data from cloud!");
-            } else if (!silent) {
-              showToast("Already up to date.");
-            }
-          }
-        }
-      } catch (e) {
-        if (!silent) showToast("Sync complete (Offline mode).");
-      } finally {
-        if (spinIcon) spinIcon.classList.remove('fa-spin');
-      }
-    }
-
-    setInterval(() => {
-      pullFromCloud(true);
-    }, 10000);
-
-    /* ====================================================================
-       3. EVENT RETRIEVAL & RENDERING ENGINE
-       ==================================================================== */
-    function getEventsForDate(dateStr) {
-      const events = [];
-
-      if (state.filters.task) {
-        const tasks = state.userTasks.filter(t => t.date === dateStr);
-        tasks.forEach(t => {
-          events.push({
-            id: t.id,
-            title: t.title,
-            type: 'task',
-            category: t.category || 'task',
-            time: t.time || '',
-            priority: t.priority || 'medium',
-            notes: t.notes || '',
-            isCompleted: !!t.isCompleted,
-            raw: t
-          });
-        });
-      }
-
-      if (state.filters.politeknik) {
-        const mondayWeek = getPoliWeekLabelForMonday(dateStr);
-        if (mondayWeek) {
-          events.push({
-            id: `poli-week-${dateStr}`,
-            title: mondayWeek.label,
-            type: 'politeknik',
-            category: 'politeknik',
-            detail: mondayWeek.detail,
-            isMultiDay: false
-          });
-        }
-
-        POLITEKNIK_TAKWIM.forEach((item, idx) => {
-          if (item.date && item.date === dateStr) {
-            events.push({
-              id: `poli-single-${idx}`,
-              title: item.title,
-              type: 'politeknik',
-              category: 'politeknik',
-              detail: item.detail,
-              isMultiDay: false
-            });
-          }
-        });
-      }
-
-      if (state.filters.kpm) {
-        KPM_SCHOOL_HOLIDAYS.forEach((item, idx) => {
-          if (isDateBetween(dateStr, item.start, item.end)) {
-            events.push({
-              id: `kpm-${idx}`,
-              title: item.title,
-              type: 'kpm',
-              category: 'kpm',
-              isMultiDay: true
-            });
-          }
-        });
-      }
-
-      if (state.filters.holiday) {
-        PUBLIC_HOLIDAYS_MALAYSIA.forEach((item, idx) => {
-          if (item.date === dateStr) {
-            events.push({
-              id: `holiday-${idx}`,
-              title: item.title,
-              type: 'holiday',
-              category: 'holiday'
-            });
-          }
-        });
-      }
-
-      return events;
-    }
-
-    const MONTH_NAMES_EN = [
-      "January", "February", "March", "April", "May", "June",
+    const MONTHS = [
+      "January", "February", "March", "April", "May", "June", 
       "July", "August", "September", "October", "November", "December"
     ];
 
-    const DAY_NAMES_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-    function renderCalendar() {
-      const year = state.currentDate.getFullYear();
-      const month = state.currentDate.getMonth();
-
-      const label = document.getElementById('currentMonthYearLabel');
-      if (label) {
-        label.textContent = `${MONTH_NAMES_EN[month]} ${year}`;
+    // Initialize Planner ID & URL
+    function initPlanner() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get('p');
+        if (!id) {
+          id = 'ppd-' + Math.random().toString(36).substring(2, 8);
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('p', id);
+            window.history.replaceState({}, '', url.toString());
+          } catch (e) {
+            // Ignore iframe security error
+          }
+        }
+        plannerId = id;
+      } catch (err) {
+        plannerId = 'ppd-default';
       }
+      
+      try {
+        const shareUrl = window.location.href;
+        const box = document.getElementById('shareUrlBox');
+        if (box) box.value = shareUrl;
+        const modalInput = document.getElementById('shareModalInput');
+        if (modalInput) modalInput.value = shareUrl;
+      } catch (err) {}
 
-      const grid = document.getElementById('calendarDaysGrid');
+      // Load existing saved tasks with safety fallback
+      try {
+        const saved = localStorage.getItem('ppd_planner_' + plannerId);
+        if (saved) {
+          tasks = JSON.parse(saved);
+        }
+      } catch (e) {
+        tasks = [];
+      }
+    }
+
+    function saveTasksToStorage() {
+      try {
+        localStorage.setItem('ppd_planner_' + plannerId, JSON.stringify(tasks));
+      } catch (e) {
+        console.warn('LocalStorage unavailable');
+      }
+    }
+
+    // Render Calendar
+    function renderCalendar() {
+      const grid = document.getElementById('calendarGrid');
       if (!grid) return;
       grid.innerHTML = '';
 
-      const rawFirstDayIndex = new Date(year, month, 1).getDay(); 
-      const firstDayIndex = (rawFirstDayIndex + 6) % 7;
-
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const daysInPrevMonth = new Date(year, month, 0).getDate();
-      const todayStr = formatYMD(new Date());
-
-      for (let i = firstDayIndex - 1; i >= 0; i--) {
-        const dayNum = daysInPrevMonth - i;
-        const prevMonthDate = new Date(year, month - 1, dayNum);
-        const dateStr = formatYMD(prevMonthDate);
-        grid.appendChild(createDayCell(prevMonthDate, dateStr, dayNum, true));
+      const monthLabel = document.getElementById('currentMonthYearLabel');
+      if (monthLabel) {
+        monthLabel.innerText = `${MONTHS[currentMonth]} ${currentYear}`;
       }
+
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      // Start week with Monday (0 = Monday, 6 = Sunday)
+      const startDayIndex = (firstDay.getDay() + 6) % 7; 
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const prevDays = new Date(currentYear, currentMonth, 0).getDate();
+
+      const filterPoliEl = document.getElementById('filterPoli');
+      const filterTasksEl = document.getElementById('filterTasks');
+      const filterKpmEl = document.getElementById('filterKpm');
+      const filterHolidaysEl = document.getElementById('filterHolidays');
+
+      const showPoli = filterPoliEl ? filterPoliEl.checked : true;
+      const showTasks = filterTasksEl ? filterTasksEl.checked : true;
+      const showKpm = filterKpmEl ? filterKpmEl.checked : true;
+      const showHolidays = filterHolidaysEl ? filterHolidaysEl.checked : true;
+
+      // 1. Prev Month Padding
+      for (let i = startDayIndex - 1; i >= 0; i--) {
+        const dayNum = prevDays - i;
+        const cell = document.createElement('div');
+        cell.className = "calendar-cell bg-slate-50/80 p-2 text-slate-300 text-xs font-semibold select-none border-b border-r border-slate-100";
+        cell.innerText = dayNum;
+        grid.appendChild(cell);
+      }
+
+      // 2. Current Month Days
+      const today = new Date();
+      const isThisMonth = today.getFullYear() === currentYear && today.getMonth() === currentMonth;
 
       for (let day = 1; day <= daysInMonth; day++) {
-        const currentDayDate = new Date(year, month, day);
-        const dateStr = formatYMD(currentDayDate);
-        grid.appendChild(createDayCell(currentDayDate, dateStr, day, false, dateStr === todayStr));
-      }
+        const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const isToday = isThisMonth && today.getDate() === day;
+        const isSelected = selectedDateStr === dateStr;
 
-      const totalCellsFilled = firstDayIndex + daysInMonth;
-      const totalGridCells = totalCellsFilled > 35 ? 42 : 35;
-      const nextDaysCount = totalGridCells - totalCellsFilled;
+        const cell = document.createElement('div');
+        cell.className = `calendar-cell bg-white p-1.5 sm:p-2 flex flex-col justify-between cursor-pointer transition hover:bg-slate-50 group relative border-b border-r border-slate-100 ${
+          isSelected ? 'ring-2 ring-indigo-600 z-10' : ''
+        }`;
 
-      for (let day = 1; day <= nextDaysCount; day++) {
-        const nextMonthDate = new Date(year, month + 1, day);
-        const dateStr = formatYMD(nextMonthDate);
-        grid.appendChild(createDayCell(nextMonthDate, dateStr, day, true));
-      }
+        // Top bar in cell
+        const topBar = document.createElement('div');
+        topBar.className = "flex items-center justify-between mb-1";
+        
+        const numBadge = document.createElement('span');
+        numBadge.className = `text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center ${
+          isToday ? 'bg-indigo-600 text-white' : (isSelected ? 'bg-slate-800 text-white' : 'text-slate-700')
+        }`;
+        numBadge.innerText = day;
+        topBar.appendChild(numBadge);
 
-      if (state.viewMode === 'agenda') {
-        renderAgendaView();
-      }
-    }
-
-    function createDayCell(dateObj, dateStr, dayNum, isOtherMonth = false, isToday = false) {
-      const cell = document.createElement('div');
-      const isSelected = dateStr === state.selectedDateStr;
-      const isFull = state.viewMode === 'full';
-
-      let baseClass = isFull 
-        ? "min-h-[130px] sm:min-h-[150px] p-2 bg-white flex flex-col justify-between transition relative cursor-pointer hover:bg-indigo-50/50 group " 
-        : "min-h-[90px] sm:min-h-[105px] p-1.5 sm:p-2 bg-white flex flex-col justify-between transition relative cursor-pointer hover:bg-indigo-50/50 group ";
-      
-      if (isOtherMonth) {
-        baseClass += "opacity-45 bg-slate-50/70 text-slate-400 ";
-      }
-      if (isSelected) {
-        baseClass += "ring-2 ring-indigo-600 ring-inset bg-indigo-50/40 ";
-      }
-      cell.className = baseClass;
-
-      cell.onclick = () => {
-        state.selectedDateStr = dateStr;
-        renderCalendar();
-        renderSelectedDayView();
-      };
-
-      const headerDiv = document.createElement('div');
-      headerDiv.className = "flex items-center justify-between mb-1";
-
-      const numSpan = document.createElement('span');
-      numSpan.className = `text-xs font-semibold rounded-full w-6 h-6 flex items-center justify-center ${
-        isToday ? 'bg-indigo-600 text-white font-bold shadow' : 'text-slate-700'
-      }`;
-      numSpan.textContent = dayNum;
-      headerDiv.appendChild(numSpan);
-
-      if (isFull) {
         const addBtn = document.createElement('button');
-        addBtn.className = "text-[11px] text-slate-400 hover:text-indigo-600 p-1 rounded hover:bg-indigo-50 opacity-0 group-hover:opacity-100 transition";
-        addBtn.title = "Add task on this date";
+        addBtn.className = "text-slate-300 group-hover:text-indigo-600 p-0.5 text-xs opacity-0 group-hover:opacity-100 transition";
+        addBtn.title = "Add Task";
         addBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
         addBtn.onclick = (e) => {
           e.stopPropagation();
-          openModalForDate(dateStr);
+          selectDate(dateStr);
+          openModal(dateStr);
         };
-        headerDiv.appendChild(addBtn);
-      }
+        topBar.appendChild(addBtn);
+        cell.appendChild(topBar);
 
-      const eventsContainer = document.createElement('div');
-      eventsContainer.className = "space-y-1 overflow-hidden flex-1";
+        // Events list in cell
+        const eventsContainer = document.createElement('div');
+        eventsContainer.className = "flex flex-col gap-1 overflow-hidden";
 
-      const events = getEventsForDate(dateStr);
-      const maxDisplay = isFull ? 4 : 2;
-
-      events.slice(0, maxDisplay).forEach(ev => {
-        const itemPill = document.createElement('div');
-        itemPill.className = `text-[10px] font-medium leading-tight truncate px-1.5 py-0.5 rounded transition ${getPillStyle(ev)}`;
-        itemPill.title = `${ev.title} ${ev.time ? '('+ev.time+')' : ''}`;
-        
-        let iconHtml = '';
-        if (ev.type === 'task') {
-          iconHtml = ev.isCompleted ? '<i class="fa-solid fa-check text-[9px] mr-1 text-slate-400"></i>' : '<i class="fa-regular fa-circle text-[8px] mr-1"></i>';
-        } else if (ev.type === 'politeknik') {
-          iconHtml = '<i class="fa-solid fa-graduation-cap text-[9px] mr-1"></i>';
-        } else if (ev.type === 'holiday') {
-          iconHtml = '<i class="fa-solid fa-flag text-[9px] mr-1"></i>';
-        } else if (ev.type === 'kpm') {
-          iconHtml = '<i class="fa-solid fa-school text-[9px] mr-1"></i>';
+        // A. PPD Takwim (Only on Monday)
+        if (showPoli && PPD_TAKTIM_MONDAYS[dateStr]) {
+          const item = PPD_TAKTIM_MONDAYS[dateStr];
+          const pill = document.createElement('div');
+          const isBreak = item.type === 'ppd-break';
+          pill.className = `text-[10px] font-semibold leading-tight truncate px-1.5 py-0.5 rounded border-l-2 ${
+            isBreak ? 'bg-amber-100 text-amber-900 border-amber-500' : 'bg-indigo-100 text-indigo-900 border-indigo-600'
+          }`;
+          pill.innerHTML = `<i class="fa-solid fa-graduation-cap text-[9px] mr-1"></i>${escapeHtml(item.label)}`;
+          pill.title = item.label;
+          eventsContainer.appendChild(pill);
         }
 
-        itemPill.innerHTML = `${iconHtml}<span>${ev.title}</span>`;
-        eventsContainer.appendChild(itemPill);
-      });
+        // B. Public Holiday
+        if (showHolidays && PUBLIC_HOLIDAYS[dateStr]) {
+          const pill = document.createElement('div');
+          pill.className = "text-[10px] font-semibold leading-tight truncate px-1.5 py-0.5 rounded bg-rose-100 text-rose-900 border-l-2 border-rose-500";
+          pill.innerHTML = `<i class="fa-solid fa-flag text-[9px] mr-1"></i>${escapeHtml(PUBLIC_HOLIDAYS[dateStr])}`;
+          pill.title = PUBLIC_HOLIDAYS[dateStr];
+          eventsContainer.appendChild(pill);
+        }
 
-      if (events.length > maxDisplay) {
-        const moreSpan = document.createElement('div');
-        moreSpan.className = "text-[9px] text-slate-500 font-semibold px-1";
-        moreSpan.textContent = `+${events.length - maxDisplay} more`;
-        eventsContainer.appendChild(moreSpan);
+        // C. KPM Break
+        if (showKpm && KPM_HOLIDAYS[dateStr]) {
+          const pill = document.createElement('div');
+          pill.className = "text-[10px] font-semibold leading-tight truncate px-1.5 py-0.5 rounded bg-amber-50 text-amber-800 border-l-2 border-amber-400";
+          pill.innerHTML = `<i class="fa-solid fa-school text-[9px] mr-1"></i>${escapeHtml(KPM_HOLIDAYS[dateStr])}`;
+          pill.title = KPM_HOLIDAYS[dateStr];
+          eventsContainer.appendChild(pill);
+        }
+
+        // D. Tasks
+        if (showTasks) {
+          const dayTasks = tasks.filter(t => t.date === dateStr);
+          dayTasks.slice(0, 2).forEach(t => {
+            const pill = document.createElement('div');
+            pill.className = `text-[10px] leading-tight truncate px-1.5 py-0.5 rounded border-l-2 ${
+              t.isCompleted 
+                ? 'bg-slate-100 text-slate-400 line-through border-slate-300' 
+                : 'bg-emerald-100 text-emerald-900 border-emerald-600 font-medium'
+            }`;
+            pill.innerHTML = `<i class="fa-regular fa-square-check text-[9px] mr-1"></i>${escapeHtml(t.title)}`;
+            pill.title = t.title;
+            eventsContainer.appendChild(pill);
+          });
+
+          if (dayTasks.length > 2) {
+            const more = document.createElement('div');
+            more.className = "text-[9px] text-slate-400 text-right font-bold pr-1";
+            more.innerText = `+${dayTasks.length - 2} more`;
+            eventsContainer.appendChild(more);
+          }
+        }
+
+        cell.appendChild(eventsContainer);
+        cell.onclick = () => selectDate(dateStr);
+        grid.appendChild(cell);
       }
 
-      cell.appendChild(headerDiv);
-      cell.appendChild(eventsContainer);
-      return cell;
+      // 3. Next Month Padding
+      const totalCells = startDayIndex + daysInMonth;
+      const remaining = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+      for (let j = 1; j <= remaining; j++) {
+        const cell = document.createElement('div');
+        cell.className = "calendar-cell bg-slate-50/80 p-2 text-slate-300 text-xs font-semibold select-none border-b border-r border-slate-100";
+        cell.innerText = j;
+        grid.appendChild(cell);
+      }
     }
 
-    function getPillStyle(event) {
-      if (event.type === 'task') {
-        if (event.isCompleted) {
-          return "bg-slate-100 text-slate-400 line-through";
+    // Select Date Action
+    function selectDate(dateStr) {
+      selectedDateStr = dateStr;
+      const sideInput = document.getElementById('sideTaskDate');
+      if (sideInput) sideInput.value = dateStr;
+
+      try {
+        const d = new Date(dateStr + "T00:00:00");
+        const titleEl = document.getElementById('selectedDateTitle');
+        if (titleEl) {
+          titleEl.innerText = d.toLocaleDateString('ms-MY', {
+            weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
+          });
         }
-        if (event.priority === 'high') {
-          return "bg-rose-100 text-rose-800 border-l-2 border-rose-500 font-semibold";
-        }
-        return "bg-emerald-100 text-emerald-800 border-l-2 border-emerald-500";
-      }
-      if (event.type === 'politeknik') {
-        return "bg-indigo-100 text-indigo-900 border-l-2 border-indigo-600";
-      }
-      if (event.type === 'kpm') {
-        return "bg-amber-100 text-amber-900 border-l-2 border-amber-500";
-      }
-      if (event.type === 'holiday') {
-        return "bg-rose-100 text-rose-900 font-semibold";
-      }
-      return "bg-slate-100 text-slate-700";
+      } catch (e) {}
+
+      renderCalendar();
+      renderSelectedDateDetails();
     }
 
-    /* ====================================================================
-       4. LEFT PANEL & DETAILS
-       ==================================================================== */
-    function renderSelectedDayView() {
-      const dateParts = state.selectedDateStr.split('-');
-      const d = new Date(parseInt(dateParts[0]), parseInt(dateParts[1]) - 1, parseInt(dateParts[2]));
-      
-      const dayName = DAY_NAMES_EN[d.getDay()] || '';
-      const dayMonthYear = `${d.getDate()} ${MONTH_NAMES_EN[d.getMonth()]} ${d.getFullYear()}`;
-
-      const nameEl = document.getElementById('selectedDateDayName');
-      const formattedEl = document.getElementById('selectedDateFormatted');
-      if (nameEl) nameEl.textContent = dayName;
-      if (formattedEl) formattedEl.textContent = dayMonthYear;
-
-      const sideDateInput = document.getElementById('sideTaskDate');
-      if (sideDateInput) {
-        sideDateInput.value = state.selectedDateStr;
-      }
-
-      const container = document.getElementById('selectedDayEventsList');
-      if (!container) return;
+    // Render details for selected date
+    function renderSelectedDateDetails() {
+      const container = document.getElementById('selectedDateEventsList');
       container.innerHTML = '';
 
-      const events = getEventsForDate(state.selectedDateStr);
+      const items = [];
 
-      if (events.length === 0) {
+      // PPD
+      if (PPD_TAKTIM_MONDAYS[selectedDateStr]) {
+        items.push({
+          type: 'ppd',
+          title: PPD_TAKTIM_MONDAYS[selectedDateStr].label,
+          desc: "Takwim Rasmi Politeknik Port Dickson"
+        });
+      }
+
+      // Holiday
+      if (PUBLIC_HOLIDAYS[selectedDateStr]) {
+        items.push({
+          type: 'holiday',
+          title: PUBLIC_HOLIDAYS[selectedDateStr],
+          desc: "Hari Kelepasan Am Malaysia"
+        });
+      }
+
+      // KPM
+      if (KPM_HOLIDAYS[selectedDateStr]) {
+        items.push({
+          type: 'kpm',
+          title: KPM_HOLIDAYS[selectedDateStr],
+          desc: "Kalendar Cuti Persekolahan KPM"
+        });
+      }
+
+      // Tasks
+      const dayTasks = tasks.filter(t => t.date === selectedDateStr);
+      dayTasks.forEach(t => items.push({ ...t, type: 'task' }));
+
+      if (items.length === 0) {
         container.innerHTML = `
-          <div class="text-center py-6 text-slate-400 text-xs">
-            No events or tasks scheduled for this day.
+          <div class="text-xs text-slate-400 text-center py-6 border border-dashed border-slate-200 rounded-xl">
+            Tiada aktiviti atau jadual pada tarikh ini.
           </div>
         `;
         return;
       }
 
-      events.forEach(item => {
-        const card = document.createElement('div');
-        card.className = "p-3 rounded-xl border transition flex flex-col gap-1.5 ";
+      items.forEach(item => {
+        const box = document.createElement('div');
+        box.className = "p-2.5 rounded-xl border flex flex-col gap-1 ";
 
-        if (item.type === 'task') {
-          card.className += item.isCompleted 
-            ? "bg-slate-50 border-slate-200 opacity-60" 
-            : "bg-white border-slate-200 hover:border-emerald-300 shadow-sm";
-          
-          card.innerHTML = `
+        if (item.type === 'ppd') {
+          box.className += "bg-indigo-50 border-indigo-200 text-indigo-950";
+          box.innerHTML = `
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span><i class="fa-solid fa-graduation-cap text-indigo-600 mr-1.5"></i> ${escapeHtml(item.title)}</span>
+              <span class="text-[10px] bg-indigo-200/80 px-2 py-0.5 rounded-full">PPD</span>
+            </div>
+            <p class="text-[11px] text-indigo-700">${item.desc}</p>
+          `;
+        } else if (item.type === 'holiday') {
+          box.className += "bg-rose-50 border-rose-200 text-rose-950";
+          box.innerHTML = `
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span><i class="fa-solid fa-flag text-rose-600 mr-1.5"></i> ${escapeHtml(item.title)}</span>
+              <span class="text-[10px] bg-rose-200 px-2 py-0.5 rounded-full">Cuti Am</span>
+            </div>
+            <p class="text-[11px] text-rose-700">${item.desc}</p>
+          `;
+        } else if (item.type === 'kpm') {
+          box.className += "bg-amber-50 border-amber-200 text-amber-950";
+          box.innerHTML = `
+            <div class="flex items-center justify-between text-xs font-bold">
+              <span><i class="fa-solid fa-school text-amber-600 mr-1.5"></i> ${escapeHtml(item.title)}</span>
+              <span class="text-[10px] bg-amber-200 px-2 py-0.5 rounded-full">KPM</span>
+            </div>
+            <p class="text-[11px] text-amber-700">${item.desc}</p>
+          `;
+        } else if (item.type === 'task') {
+          box.className += item.isCompleted ? "bg-slate-50 border-slate-200 opacity-60" : "bg-white border-slate-200 shadow-xs";
+          box.innerHTML = `
             <div class="flex items-start justify-between gap-2">
-              <label class="flex items-start gap-2.5 cursor-pointer flex-1">
-                <input type="checkbox" ${item.isCompleted ? 'checked' : ''} 
-                  class="mt-1 rounded text-emerald-600 focus:ring-emerald-500 task-checkbox" 
-                  data-id="${item.id}">
+              <label class="flex items-start gap-2 cursor-pointer flex-1">
+                <input type="checkbox" ${item.isCompleted ? 'checked' : ''} class="mt-0.5 rounded text-indigo-600 accent-indigo-600 task-check" data-id="${item.id}">
                 <div>
-                  <span class="text-xs font-bold ${item.isCompleted ? 'line-through text-slate-500' : 'text-slate-800'}">
-                    ${escapeHtml(item.title)}
-                  </span>
-                  ${item.time ? `<div class="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5"><i class="fa-regular fa-clock text-[10px]"></i> ${item.time}</div>` : ''}
-                  ${item.notes ? `<p class="text-[11px] text-slate-600 mt-1 bg-slate-50 p-1.5 rounded-lg border border-slate-100">${escapeHtml(item.notes)}</p>` : ''}
+                  <span class="text-xs font-semibold ${item.isCompleted ? 'line-through text-slate-400' : 'text-slate-800'}">${escapeHtml(item.title)}</span>
+                  ${item.time ? `<p class="text-[11px] text-slate-500"><i class="fa-regular fa-clock mr-1"></i>${item.time}</p>` : ''}
+                  ${item.notes ? `<p class="text-[11px] text-slate-600 bg-slate-50 p-1.5 rounded-lg border border-slate-100 mt-1">${escapeHtml(item.notes)}</p>` : ''}
                 </div>
               </label>
-              <button class="text-slate-400 hover:text-rose-600 p-1 text-xs transition delete-task-btn" data-id="${item.id}" title="Delete Task">
+              <button class="text-slate-400 hover:text-rose-600 p-1 text-xs btn-del" data-id="${item.id}" title="Padam">
                 <i class="fa-regular fa-trash-can"></i>
               </button>
             </div>
-            <div class="flex items-center justify-between text-[10px] text-slate-400 pt-1 border-t border-slate-100">
-              <span class="capitalize px-1.5 py-0.5 rounded bg-slate-100 font-medium text-slate-600">${item.category}</span>
-              ${item.priority === 'high' ? '<span class="text-rose-600 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Urgent</span>' : ''}
-            </div>
-          `;
-        } else if (item.type === 'politeknik') {
-          card.className += "bg-indigo-50/70 border-indigo-200";
-          card.innerHTML = `
-            <div class="flex items-start gap-2">
-              <span class="text-indigo-600 mt-0.5 text-xs"><i class="fa-solid fa-graduation-cap"></i></span>
-              <div class="flex-1">
-                <div class="text-xs font-bold text-indigo-950">${escapeHtml(item.title)}</div>
-                ${item.detail ? `<div class="text-[11px] text-indigo-800 mt-0.5">${escapeHtml(item.detail)}</div>` : ''}
-                <div class="text-[10px] font-semibold text-indigo-600 mt-1">Polytechnic Academic Calendar</div>
-              </div>
-            </div>
-          `;
-        } else if (item.type === 'kpm') {
-          card.className += "bg-amber-50 border-amber-200";
-          card.innerHTML = `
-            <div class="flex items-start gap-2">
-              <span class="text-amber-600 mt-0.5 text-xs"><i class="fa-solid fa-school"></i></span>
-              <div class="flex-1">
-                <div class="text-xs font-bold text-amber-950">${escapeHtml(item.title)}</div>
-                <div class="text-[10px] text-amber-800 mt-0.5">Ministry of Education (MOE) School Break</div>
-              </div>
-            </div>
-          `;
-        } else if (item.type === 'holiday') {
-          card.className += "bg-rose-50 border-rose-200";
-          card.innerHTML = `
-            <div class="flex items-start gap-2">
-              <span class="text-rose-600 mt-0.5 text-xs"><i class="fa-solid fa-flag"></i></span>
-              <div class="flex-1">
-                <div class="text-xs font-bold text-rose-950">${escapeHtml(item.title)}</div>
-                <div class="text-[10px] text-rose-700 mt-0.5">Malaysia Public Holiday</div>
-              </div>
-            </div>
           `;
         }
 
-        container.appendChild(card);
+        container.appendChild(box);
       });
 
-      container.querySelectorAll('.task-checkbox').forEach(cb => {
+      // Events for checkbox and delete
+      container.querySelectorAll('.task-check').forEach(cb => {
         cb.onchange = (e) => {
-          const id = e.target.getAttribute('data-id');
-          toggleTaskStatus(id, !e.target.checked);
-        };
-      });
-
-      container.querySelectorAll('.delete-task-btn').forEach(btn => {
-        btn.onclick = (e) => {
-          const id = btn.getAttribute('data-id');
-          showConfirmModal("Delete Task", "Are you sure you want to delete this task from the planner?", () => {
-            deleteTask(id);
-          });
-        };
-      });
-    }
-
-    function renderPendingTaskList() {
-      const container = document.getElementById('pendingTasksList');
-      const badge = document.getElementById('pendingCountBadge');
-      if (!container) return;
-      container.innerHTML = '';
-
-      const pendingTasks = state.userTasks.filter(t => !t.isCompleted).sort((a, b) => a.date.localeCompare(b.date));
-      if (badge) badge.textContent = pendingTasks.length;
-
-      if (pendingTasks.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-6 text-slate-400 text-xs">
-            <i class="fa-solid fa-circle-check text-emerald-400 text-lg mb-1 block"></i>
-            All tasks completed! Great job!
-          </div>
-        `;
-        return;
-      }
-
-      pendingTasks.forEach(task => {
-        const item = document.createElement('div');
-        item.className = "p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 transition flex items-center justify-between gap-2 shadow-xs";
-        
-        item.innerHTML = `
-          <div class="flex items-center gap-2 overflow-hidden flex-1 cursor-pointer select-task-date" data-date="${task.date}">
-            <span class="w-1.5 h-1.5 rounded-full ${task.priority === 'high' ? 'bg-rose-500' : 'bg-emerald-500'}"></span>
-            <div class="truncate">
-              <div class="text-xs font-semibold text-slate-800 truncate">${escapeHtml(task.title)}</div>
-              <div class="text-[10px] text-slate-400">${task.date} ${task.time ? '• ' + task.time : ''}</div>
-            </div>
-          </div>
-          <button class="quick-complete-btn text-slate-400 hover:text-emerald-600 p-1" data-id="${task.id}" title="Mark as Done">
-            <i class="fa-regular fa-circle-check"></i>
-          </button>
-        `;
-
-        container.appendChild(item);
-      });
-
-      container.querySelectorAll('.select-task-date').forEach(el => {
-        el.onclick = () => {
-          const dateStr = el.getAttribute('data-date');
-          state.selectedDateStr = dateStr;
-          const targetD = parseYMD(dateStr);
-          state.currentDate = new Date(targetD.getFullYear(), targetD.getMonth(), 1);
-          renderCalendar();
-          renderSelectedDayView();
-        };
-      });
-
-      container.querySelectorAll('.quick-complete-btn').forEach(btn => {
-        btn.onclick = () => {
-          const id = btn.getAttribute('data-id');
-          toggleTaskStatus(id, false);
-        };
-      });
-    }
-
-    function renderAgendaView() {
-      const container = document.getElementById('agendaItemsList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      const year = state.currentDate.getFullYear();
-      const month = state.currentDate.getMonth();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      let hasItems = false;
-
-      for (let day = 1; day <= daysInMonth; day++) {
-        const d = new Date(year, month, day);
-        const dateStr = formatYMD(d);
-        const events = getEventsForDate(dateStr);
-
-        if (events.length > 0) {
-          hasItems = true;
-          const dayCard = document.createElement('div');
-          dayCard.className = "flex flex-col sm:flex-row items-start sm:items-center gap-3 p-3 rounded-xl border border-slate-200/80 bg-white hover:border-indigo-200 transition";
-          
-          const dayBadge = `
-            <div class="sm:w-28 flex-shrink-0 flex sm:flex-col items-center sm:items-start gap-1">
-              <span class="text-xs font-bold text-indigo-700">${DAY_NAMES_EN[d.getDay()]}</span>
-              <span class="text-xs font-semibold text-slate-500">${day} ${MONTH_NAMES_EN[month]}</span>
-            </div>
-          `;
-
-          const eventsList = document.createElement('div');
-          eventsList.className = "flex flex-wrap gap-2 flex-1";
-
-          events.forEach(ev => {
-            const pill = document.createElement('div');
-            pill.className = `text-xs px-2.5 py-1 rounded-lg border font-medium flex items-center gap-1.5 ${getPillStyle(ev)}`;
-            pill.innerHTML = `<span>${ev.title}</span> ${ev.time ? `<span class="opacity-75 text-[10px]">(${ev.time})</span>` : ''}`;
-            eventsList.appendChild(pill);
-          });
-
-          dayCard.innerHTML = dayBadge;
-          dayCard.appendChild(eventsList);
-          container.appendChild(dayCard);
-        }
-      }
-
-      if (!hasItems) {
-        container.innerHTML = `
-          <div class="text-center py-12 text-slate-400 text-xs">
-            <i class="fa-solid fa-calendar-xmark text-2xl mb-2 text-slate-300 block"></i>
-            No events or tasks scheduled for this month.
-          </div>
-        `;
-      }
-    }
-
-    /* ====================================================================
-       5. TASK ACTIONS (ADD / TOGGLE / DELETE)
-       ==================================================================== */
-    async function addNewTask(newTask) {
-      state.userTasks.push(newTask);
-      renderCalendar();
-      renderSelectedDayView();
-      renderPendingTaskList();
-      showToast("Task added & syncing!");
-      await pushToCloud();
-    }
-
-    async function toggleTaskStatus(taskId, currentStatus) {
-      const task = state.userTasks.find(t => t.id === taskId);
-      if (!task) return;
-      task.isCompleted = !currentStatus;
-      task.updatedAt = new Date().toISOString();
-      renderCalendar();
-      renderSelectedDayView();
-      renderPendingTaskList();
-      await pushToCloud();
-    }
-
-    async function deleteTask(taskId) {
-      state.userTasks = state.userTasks.filter(t => t.id !== taskId);
-      renderCalendar();
-      renderSelectedDayView();
-      renderPendingTaskList();
-      showToast("Task deleted.");
-      await pushToCloud();
-    }
-
-    /* ====================================================================
-       6. VIEW SWITCHER
-       ==================================================================== */
-    function setViewMode(mode) {
-      state.viewMode = mode;
-      const mainGrid = document.getElementById('mainContentGrid');
-      const calCol = document.getElementById('calendarContainerCol');
-      const sideCol = document.getElementById('sidebarContainerCol');
-      const agendaView = document.getElementById('agendaViewContainer');
-
-      const btnSplit = document.getElementById('viewBtnSplit');
-      const btnFull = document.getElementById('viewBtnFull');
-      const btnAgenda = document.getElementById('viewBtnAgenda');
-
-      [btnSplit, btnFull, btnAgenda].forEach(btn => {
-        if (btn) btn.className = "view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition text-slate-600 hover:text-slate-900 flex items-center gap-1.5";
-      });
-
-      if (mode === 'split') {
-        if (btnSplit) btnSplit.className = "view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition bg-white text-indigo-700 shadow-sm flex items-center gap-1.5";
-        mainGrid.classList.remove('hidden');
-        calCol.className = "lg:col-span-8 bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col order-1 lg:order-2";
-        sideCol.className = "lg:col-span-4 flex flex-col gap-6 order-2 lg:order-1";
-        sideCol.classList.remove('hidden');
-        agendaView.classList.add('hidden');
-      } else if (mode === 'full') {
-        if (btnFull) btnFull.className = "view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition bg-white text-indigo-700 shadow-sm flex items-center gap-1.5";
-        mainGrid.classList.remove('hidden');
-        calCol.className = "lg:col-span-12 bg-white rounded-2xl shadow-sm border border-slate-200/80 overflow-hidden flex flex-col";
-        sideCol.classList.add('hidden');
-        agendaView.classList.add('hidden');
-      } else if (mode === 'agenda') {
-        if (btnAgenda) btnAgenda.className = "view-tab-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition bg-white text-indigo-700 shadow-sm flex items-center gap-1.5";
-        mainGrid.classList.add('hidden');
-        agendaView.classList.remove('hidden');
-        renderAgendaView();
-      }
-
-      renderCalendar();
-    }
-
-    /* ====================================================================
-       7. UI EVENT HANDLERS & MODALS
-       ==================================================================== */
-    const taskModal = document.getElementById('taskModal');
-    const taskForm = document.getElementById('taskForm');
-    const shareModal = document.getElementById('shareModal');
-
-    window.openModalForDate = function(dateStr) {
-      document.getElementById('taskTitle').value = '';
-      document.getElementById('taskNotes').value = '';
-      document.getElementById('taskTime').value = '';
-      document.getElementById('taskDate').value = dateStr || state.selectedDateStr;
-      document.getElementById('taskPriority').value = 'medium';
-      document.getElementById('taskCategory').value = 'task';
-      taskModal.classList.remove('hidden');
-    };
-
-    document.getElementById('btnOpenAddTask').onclick = () => openModalForDate(state.selectedDateStr);
-    document.getElementById('btnQuickAddForDay').onclick = () => openModalForDate(state.selectedDateStr);
-
-    document.getElementById('btnCloseModal').onclick = () => taskModal.classList.add('hidden');
-    document.getElementById('btnCancelModal').onclick = () => taskModal.classList.add('hidden');
-
-    taskForm.onsubmit = async (e) => {
-      e.preventDefault();
-      const title = document.getElementById('taskTitle').value.trim();
-      const date = document.getElementById('taskDate').value;
-      const category = document.getElementById('taskCategory').value;
-      const time = document.getElementById('taskTime').value;
-      const priority = document.getElementById('taskPriority').value;
-      const notes = document.getElementById('taskNotes').value.trim();
-
-      if (!title || !date) return;
-
-      const newTask = {
-        id: 'task_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-        title,
-        date,
-        category,
-        time,
-        priority,
-        notes,
-        isCompleted: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-
-      taskModal.classList.add('hidden');
-      await addNewTask(newTask);
-
-      state.selectedDateStr = date;
-      const targetD = parseYMD(date);
-      state.currentDate = new Date(targetD.getFullYear(), targetD.getMonth(), 1);
-      renderCalendar();
-      renderSelectedDayView();
-    };
-
-    // Quick Entry Form (Left Panel)
-    const sideTaskForm = document.getElementById('sideTaskForm');
-    if (sideTaskForm) {
-      sideTaskForm.onsubmit = async (e) => {
-        e.preventDefault();
-        const title = document.getElementById('sideTaskTitle').value.trim();
-        const date = document.getElementById('sideTaskDate').value;
-        const category = document.getElementById('sideTaskCategory').value;
-        const time = document.getElementById('sideTaskTime').value;
-        const priority = document.getElementById('sideTaskPriority').value;
-        const notes = document.getElementById('sideTaskNotes').value.trim();
-
-        if (!title || !date) return;
-
-        const newTask = {
-          id: 'task_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
-          title,
-          date,
-          category,
-          time,
-          priority,
-          notes,
-          isCompleted: false,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
-        };
-
-        document.getElementById('sideTaskTitle').value = '';
-        document.getElementById('sideTaskTime').value = '';
-        document.getElementById('sideTaskNotes').value = '';
-
-        await addNewTask(newTask);
-
-        state.selectedDateStr = date;
-        const targetD = parseYMD(date);
-        state.currentDate = new Date(targetD.getFullYear(), targetD.getMonth(), 1);
-        renderCalendar();
-        renderSelectedDayView();
-      };
-    }
-
-    // Share Modal
-    document.getElementById('btnSharePlanner').onclick = () => {
-      const shareInput = document.getElementById('shareUrlInput');
-      shareInput.value = window.location.href;
-      shareModal.classList.remove('hidden');
-    };
-
-    document.getElementById('btnCloseShareModal').onclick = () => {
-      shareModal.classList.add('hidden');
-    };
-
-    document.getElementById('btnCopyShareUrl').onclick = () => {
-      const shareInput = document.getElementById('shareUrlInput');
-      shareInput.select();
-      shareInput.setSelectionRange(0, 99999);
-      try {
-        navigator.clipboard.writeText(shareInput.value);
-        showToast("Link copied successfully!");
-      } catch (err) {
-        document.execCommand('copy');
-        showToast("Link copied successfully!");
-      }
-    };
-
-    // Install Guide Modal
-    const installGuideModal = document.getElementById('installGuideModal');
-    document.getElementById('btnInstallApp').onclick = () => {
-      installGuideModal.classList.remove('hidden');
-    };
-    document.getElementById('btnCloseInstallGuide').onclick = () => {
-      installGuideModal.classList.add('hidden');
-    };
-    document.getElementById('btnDismissInstallGuide').onclick = () => {
-      installGuideModal.classList.add('hidden');
-    };
-
-    // Clear completed tasks
-    document.getElementById('btnClearDoneTasks').onclick = () => {
-      const completed = state.userTasks.filter(t => t.isCompleted);
-      if (completed.length === 0) {
-        showToast("No completed tasks to clear.");
-        return;
-      }
-
-      showConfirmModal("Clear Completed", `Delete ${completed.length} task(s) marked as completed?`, async () => {
-        for (const t of completed) {
-          await deleteTask(t.id);
-        }
-        showToast("List cleared!");
-      });
-    };
-
-    // Navigation Buttons
-    document.getElementById('btnPrevMonth').onclick = () => {
-      state.currentDate.setMonth(state.currentDate.getMonth() - 1);
-      renderCalendar();
-    };
-
-    document.getElementById('btnNextMonth').onclick = () => {
-      state.currentDate.setMonth(state.currentDate.getMonth() + 1);
-      renderCalendar();
-    };
-
-    document.getElementById('btnToday').onclick = () => {
-      state.currentDate = new Date();
-      state.selectedDateStr = formatYMD(new Date());
-      renderCalendar();
-      renderSelectedDayView();
-    };
-
-    // View tab buttons
-    document.getElementById('viewBtnSplit').onclick = () => setViewMode('split');
-    document.getElementById('viewBtnFull').onclick = () => setViewMode('full');
-    document.getElementById('viewBtnAgenda').onclick = () => setViewMode('agenda');
-
-    // Filter checkboxes
-    document.getElementById('filterTasks').onchange = (e) => {
-      state.filters.task = e.target.checked;
-      renderCalendar();
-      renderSelectedDayView();
-    };
-    document.getElementById('filterPoliteknik').onchange = (e) => {
-      state.filters.politeknik = e.target.checked;
-      renderCalendar();
-      renderSelectedDayView();
-    };
-    document.getElementById('filterKPM').onchange = (e) => {
-      state.filters.kpm = e.target.checked;
-      renderCalendar();
-      renderSelectedDayView();
-    };
-    document.getElementById('filterHolidays').onchange = (e) => {
-      state.filters.holiday = e.target.checked;
-      renderCalendar();
-      renderSelectedDayView();
-    };
-
-    // Toast helper
-    function showToast(msg, isError = false) {
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMessage');
-      const toastIcon = document.getElementById('toastIcon');
-
-      if (!toast) return;
-      toastMsg.textContent = msg;
-      if (isError) {
-        toastIcon.innerHTML = '<i class="fa-solid fa-circle-exclamation text-rose-400"></i>';
-      } else {
-        toastIcon.innerHTML = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
-      }
-
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 3200);
-    }
-
-    // Modal Confirmation helper
-    let confirmCallback = null;
-    function showConfirmModal(title, msg, onConfirm) {
-      const modal = document.getElementById('confirmModal');
-      document.getElementById('confirmTitle').textContent = title;
-      document.getElementById('confirmMessage').textContent = msg;
-      confirmCallback = onConfirm;
-      modal.classList.remove('hidden');
-    }
-
-    document.getElementById('btnConfirmCancel').onclick = () => {
-      document.getElementById('confirmModal').classList.add('hidden');
-      confirmCallback = null;
-    };
-
-    document.getElementById('btnConfirmAction').onclick = () => {
-      if (confirmCallback) confirmCallback();
-      document.getElementById('confirmModal').classList.add('hidden');
-      confirmCallback = null;
-    };
-
-    function escapeHtml(text) {
-      if (!text) return '';
-      return text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-    }
-
-    /* ====================================================================
-       8. INITIAL RENDERING & SYNC ATTACHMENTS
-       ==================================================================== */
-    function initializeApp() {
-      // Set planner ID label
-      const plannerIdDisplay = document.getElementById('plannerUniqueIdDisplay');
-      if (plannerIdDisplay) {
-        plannerIdDisplay.textContent = `Planner ID: ${state.plannerId}`;
-      }
-
-      // 1. Load local cache first for instant UI response
-      loadLocalTasks();
-
-      // 2. Render UI immediately
-      renderCalendar();
-      renderSelectedDayView();
-      renderPendingTaskList();
-
-      // 3. Immediately pull latest updates from cloud (if opened on another device)
-      pullFromCloud(false);
-
-      // Manual Sync Button
-      const btnManualSync = document.getElementById('btnManualSync');
-      if (btnManualSync) {
-        btnManualSync.onclick = () => pullFromCloud(false);
-      }
-
-      // Quick Copy Link button
-      const btnCopyPlannerId = document.getElementById('btnCopyPlannerId');
-      if (btnCopyPlannerId) {
-        btnCopyPlannerId.onclick = () => {
-          try {
-            navigator.clipboard.writeText(window.location.href);
-            showToast("Planner link copied!");
-          } catch(e) {
-            const shareInput = document.getElementById('shareUrlInput');
-            if (shareInput) {
-              shareInput.value = window.location.href;
-              shareInput.select();
-              document.execCommand('copy');
-            }
-            showToast("Planner link copied!");
+          const t = tasks.find(x => x.id === e.target.dataset.id);
+          if (t) {
+            t.isCompleted = e.target.checked;
+            saveTasksToStorage();
+            renderCalendar();
+            renderSelectedDateDetails();
           }
         };
-      }
+      });
 
-      // Export / Backup JSON
-      const btnExportData = document.getElementById('btnExportData');
-      if (btnExportData) {
-        btnExportData.onclick = () => {
-          const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.userTasks, null, 2));
-          const dlAnchor = document.createElement('a');
-          dlAnchor.setAttribute("href", dataStr);
-          dlAnchor.setAttribute("download", `PoliPlanner_Backup_${state.plannerId}_${formatYMD(new Date())}.json`);
-          document.body.appendChild(dlAnchor);
-          dlAnchor.click();
-          dlAnchor.remove();
-          showToast("Backup file downloaded!");
+      container.querySelectorAll('.btn-del').forEach(btn => {
+        btn.onclick = (e) => {
+          tasks = tasks.filter(x => x.id !== e.currentTarget.dataset.id);
+          saveTasksToStorage();
+          renderCalendar();
+          renderSelectedDateDetails();
+          showToast("Tugasan telah dipadam.");
         };
-      }
-
-      // Import / Restore JSON
-      const btnImportData = document.getElementById('btnImportData');
-      const fileImportInput = document.getElementById('fileImportInput');
-      if (btnImportData && fileImportInput) {
-        btnImportData.onclick = () => fileImportInput.click();
-        fileImportInput.onchange = (e) => {
-          const file = e.target.files[0];
-          if (!file) return;
-          const reader = new FileReader();
-          reader.onload = async (evt) => {
-            try {
-              const imported = JSON.parse(evt.target.result);
-              if (Array.isArray(imported)) {
-                state.userTasks = imported;
-                renderCalendar();
-                renderSelectedDayView();
-                renderPendingTaskList();
-                await pushToCloud();
-                showToast("Data restored & synced successfully!");
-              } else {
-                showToast("Invalid file format.", true);
-              }
-            } catch(err) {
-              showToast("Error reading backup file.", true);
-            }
-          };
-          reader.readAsText(file);
-        };
-      }
+      });
     }
 
-    // Launch application immediately when DOM is ready
+    // Add Task Handler
+    function addTask(title, date, time, category, notes) {
+      const newTask = {
+        id: 'task_' + Date.now(),
+        title: title.trim(),
+        date: date,
+        time: time || '',
+        category: category || 'task',
+        notes: notes ? notes.trim() : '',
+        isCompleted: false
+      };
+      tasks.unshift(newTask);
+      saveTasksToStorage();
+      renderCalendar();
+      renderSelectedDateDetails();
+      showToast("Tugasan berjaya disimpan!");
+    }
+
+    function openModal(date) {
+      document.getElementById('modalTaskForm').reset();
+      document.getElementById('modalTaskDate').value = date || selectedDateStr;
+      document.getElementById('taskModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('taskModal').classList.add('hidden');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        t.classList.add('translate-y-20', 'opacity-0');
+      }, 2500);
+    }
+
+    // Event Listeners
+    function setupEvents() {
+      // Month Next / Prev
+      document.getElementById('btnPrevMonth').onclick = () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        renderCalendar();
+      };
+
+      document.getElementById('btnNextMonth').onclick = () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        renderCalendar();
+      };
+
+      document.getElementById('btnToday').onclick = () => {
+        const today = new Date();
+        currentYear = today.getFullYear();
+        currentMonth = today.getMonth();
+        selectDate(today.toISOString().split('T')[0]);
+      };
+
+      // Jump Buttons
+      document.querySelectorAll('.jump-btn').forEach(btn => {
+        btn.onclick = () => {
+          currentYear = parseInt(btn.dataset.year);
+          currentMonth = parseInt(btn.dataset.month);
+          renderCalendar();
+        };
+      });
+
+      // Filter Checkboxes
+      ['filterPoli', 'filterTasks', 'filterKpm', 'filterHolidays'].forEach(id => {
+        document.getElementById(id).onchange = () => renderCalendar();
+      });
+
+      // Side Form Submit
+      document.getElementById('sideTaskForm').onsubmit = (e) => {
+        e.preventDefault();
+        addTask(
+          document.getElementById('sideTaskTitle').value,
+          document.getElementById('sideTaskDate').value,
+          document.getElementById('sideTaskTime').value,
+          document.getElementById('sideTaskCategory').value,
+          document.getElementById('sideTaskNotes').value
+        );
+        document.getElementById('sideTaskTitle').value = '';
+        document.getElementById('sideTaskNotes').value = '';
+      };
+
+      // Modal Buttons
+      document.getElementById('btnOpenAddModal').onclick = () => openModal(selectedDateStr);
+      document.getElementById('btnAddSelectedDateTask').onclick = () => openModal(selectedDateStr);
+      document.getElementById('btnCloseModal').onclick = closeModal;
+      document.getElementById('btnCancelModal').onclick = closeModal;
+
+      document.getElementById('modalTaskForm').onsubmit = (e) => {
+        e.preventDefault();
+        addTask(
+          document.getElementById('modalTaskTitle').value,
+          document.getElementById('modalTaskDate').value,
+          document.getElementById('modalTaskTime').value,
+          document.getElementById('modalTaskCategory').value,
+          document.getElementById('modalTaskNotes').value
+        );
+        closeModal();
+      };
+
+      // Share Modal
+      const shareModal = document.getElementById('shareModal');
+      document.getElementById('btnShareLink').onclick = () => shareModal.classList.remove('hidden');
+      document.getElementById('btnCloseShareModal').onclick = () => shareModal.classList.add('hidden');
+
+      const copyShareHandler = () => {
+        try {
+          const input = document.getElementById('shareUrlBox');
+          input.select();
+          document.execCommand('copy');
+          showToast("Pautan berjaya disalin!");
+        } catch (e) {}
+      };
+      const copyBox = document.getElementById('btnCopyBox');
+      if (copyBox) copyBox.onclick = copyShareHandler;
+      const copyModal = document.getElementById('btnCopyShareModal');
+      if (copyModal) copyModal.onclick = copyShareHandler;
+    }
+
+    // Start immediately without blocking
+    function startApp() {
+      try {
+        initPlanner();
+      } catch (e) {}
+      
+      try {
+        setupEvents();
+      } catch (e) {}
+
+      // Immediately render calendar & selected date (November 2026 - M0 PPD)
+      currentYear = 2026;
+      currentMonth = 10;
+      selectedDateStr = "2026-11-23";
+      selectDate("2026-11-23");
+    }
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initializeApp);
+      document.addEventListener('DOMContentLoaded', startApp);
     } else {
-      initializeApp();
+      startApp();
     }
   </script>
 </body>
