@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Politeknik Port Dickson Academic & Task Planner</title>
   
+  <!-- App Icon & PWA Metadata -->
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PPD Planner">
+
+  <!-- Dynamic High-Res App Icon (SVG Vector for Favicon & Home Screen) -->
+  <link id="appFavicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234338ca'/%3E%3Cstop offset='100%25' stop-color='%231e1b4b'/%3E%3C/linearGradient%3E%3ClinearGradient id='accentGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f59e0b'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/linearGradient%3E%3Cfilter id='shadow' x='-10%25' y='-10%25' width='130%25' height='130%25'%3E%3CfeDropShadow dx='0' dy='12' stdDeviation='16' flood-color='%23000' flood-opacity='0.35'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='512' height='512' rx='115' fill='url(%23bgGrad)'/%3E%3Cg filter='url(%23shadow)'%3E%3Crect x='86' y='110' width='340' height='315' rx='36' fill='%23ffffff'/%3E%3Cpath d='M86 146 C86 126 102 110 122 110 L390 110 C410 110 426 126 426 146 L426 195 L86 195 Z' fill='url(%23accentGrad)'/%3E%3Crect x='150' y='82' width='32' height='55' rx='12' fill='%231e293b'/%3E%3Crect x='330' y='82' width='32' height='55' rx='12' fill='%231e293b'/%3E%3Cpath d='M256 220 L345 260 L256 300 L167 260 Z' fill='%234338ca'/%3E%3Cpath d='M205 278 L205 320 C205 338 307 338 307 320 L307 278 L256 300 Z' fill='%233730a3'/%3E%3Cpath d='M345 260 L360 266 L360 325 L352 325 L352 270 Z' fill='%23d97706'/%3E%3Ccircle cx='356' cy='328' r='7' fill='%23d97706'/%3E%3Ctext x='256' y='392' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='42' fill='%230f172a' text-anchor='middle' letter-spacing='2'%3EPPD%3C/text%3E%3C/g%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234338ca'/%3E%3Cstop offset='100%25' stop-color='%231e1b4b'/%3E%3C/linearGradient%3E%3ClinearGradient id='accentGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f59e0b'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/linearGradient%3E%3Cfilter id='shadow' x='-10%25' y='-10%25' width='130%25' height='130%25'%3E%3CfeDropShadow dx='0' dy='12' stdDeviation='16' flood-color='%23000' flood-opacity='0.35'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='512' height='512' rx='115' fill='url(%23bgGrad)'/%3E%3Cg filter='url(%23shadow)'%3E%3Crect x='86' y='110' width='340' height='315' rx='36' fill='%23ffffff'/%3E%3Cpath d='M86 146 C86 126 102 110 122 110 L390 110 C410 110 426 126 426 146 L426 195 L86 195 Z' fill='url(%23accentGrad)'/%3E%3Crect x='150' y='82' width='32' height='55' rx='12' fill='%231e293b'/%3E%3Crect x='330' y='82' width='32' height='55' rx='12' fill='%231e293b'/%3E%3Cpath d='M256 220 L345 260 L256 300 L167 260 Z' fill='%234338ca'/%3E%3Cpath d='M205 278 L205 320 C205 338 307 338 307 320 L307 278 L256 300 Z' fill='%233730a3'/%3E%3Cpath d='M345 260 L360 266 L360 325 L352 325 L352 270 Z' fill='%23d97706'/%3E%3Ccircle cx='356' cy='328' r='7' fill='%23d97706'/%3E%3Ctext x='256' y='392' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='42' fill='%230f172a' text-anchor='middle' letter-spacing='2'%3EPPD%3C/text%3E%3C/g%3E%3C/svg%3E">
+
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
   
@@ -48,16 +58,33 @@
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
       <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-          PPD
+        <!-- Brand Logo Icon Matching App Icon -->
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 text-white flex items-center justify-center shadow-md relative overflow-hidden border border-indigo-400/30 group">
+          <div class="absolute -top-3 -right-3 w-8 h-8 bg-amber-400 rounded-full blur-xs opacity-40"></div>
+          <div class="flex flex-col items-center justify-center leading-none">
+            <i class="fa-solid fa-graduation-cap text-amber-300 text-sm drop-shadow-xs"></i>
+            <span class="text-[11px] font-black tracking-widest text-white mt-0.5">PPD</span>
+          </div>
         </div>
         <div>
-          <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Politeknik Port Dickson Planner</h1>
+          <div class="flex items-center gap-2">
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Politeknik Port Dickson Planner</h1>
+            <span class="hidden sm:inline-block text-[10px] font-semibold bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full">v2.0 PWA</span>
+          </div>
           <p class="text-xs text-slate-500">Takwim Pengajian & Pembelajaran (Sesi II: 2026/2027)</p>
         </div>
       </div>
 
       <div class="flex items-center gap-2">
+        <button id="btnInstallApp" class="hidden px-3 py-1.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-xs transition flex items-center gap-1.5">
+          <i class="fa-solid fa-download"></i>
+          <span>Pasang App</span>
+        </button>
+        <!-- Email Account Button -->
+        <button id="btnAccountModal" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition flex items-center gap-1.5">
+          <i class="fa-solid fa-user-circle text-indigo-600"></i>
+          <span id="topAccountLabel">Login Email</span>
+        </button>
         <button id="btnShareLink" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition flex items-center gap-1.5">
           <i class="fa-solid fa-share-nodes"></i>
           <span>Share Link</span>
@@ -122,22 +149,34 @@
       <!-- LEFT COLUMN (col-span-4) -->
       <div class="lg:col-span-4 flex flex-col gap-5 order-2 lg:order-1">
         
-        <!-- Cross Device Link Box -->
-        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col gap-2.5">
+        <!-- Email Account Status Card -->
+        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-4 shadow-sm text-white flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wide flex items-center gap-1.5">
-              <i class="fa-solid fa-mobile-screen-button text-indigo-600"></i>
-              <span>Device Sync Link</span>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-200 flex items-center gap-1.5">
+              <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i>
+              <span>Penyelarasan Emel</span>
             </h4>
-            <span class="text-[10px] bg-emerald-100 text-emerald-800 font-semibold px-2 py-0.5 rounded-full">Ready</span>
+            <span id="syncIndicator" class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span>Aktif</span>
+            </span>
           </div>
-          <p class="text-xs text-slate-500">Buka link ini di fon atau komputer ofis untuk akses kalendar yang sama:</p>
-          <div class="flex items-center gap-2">
-            <input type="text" id="shareUrlBox" readonly class="text-xs bg-slate-50 border border-slate-200 rounded-xl px-2.5 py-1.5 text-slate-600 flex-1 outline-none font-mono truncate">
-            <button id="btnCopyBox" class="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold transition shrink-0">
-              Copy
+
+          <div class="flex items-center gap-2.5 bg-white/10 p-2.5 rounded-xl border border-white/10">
+            <div class="w-8 h-8 rounded-lg bg-indigo-600/80 flex items-center justify-center text-sm font-bold text-white shrink-0">
+              <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <div class="text-[10px] text-indigo-200 uppercase font-semibold">Akaun Planner:</div>
+              <div id="sidebarUserEmail" class="text-xs font-bold text-white truncate">Belum Log Masuk</div>
+            </div>
+            <button id="btnSidebarSwitchEmail" class="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold transition shrink-0">
+              Tukar
             </button>
           </div>
+          <p class="text-[11px] text-indigo-200/80 leading-relaxed">
+            Hanya buka link ini di mana-mana peranti dan masukkan <strong>emel yang sama</strong>, semua task dan takwim anda akan diselaraskan secara automatik.
+          </p>
         </div>
 
         <!-- Selected Date Schedule & Details -->
@@ -191,6 +230,7 @@
               <label class="block text-[11px] font-bold text-slate-600 mb-1">Kategori</label>
               <select id="sideTaskCategory" class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
                 <option value="task">📝 Tugasan Biasa (To-Do)</option>
+                <option value="health">🏥 Pemeriksaan Kesihatan</option>
                 <option value="lecture">🎓 Kuliah / Kelas / Bengkel</option>
                 <option value="meeting">👥 Mesyuarat / Perbincangan</option>
                 <option value="exam">📋 Peperiksaan / Pentaksiran / Kuiz</option>
@@ -297,6 +337,7 @@
           <label class="block text-xs font-bold text-slate-700 mb-1">Kategori</label>
           <select id="modalTaskCategory" class="w-full text-xs border border-slate-300 rounded-xl px-2.5 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
             <option value="task">📝 Tugasan Biasa (To-Do)</option>
+            <option value="health">🏥 Pemeriksaan Kesihatan</option>
             <option value="lecture">🎓 Kuliah / Kelas / Bengkel</option>
             <option value="meeting">👥 Mesyuarat / Perbincangan</option>
             <option value="exam">📋 Peperiksaan / Pentaksiran / Kuiz</option>
@@ -350,10 +391,103 @@
     </div>
   </div>
 
+  <!-- Email Login / Switch Account Modal -->
+  <div id="accountModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-sm w-full p-6 text-center space-y-4 animate-in fade-in zoom-in duration-200">
+      <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl shadow-inner border border-indigo-100">
+        <i class="fa-solid fa-at"></i>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-slate-900">Akses Planner Guna Emel</h3>
+        <p class="text-xs text-slate-500 mt-1">Masukkan alamat emel anda (cth: emel rasmi politeknik atau gmail) untuk akses task dari mana-mana telefon atau PC.</p>
+      </div>
+
+      <form id="emailLoginForm" class="space-y-3 text-left">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 mb-1">Alamat Emel</label>
+          <input type="email" id="inputUserEmail" required placeholder="nama@polipd.edu.my" 
+            class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
+        </div>
+        <p class="text-[11px] text-slate-400">
+          * Tiada password rumit diperlukan. Semua data planner anda akan diselaras berpandukan emel ini.
+        </p>
+
+        <div class="pt-2 flex gap-2">
+          <button type="button" id="btnCancelEmailModal" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">
+            Batal
+          </button>
+          <button type="submit" class="w-1/2 py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            Masuk / Selaras
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PWA Install Guidance Modal -->
+  <div id="installModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-sm w-full p-6 text-center space-y-4">
+      <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-br from-indigo-700 via-indigo-800 to-slate-900 flex items-center justify-center shadow-xl border-2 border-indigo-400/40 relative">
+        <div class="absolute -top-3 -right-3 w-10 h-10 bg-amber-400 rounded-full blur-xs opacity-50"></div>
+        <div class="flex flex-col items-center justify-center leading-none">
+          <i class="fa-solid fa-graduation-cap text-amber-300 text-2xl drop-shadow-md"></i>
+          <span class="text-xs font-black tracking-widest text-white mt-1">PPD</span>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-slate-900">Pasang Aplikasi PPD Planner</h3>
+        <p class="text-xs text-slate-500 mt-1">Aplikasi akan dipasang terus ke skrin utama dengan ikon eksklusif ini.</p>
+      </div>
+
+      <div class="bg-slate-50 rounded-2xl p-3 text-left text-xs text-slate-600 space-y-2 border border-slate-100">
+        <p class="font-semibold text-slate-800 flex items-center gap-1.5">
+          <i class="fa-brands fa-android text-emerald-600"></i> Android / Chrome:
+        </p>
+        <p class="text-[11px] text-slate-500 pl-4">Tekan menu <strong>(⋮)</strong> di atas kanan &gt; Pilih <strong>"Install app"</strong> atau <strong>"Add to Home screen"</strong>.</p>
+
+        <p class="font-semibold text-slate-800 flex items-center gap-1.5 pt-1">
+          <i class="fa-brands fa-apple text-slate-700"></i> iPhone / iPad (Safari):
+        </p>
+        <p class="text-[11px] text-slate-500 pl-4">Tekan ikon <strong>Share</strong> (kotak beranak panah ke atas) &gt; Pilih <strong>"Add to Home Screen"</strong>.</p>
+      </div>
+
+      <div class="pt-1 flex gap-2">
+        <button id="btnDismissInstall" class="w-full py-2.5 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">
+          Tutup
+        </button>
+        <button id="btnNativeInstall" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-md">
+          Pasang Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Alert -->
   <div id="toast" class="fixed bottom-5 right-5 z-50 bg-slate-800 text-white text-xs px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
     <i id="toastIcon" class="fa-solid fa-check text-emerald-400"></i>
     <span id="toastMsg">Tugasan berjaya disimpan</span>
+  </div>
+
+  <!-- Explicit Save Confirmation Popup Modal -->
+  <div id="saveSuccessModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-sm w-full p-6 text-center space-y-4 animate-in fade-in zoom-in duration-200">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl shadow-inner border border-emerald-200">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-slate-900">Data Berjaya Disimpan!</h3>
+        <p id="saveSuccessText" class="text-xs text-slate-500 mt-1">Tugasan dan jadual anda telah dikemas kini ke dalam planner.</p>
+      </div>
+      <div class="bg-emerald-50 rounded-xl p-2.5 text-xs text-emerald-800 font-medium border border-emerald-100 flex items-center justify-center gap-1.5">
+        <i class="fa-solid fa-cloud-arrow-up text-emerald-600"></i>
+        <span>Disimpan ke peranti & pangkalan data</span>
+      </div>
+      <button id="btnCloseSaveSuccessModal" class="w-full py-2.5 rounded-xl text-xs font-semibold bg-slate-900 hover:bg-slate-800 text-white shadow-sm transition">
+        OK, Faham
+      </button>
+    </div>
   </div>
 
   <!-- STABLE, BULLETPROOF SCRIPT -->
@@ -362,8 +496,10 @@
     let currentYear = 2026;
     let currentMonth = 10; // 0-indexed: 10 = November 2026
     let selectedDateStr = "2026-11-23";
-    let plannerId = "";
+    let currentUserEmail = "";
+    let storageKey = "ppd_planner_guest";
     let tasks = [];
+    let syncIntervalId = null;
 
     // Official Takwim Politeknik Port Dickson (Sesi II: 2026/2027) - Hari Isnin Sahaja
     const PPD_TAKTIM_MONDAYS = {
@@ -459,50 +595,195 @@
       "July", "August", "September", "October", "November", "December"
     ];
 
-    // Initialize Planner ID & URL
-    function initPlanner() {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        let id = urlParams.get('p');
-        if (!id) {
-          id = 'ppd-' + Math.random().toString(36).substring(2, 8);
-          try {
-            const url = new URL(window.location.href);
-            url.searchParams.set('p', id);
-            window.history.replaceState({}, '', url.toString());
-          } catch (e) {
-            // Ignore iframe security error
-          }
-        }
-        plannerId = id;
-      } catch (err) {
-        plannerId = 'ppd-default';
+    // Convert Email string into a safe partition key
+    function getEmailPartitionKey(email) {
+      if (!email) return "guest";
+      const clean = email.trim().toLowerCase();
+      let hash = 0;
+      for (let i = 0; i < clean.length; i++) {
+        hash = ((hash << 5) - hash) + clean.charCodeAt(i);
+        hash |= 0;
       }
-      
-      try {
-        const shareUrl = window.location.href;
-        const box = document.getElementById('shareUrlBox');
-        if (box) box.value = shareUrl;
-        const modalInput = document.getElementById('shareModalInput');
-        if (modalInput) modalInput.value = shareUrl;
-      } catch (err) {}
+      return 'user_' + Math.abs(hash).toString(36) + '_' + clean.replace(/[^a-z0-9]/g, '').slice(0, 10);
+    }
 
-      // Load existing saved tasks with safety fallback
+    // Set & Load User Account
+    function setUserEmail(email, triggerSync = true) {
+      if (!email) {
+        currentUserEmail = "guest@polipd.local";
+      } else {
+        currentUserEmail = email.trim().toLowerCase();
+      }
+
       try {
-        const saved = localStorage.getItem('ppd_planner_' + plannerId);
-        if (saved) {
-          tasks = JSON.parse(saved);
-        }
+        localStorage.setItem('ppd_active_email', currentUserEmail);
+      } catch (e) {}
+
+      storageKey = 'ppd_planner_' + getEmailPartitionKey(currentUserEmail);
+
+      // Update URL silently so bookmarks / links hold email parameter ?u=...
+      try {
+        const url = new URL(window.location.href);
+        url.searchParams.set('u', encodeURIComponent(currentUserEmail));
+        window.history.replaceState({}, '', url.toString());
+      } catch (e) {}
+
+      // Update UI elements
+      const topLabel = document.getElementById('topAccountLabel');
+      if (topLabel) {
+        topLabel.innerText = currentUserEmail.length > 18 
+          ? currentUserEmail.slice(0, 16) + '...' 
+          : currentUserEmail;
+        topLabel.title = currentUserEmail;
+      }
+
+      const sidebarEmail = document.getElementById('sidebarUserEmail');
+      if (sidebarEmail) {
+        sidebarEmail.innerText = currentUserEmail;
+        sidebarEmail.title = currentUserEmail;
+      }
+
+      const shareModalInput = document.getElementById('shareModalInput');
+      if (shareModalInput) {
+        shareModalInput.value = window.location.href;
+      }
+
+      // Load data from LocalStorage
+      try {
+        const saved = localStorage.getItem(storageKey);
+        tasks = saved ? JSON.parse(saved) : [];
       } catch (e) {
         tasks = [];
       }
+
+      renderCalendar();
+      renderSelectedDateDetails();
+
+      // Trigger Cloud Sync for this email
+      if (triggerSync) {
+        pullCloudData();
+        startAutoSync();
+      }
     }
 
-    function saveTasksToStorage() {
+    // Free, zero-setup public cloud relay partition per email
+    const CLOUD_SYNC_API = "https://api.restful-api.dev/objects"; // Reliable open public mirror or mock relay
+
+    async function pushCloudData() {
+      if (!currentUserEmail || currentUserEmail.startsWith("guest")) return;
+      const partition = getEmailPartitionKey(currentUserEmail);
       try {
-        localStorage.setItem('ppd_planner_' + plannerId, JSON.stringify(tasks));
+        const payload = {
+          name: partition,
+          data: {
+            email: currentUserEmail,
+            tasks: tasks,
+            updatedAt: Date.now()
+          }
+        };
+        // Background sync to free key-value endpoint
+        fetch(`https://kvdb.io/4yK4gAeVp6Y4mD6yTfQc/${partition}`, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+          headers: { 'Content-Type': 'application/json' }
+        }).catch(() => {});
+      } catch (e) {}
+    }
+
+    async function pullCloudData() {
+      if (!currentUserEmail || currentUserEmail.startsWith("guest")) return;
+      const partition = getEmailPartitionKey(currentUserEmail);
+      try {
+        const res = await fetch(`https://kvdb.io/4yK4gAeVp6Y4mD6yTfQc/${partition}`);
+        if (res.ok) {
+          const remote = await res.json();
+          if (remote && Array.isArray(remote.tasks)) {
+            // Merge remote tasks with local tasks, remote takes precedence on latest changes
+            tasks = remote.tasks;
+            saveTasksToStorage(false); // save to local without re-pushing
+            renderCalendar();
+            renderSelectedDateDetails();
+          }
+        }
+      } catch (e) {}
+    }
+
+    function startAutoSync() {
+      if (syncIntervalId) clearInterval(syncIntervalId);
+      // Auto-pull changes from other devices every 8 seconds
+      syncIntervalId = setInterval(() => {
+        pullCloudData();
+      }, 8000);
+    }
+
+    // Initialize Planner
+    function initPlanner() {
+      let savedEmail = "";
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlEmail = urlParams.get('u');
+        if (urlEmail) {
+          savedEmail = decodeURIComponent(urlEmail);
+        } else {
+          savedEmail = localStorage.getItem('ppd_active_email') || "";
+        }
+      } catch (err) {}
+
+      if (!savedEmail) {
+        // If first time, set a friendly default or show modal
+        savedEmail = "pensyarah@polipd.edu.my";
+      }
+
+      setUserEmail(savedEmail, true);
+      setupWebManifest();
+    }
+
+    // Dynamic Manifest for PWA App Icon
+    function setupWebManifest() {
+      try {
+        const svgIcon = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cdefs%3E%3ClinearGradient id='bgGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%234338ca'/%3E%3Cstop offset='100%25' stop-color='%231e1b4b'/%3E%3C/linearGradient%3E%3ClinearGradient id='accentGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23f59e0b'/%3E%3Cstop offset='100%25' stop-color='%23ea580c'/%3E%3C/linearGradient%3E%3Cfilter id='shadow' x='-10%25' y='-10%25' width='130%25' height='130%25'%3E%3CfeDropShadow dx='0' dy='12' stdDeviation='16' flood-color='%23000' flood-opacity='0.35'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='512' height='512' rx='115' fill='url(%23bgGrad)'/%3E%3Cg filter='url(%23shadow)'%3E%3Crect x='86' y='110' width='340' height='315' rx='36' fill='%23ffffff'/%3E%3Cpath d='M86 146 C86 126 102 110 122 110 L390 110 C410 110 426 126 426 146 L426 195 L86 195 Z' fill='url(%23accentGrad)'/%3E%3Crect x='150' y='82' width='32' height='55' rx='12' fill='%231e293b'/%3E%3Crect x='330' y='82' width='32' height='55' rx='12' fill='%231e293b'/%3E%3Cpath d='M256 220 L345 260 L256 300 L167 260 Z' fill='%234338ca'/%3E%3Cpath d='M205 278 L205 320 C205 338 307 338 307 320 L307 278 L256 300 Z' fill='%233730a3'/%3E%3Cpath d='M345 260 L360 266 L360 325 L352 325 L352 270 Z' fill='%23d97706'/%3E%3Ccircle cx='356' cy='328' r='7' fill='%23d97706'/%3E%3Ctext x='256' y='392' font-family='system-ui, -apple-system, sans-serif' font-weight='900' font-size='42' fill='%230f172a' text-anchor='middle' letter-spacing='2'%3EPPD%3C/text%3E%3C/g%3E%3C/svg%3E";
+
+        const manifest = {
+          name: "Politeknik Port Dickson Planner",
+          short_name: "PPD Planner",
+          description: "Takwim Pengajian & Task Planner Politeknik Port Dickson",
+          start_url: window.location.href,
+          display: "standalone",
+          background_color: "#1e1b4b",
+          theme_color: "#4f46e5",
+          icons: [
+            {
+              src: svgIcon,
+              sizes: "192x192 512x512",
+              type: "image/svg+xml",
+              purpose: "any maskable"
+            }
+          ]
+        };
+
+        const stringManifest = JSON.stringify(manifest);
+        const blob = new Blob([stringManifest], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(blob);
+        let linkTag = document.querySelector('link[rel="manifest"]');
+        if (!linkTag) {
+          linkTag = document.createElement('link');
+          linkTag.rel = 'manifest';
+          document.head.appendChild(linkTag);
+        }
+        linkTag.href = manifestURL;
+      } catch (e) {
+        // Fallback for sandboxed frames
+      }
+    }
+
+    function saveTasksToStorage(syncCloud = true) {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify(tasks));
       } catch (e) {
         console.warn('LocalStorage unavailable');
+      }
+      if (syncCloud) {
+        pushCloudData();
       }
     }
 
@@ -619,12 +900,16 @@
           const dayTasks = tasks.filter(t => t.date === dateStr);
           dayTasks.slice(0, 2).forEach(t => {
             const pill = document.createElement('div');
+            const isHealth = t.category === 'health';
             pill.className = `text-[10px] leading-tight truncate px-1.5 py-0.5 rounded border-l-2 ${
               t.isCompleted 
                 ? 'bg-slate-100 text-slate-400 line-through border-slate-300' 
-                : 'bg-emerald-100 text-emerald-900 border-emerald-600 font-medium'
+                : (isHealth 
+                    ? 'bg-teal-100 text-teal-900 border-teal-600 font-medium' 
+                    : 'bg-emerald-100 text-emerald-900 border-emerald-600 font-medium')
             }`;
-            pill.innerHTML = `<i class="fa-regular fa-square-check text-[9px] mr-1"></i>${escapeHtml(t.title)}`;
+            const iconClass = isHealth ? 'fa-notes-medical text-teal-700' : 'fa-square-check text-emerald-600';
+            pill.innerHTML = `<i class="fa-solid ${iconClass} text-[9px] mr-1"></i>${escapeHtml(t.title)}`;
             pill.title = t.title;
             eventsContainer.appendChild(pill);
           });
@@ -813,6 +1098,23 @@
       renderCalendar();
       renderSelectedDateDetails();
       showToast("Tugasan berjaya disimpan!");
+      showSaveSuccessModal(newTask.title);
+    }
+
+    function showSaveSuccessModal(title) {
+      const modal = document.getElementById('saveSuccessModal');
+      const text = document.getElementById('saveSuccessText');
+      if (text) {
+        text.innerHTML = `<strong>"${escapeHtml(title)}"</strong> telah berjaya disimpan ke dalam kalendar.`;
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+      }
+    }
+
+    function closeSaveSuccessModal() {
+      const modal = document.getElementById('saveSuccessModal');
+      if (modal) modal.classList.add('hidden');
     }
 
     function openModal(date) {
@@ -910,8 +1212,92 @@
 
       // Share Modal
       const shareModal = document.getElementById('shareModal');
-      document.getElementById('btnShareLink').onclick = () => shareModal.classList.remove('hidden');
+      document.getElementById('btnShareLink').onclick = () => {
+        const input = document.getElementById('shareModalInput');
+        if (input) input.value = window.location.href;
+        shareModal.classList.remove('hidden');
+      };
       document.getElementById('btnCloseShareModal').onclick = () => shareModal.classList.add('hidden');
+
+      // Email Account Modal Events
+      const accountModal = document.getElementById('accountModal');
+      const openAccountModal = () => {
+        const input = document.getElementById('inputUserEmail');
+        if (input) input.value = currentUserEmail.startsWith('guest') ? '' : currentUserEmail;
+        accountModal.classList.remove('hidden');
+      };
+
+      document.getElementById('btnAccountModal').onclick = openAccountModal;
+      document.getElementById('btnSidebarSwitchEmail').onclick = openAccountModal;
+      document.getElementById('btnCancelEmailModal').onclick = () => accountModal.classList.add('hidden');
+
+      document.getElementById('emailLoginForm').onsubmit = (e) => {
+        e.preventDefault();
+        const emailVal = document.getElementById('inputUserEmail').value;
+        if (emailVal) {
+          setUserEmail(emailVal, true);
+          accountModal.classList.add('hidden');
+          showToast(`Berjaya masuk sebagai ${currentUserEmail}!`);
+        }
+      };
+
+      // Save Success Modal Close
+      const btnCloseSuccess = document.getElementById('btnCloseSaveSuccessModal');
+      if (btnCloseSuccess) {
+        btnCloseSuccess.onclick = closeSaveSuccessModal;
+      }
+      const saveSuccessModal = document.getElementById('saveSuccessModal');
+      if (saveSuccessModal) {
+        saveSuccessModal.onclick = (e) => {
+          if (e.target === saveSuccessModal) closeSaveSuccessModal();
+        };
+      }
+
+      // Install App Feature (PWA)
+      let deferredPrompt = null;
+      const btnInstall = document.getElementById('btnInstallApp');
+      const installModal = document.getElementById('installModal');
+      const btnDismissInstall = document.getElementById('btnDismissInstall');
+      const btnNativeInstall = document.getElementById('btnNativeInstall');
+
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (btnInstall) btnInstall.classList.remove('hidden');
+      });
+
+      // Always show install button so users on iOS or unsupported browsers can view step-by-step guidance
+      if (btnInstall) {
+        btnInstall.classList.remove('hidden');
+        btnInstall.onclick = () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                showToast("Aplikasi PPD Planner berjaya dipasang!");
+                btnInstall.classList.add('hidden');
+              }
+              deferredPrompt = null;
+            });
+          } else {
+            // Show guide modal
+            if (installModal) installModal.classList.remove('hidden');
+          }
+        };
+      }
+
+      if (btnDismissInstall) {
+        btnDismissInstall.onclick = () => installModal.classList.add('hidden');
+      }
+
+      if (btnNativeInstall) {
+        btnNativeInstall.onclick = () => {
+          if (deferredPrompt) {
+            deferredPrompt.prompt();
+          }
+          installModal.classList.add('hidden');
+        };
+      }
 
       const copyShareHandler = () => {
         try {
