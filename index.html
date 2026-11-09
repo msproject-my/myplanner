@@ -80,14 +80,19 @@
           <i class="fa-solid fa-download"></i>
           <span>Pasang App</span>
         </button>
-        <!-- Email Account Button -->
-        <button id="btnAccountModal" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition flex items-center gap-1.5">
-          <i class="fa-solid fa-user-circle text-indigo-600"></i>
-          <span id="topAccountLabel">Login Email</span>
+
+        <!-- Clean Top Account Profile / Email Button -->
+        <button id="btnAccountModal" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition flex items-center gap-1.5 shadow-xs">
+          <div class="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px]">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <span id="topAccountLabel" class="max-w-[120px] sm:max-w-[170px] truncate">Login Email</span>
+          <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
         </button>
+
         <button id="btnShareLink" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 transition flex items-center gap-1.5">
           <i class="fa-solid fa-share-nodes"></i>
-          <span>Share Link</span>
+          <span>Share</span>
         </button>
         <button id="btnOpenAddModal" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition flex items-center gap-1.5">
           <i class="fa-solid fa-plus"></i>
@@ -146,39 +151,9 @@
     <!-- Main Grid: Left (Forms & Details) & Right (Calendar) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
       
-      <!-- LEFT COLUMN (col-span-4) -->
+      <!-- LEFT COLUMN (col-span-4) - CLEANED (No sync card clutter) -->
       <div class="lg:col-span-4 flex flex-col gap-5 order-2 lg:order-1">
         
-        <!-- Email Account Status Card -->
-        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 rounded-2xl p-4 shadow-sm text-white flex flex-col gap-2.5">
-          <div class="flex items-center justify-between">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-200 flex items-center gap-1.5">
-              <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i>
-              <span>Penyelarasan Emel</span>
-            </h4>
-            <span id="syncIndicator" class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
-              <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span>Aktif</span>
-            </span>
-          </div>
-
-          <div class="flex items-center gap-2.5 bg-white/10 p-2.5 rounded-xl border border-white/10">
-            <div class="w-8 h-8 rounded-lg bg-indigo-600/80 flex items-center justify-center text-sm font-bold text-white shrink-0">
-              <i class="fa-solid fa-envelope"></i>
-            </div>
-            <div class="min-w-0 flex-1">
-              <div class="text-[10px] text-indigo-200 uppercase font-semibold">Akaun Planner:</div>
-              <div id="sidebarUserEmail" class="text-xs font-bold text-white truncate">Belum Log Masuk</div>
-            </div>
-            <button id="btnSidebarSwitchEmail" class="px-2.5 py-1 rounded-lg bg-white/20 hover:bg-white/30 text-white text-[11px] font-semibold transition shrink-0">
-              Tukar
-            </button>
-          </div>
-          <p class="text-[11px] text-indigo-200/80 leading-relaxed">
-            Hanya buka link ini di mana-mana peranti dan masukkan <strong>emel yang sama</strong>, semua task dan takwim anda akan diselaraskan secara automatik.
-          </p>
-        </div>
-
         <!-- Selected Date Schedule & Details -->
         <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 flex flex-col gap-3">
           <div class="flex items-center justify-between pb-2 border-b border-slate-100">
@@ -287,6 +262,7 @@
             <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-indigo-600"></span> Takwim PPD (Setiap Isnin)</span>
             <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500"></span> Cuti Pertengahan / KPM</span>
             <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-500"></span> Cuti Umum</span>
+            <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-teal-600"></span> Kesihatan</span>
             <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-500"></span> Tugasan Anda</span>
           </div>
           <div class="text-[11px] text-slate-400 font-medium">
@@ -391,16 +367,16 @@
     </div>
   </div>
 
-  <!-- Email Login / Switch Account Modal -->
+  <!-- Email Login / Account Modal -->
   <div id="accountModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-sm w-full p-6 text-center space-y-4 animate-in fade-in zoom-in duration-200">
       <div class="w-14 h-14 mx-auto rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl shadow-inner border border-indigo-100">
-        <i class="fa-solid fa-at"></i>
+        <i class="fa-solid fa-envelope-circle-check"></i>
       </div>
 
       <div>
-        <h3 class="text-base font-bold text-slate-900">Akses Planner Guna Emel</h3>
-        <p class="text-xs text-slate-500 mt-1">Masukkan alamat emel anda (cth: emel rasmi politeknik atau gmail) untuk akses task dari mana-mana telefon atau PC.</p>
+        <h3 class="text-base font-bold text-slate-900">Akses Planner Mengikut Emel</h3>
+        <p class="text-xs text-slate-500 mt-1">Masukkan alamat emel anda untuk sync automatik di telefon dan komputer pejabat.</p>
       </div>
 
       <form id="emailLoginForm" class="space-y-3 text-left">
@@ -410,7 +386,7 @@
             class="w-full text-xs border border-slate-300 rounded-xl px-3 py-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
         </div>
         <p class="text-[11px] text-slate-400">
-          * Tiada password rumit diperlukan. Semua data planner anda akan diselaras berpandukan emel ini.
+          * Masukkan emel yang sama di komputer ofis untuk melihat semua task anda serta-merta.
         </p>
 
         <div class="pt-2 flex gap-2">
@@ -628,19 +604,13 @@
         window.history.replaceState({}, '', url.toString());
       } catch (e) {}
 
-      // Update UI elements
+      // Update Top Nav Label
       const topLabel = document.getElementById('topAccountLabel');
       if (topLabel) {
-        topLabel.innerText = currentUserEmail.length > 18 
-          ? currentUserEmail.slice(0, 16) + '...' 
+        topLabel.innerText = currentUserEmail.length > 20 
+          ? currentUserEmail.slice(0, 18) + '...' 
           : currentUserEmail;
         topLabel.title = currentUserEmail;
-      }
-
-      const sidebarEmail = document.getElementById('sidebarUserEmail');
-      if (sidebarEmail) {
-        sidebarEmail.innerText = currentUserEmail;
-        sidebarEmail.title = currentUserEmail;
       }
 
       const shareModalInput = document.getElementById('shareModalInput');
@@ -666,22 +636,16 @@
       }
     }
 
-    // Free, zero-setup public cloud relay partition per email
-    const CLOUD_SYNC_API = "https://api.restful-api.dev/objects"; // Reliable open public mirror or mock relay
-
+    // Background Cloud Synchronization
     async function pushCloudData() {
       if (!currentUserEmail || currentUserEmail.startsWith("guest")) return;
       const partition = getEmailPartitionKey(currentUserEmail);
       try {
         const payload = {
-          name: partition,
-          data: {
-            email: currentUserEmail,
-            tasks: tasks,
-            updatedAt: Date.now()
-          }
+          email: currentUserEmail,
+          tasks: tasks,
+          updatedAt: Date.now()
         };
-        // Background sync to free key-value endpoint
         fetch(`https://kvdb.io/4yK4gAeVp6Y4mD6yTfQc/${partition}`, {
           method: 'POST',
           body: JSON.stringify(payload),
@@ -698,9 +662,8 @@
         if (res.ok) {
           const remote = await res.json();
           if (remote && Array.isArray(remote.tasks)) {
-            // Merge remote tasks with local tasks, remote takes precedence on latest changes
             tasks = remote.tasks;
-            saveTasksToStorage(false); // save to local without re-pushing
+            saveTasksToStorage(false);
             renderCalendar();
             renderSelectedDateDetails();
           }
@@ -730,7 +693,6 @@
       } catch (err) {}
 
       if (!savedEmail) {
-        // If first time, set a friendly default or show modal
         savedEmail = "pensyarah@polipd.edu.my";
       }
 
@@ -771,9 +733,7 @@
           document.head.appendChild(linkTag);
         }
         linkTag.href = manifestURL;
-      } catch (e) {
-        // Fallback for sandboxed frames
-      }
+      } catch (e) {}
     }
 
     function saveTasksToStorage(syncCloud = true) {
@@ -961,6 +921,7 @@
     // Render details for selected date
     function renderSelectedDateDetails() {
       const container = document.getElementById('selectedDateEventsList');
+      if (!container) return;
       container.innerHTML = '';
 
       const items = [];
@@ -1219,7 +1180,7 @@
       };
       document.getElementById('btnCloseShareModal').onclick = () => shareModal.classList.add('hidden');
 
-      // Email Account Modal Events
+      // Email Account Modal Events (Open via Top Nav Button)
       const accountModal = document.getElementById('accountModal');
       const openAccountModal = () => {
         const input = document.getElementById('inputUserEmail');
@@ -1228,7 +1189,6 @@
       };
 
       document.getElementById('btnAccountModal').onclick = openAccountModal;
-      document.getElementById('btnSidebarSwitchEmail').onclick = openAccountModal;
       document.getElementById('btnCancelEmailModal').onclick = () => accountModal.classList.add('hidden');
 
       document.getElementById('emailLoginForm').onsubmit = (e) => {
@@ -1266,7 +1226,6 @@
         if (btnInstall) btnInstall.classList.remove('hidden');
       });
 
-      // Always show install button so users on iOS or unsupported browsers can view step-by-step guidance
       if (btnInstall) {
         btnInstall.classList.remove('hidden');
         btnInstall.onclick = () => {
@@ -1280,7 +1239,6 @@
               deferredPrompt = null;
             });
           } else {
-            // Show guide modal
             if (installModal) installModal.classList.remove('hidden');
           }
         };
@@ -1301,14 +1259,12 @@
 
       const copyShareHandler = () => {
         try {
-          const input = document.getElementById('shareUrlBox');
+          const input = document.getElementById('shareModalInput');
           input.select();
           document.execCommand('copy');
           showToast("Pautan berjaya disalin!");
         } catch (e) {}
       };
-      const copyBox = document.getElementById('btnCopyBox');
-      if (copyBox) copyBox.onclick = copyShareHandler;
       const copyModal = document.getElementById('btnCopyShareModal');
       if (copyModal) copyModal.onclick = copyShareHandler;
     }
@@ -1338,4 +1294,3 @@
   </script>
 </body>
 </html>
-```
