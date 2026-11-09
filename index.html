@@ -24,7 +24,7 @@
       border-radius: 9999px;
     }
     .cal-cell {
-      min-height: 108px;
+      min-height: 110px;
       transition: all 0.15s ease-in-out;
     }
     .cal-cell:hover {
@@ -50,7 +50,7 @@
               Sesi II: 2026/2027
             </span>
           </div>
-          <p class="text-xs text-slate-500 mt-0.5">Politeknik Port Dickson • Takwim JHEP & Cuti Malaysia</p>
+          <p class="text-xs text-slate-500 mt-0.5">Politeknik Port Dickson • Takwim JHEP, Cuti Sekolah KPM & Cuti Umum</p>
         </div>
       </div>
 
@@ -86,15 +86,15 @@
           <span id="selectedPoliWeekBadge" class="hidden text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-sm"></span>
         </div>
 
-        <!-- Task List for Date -->
+        <!-- Task List & Schedule for Selected Date -->
         <div>
           <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-slate-700">Aktiviti & Jadual Hari Ini</span>
+            <span class="text-xs font-bold text-slate-700">Aktiviti & Maklumat Hari Ini</span>
             <span id="dayTaskCount" class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">0</span>
           </div>
 
           <div id="selectedDateTaskList" class="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scroll pr-1">
-            <!-- Dynamic task items -->
+            <!-- Dynamic task & holiday items -->
           </div>
         </div>
       </div>
@@ -103,7 +103,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col gap-4">
         <div class="border-b border-slate-100 pb-3">
           <h2 class="text-sm font-bold text-slate-900">Pengisian Pantas</h2>
-          <p class="text-xs text-slate-500">Tambah aktiviti baru terus ke planner</p>
+          <p class="text-xs text-slate-500">Tambah tugasan baru terus ke planner</p>
         </div>
 
         <form id="quickAddForm" class="flex flex-col gap-3">
@@ -202,7 +202,8 @@
           </h2>
         </div>
 
-        <div class="flex items-center gap-3 text-xs">
+        <!-- Legend / Petunjuk Warna -->
+        <div class="flex flex-wrap items-center gap-3 text-xs">
           <span class="flex items-center gap-1.5 text-indigo-700 font-semibold">
             <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
             Isnin: Takwim PPD
@@ -210,6 +211,10 @@
           <span class="flex items-center gap-1.5 text-emerald-700 font-semibold">
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
             Cuti Umum
+          </span>
+          <span class="flex items-center gap-1.5 text-amber-700 font-semibold">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            Cuti Sekolah KPM
           </span>
         </div>
       </div>
@@ -393,20 +398,55 @@
       "2027-04-19": { label: "Cuti Akhir Semester", color: "bg-amber-600 text-white" }
     };
 
-    // Cuti Umum Persekutuan / Negeri
+    // Cuti Umum Persekutuan & Negeri Sembilan
     const MALAYSIA_HOLIDAYS = {
+      // 2026
+      "2026-08-31": "Hari Kebangsaan",
+      "2026-09-16": "Hari Malaysia",
+      "2026-09-25": "Maulidur Rasul",
+      "2026-11-08": "Hari Deepavali",
+      "2026-11-09": "Cuti Ganti Deepavali",
       "2026-12-25": "Hari Krismas",
+
+      // 2027
       "2027-01-01": "Tahun Baru 2027",
-      "2027-02-06": "Tahun Baru Cina",
+      "2027-01-14": "Hari Keputeraan YDPB N.Sembilan",
+      "2027-01-16": "Israk & Mikraj",
+      "2027-01-22": "Hari Thaipusam",
+      "2027-02-06": "Tahun Baru Cina (H1)",
       "2027-02-07": "Tahun Baru Cina (H2)",
-      "2027-03-10": "Hari Raya Aidilfitri",
+      "2027-02-08": "Cuti Ganti Tahun Baru Cina",
+      "2027-03-10": "Hari Raya Aidilfitri (H1)",
       "2027-03-11": "Hari Raya Aidilfitri (H2)",
+      "2027-03-26": "Hari Nuzul Al-Quran",
       "2027-05-01": "Hari Pekerja",
       "2027-05-17": "Hari Raya Aidiladha",
       "2027-05-20": "Hari Wesak",
       "2027-06-06": "Awal Muharram",
-      "2027-06-07": "Hari Keputeraan Agong"
+      "2027-06-07": "Hari Keputeraan YDP Agong",
+      "2027-08-31": "Hari Kebangsaan",
+      "2027-09-16": "Hari Malaysia"
     };
+
+    // Kalendar Cuti Persekolahan KPM (Kumpulan B: Negeri Sembilan, Selangor, KL, Melaka, Johor dll)
+    const KPM_RANGES = [
+      { start: "2026-12-05", end: "2026-12-31", name: "Cuti Akhir Persekolahan 2026" },
+      { start: "2027-01-01", end: "2027-01-03", name: "Cuti Akhir Persekolahan 2026" },
+      { start: "2027-02-05", end: "2027-02-12", name: "Cuti Perayaan Tambahan KPM (TBC)" },
+      { start: "2027-03-06", end: "2027-03-14", name: "Cuti Penggal 1 KPM" },
+      { start: "2027-05-22", end: "2027-06-06", name: "Cuti Pertengahan Tahun KPM" },
+      { start: "2027-08-28", end: "2027-09-05", name: "Cuti Penggal 2 KPM" },
+      { start: "2027-12-04", end: "2027-12-31", name: "Cuti Akhir Persekolahan 2027" }
+    ];
+
+    function getKpmHolidayName(dateStr) {
+      for (const r of KPM_RANGES) {
+        if (dateStr >= r.start && dateStr <= r.end) {
+          return r.name;
+        }
+      }
+      return null;
+    }
 
     const MONTHS = [
       "Januari", "Februari", "Mac", "April", "Mei", "Jun", 
@@ -454,11 +494,11 @@
       grid.innerHTML = '';
 
       const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-      const offset = (firstDay + 6) % 7; // Monday start
+      const offset = (firstDay + 6) % 7; // Isnin mula
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
       const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
 
-      // Previous month padding
+      // Ruang bulan lepas
       for (let i = offset - 1; i >= 0; i--) {
         const d = prevMonthDays - i;
         const cell = document.createElement('div');
@@ -467,12 +507,13 @@
         grid.appendChild(cell);
       }
 
-      // Days of the month
+      // Hari bulan semasa
       for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = formatDate(currentYear, currentMonth, day);
         const dayTasks = tasks.filter(t => t.date === dateStr);
         const ppdMonday = PPD_MONDAYS[dateStr];
         const holiday = MALAYSIA_HOLIDAYS[dateStr];
+        const kpmHoliday = getKpmHolidayName(dateStr);
         const isSelected = dateStr === selectedDateStr;
 
         const cell = document.createElement('div');
@@ -490,6 +531,9 @@
         }
         if (holiday) {
           topBadges += `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 truncate block mb-1" title="${holiday}">🎉 ${holiday}</span>`;
+        }
+        if (kpmHoliday) {
+          topBadges += `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 truncate block mb-1" title="${kpmHoliday}">🎒 ${kpmHoliday}</span>`;
         }
 
         let taskItems = '';
@@ -569,6 +613,7 @@
 
       container.innerHTML = '';
 
+      // Tunjuk Cuti Umum jika ada
       const holiday = MALAYSIA_HOLIDAYS[selectedDateStr];
       if (holiday) {
         const hEl = document.createElement('div');
@@ -577,7 +622,16 @@
         container.appendChild(hEl);
       }
 
-      if (dayTasks.length === 0 && !holiday) {
+      // Tunjuk Cuti Persekolahan KPM jika ada
+      const kpmHoliday = getKpmHolidayName(selectedDateStr);
+      if (kpmHoliday) {
+        const kEl = document.createElement('div');
+        kEl.className = 'p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-2';
+        kEl.innerHTML = `<i class="fa-solid fa-school text-amber-600"></i><span><b>Cuti Sekolah KPM:</b> ${kpmHoliday}</span>`;
+        container.appendChild(kEl);
+      }
+
+      if (dayTasks.length === 0 && !holiday && !kpmHoliday) {
         container.innerHTML = `
           <div class="py-6 text-center text-slate-400">
             <i class="fa-regular fa-calendar-xmark text-xl mb-1 block"></i>
@@ -739,3 +793,7 @@
   </script>
 </body>
 </html>
+```
+
+Sekarang fail ini telah ditukar kepada `.html`. Sila klik semula butang **`Preview`** di penjuru atas kanan — aplikasi kalendar visual penuh, lengkap dengan takwim PPD, cuti umum, cuti KPM dan borang pengisian akan terus terpapar!
+```
