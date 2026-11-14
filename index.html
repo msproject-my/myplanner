@@ -2,175 +2,302 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#4f46e5">
   <title>PoliPlanner - Takwim Politeknik Port Dickson</title>
-  
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-  
+
   <style>
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: #f8fafc;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: contain;
     }
+
     .custom-scroll::-webkit-scrollbar {
-      width: 5px;
+      width: 4px;
+      height: 4px;
     }
+
     .custom-scroll::-webkit-scrollbar-thumb {
       background: #cbd5e1;
       border-radius: 9999px;
     }
-    .cal-cell {
-      min-height: 110px;
-      transition: all 0.15s ease-in-out;
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-    .cal-cell:hover {
-      background-color: #f1f5f9;
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Sel Kalendar Responsif (Mobile & Desktop) */
+    .cal-cell {
+      min-height: 74px;
+      transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease;
+    }
+
+    @media (min-width: 640px) {
+      .cal-cell {
+        min-height: 112px;
+      }
+    }
+
+    .cal-cell:active {
+      transform: scale(0.97);
+    }
+
+    /* Elak pelayar Android/iOS mengezum masuk secara automatik ketika menaip */
+    @media (max-width: 640px) {
+      input, select, textarea {
+        font-size: 16px !important;
+      }
+    }
+
+    /* Ruang selamat untuk bar navigasi bawah telefon */
+    .safe-pb {
+      padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+    }
+
+    @media (min-width: 1024px) {
+      .safe-pb {
+        padding-bottom: 2rem;
+      }
     }
   </style>
 </head>
-<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+<body class="text-slate-800 antialiased min-h-screen flex flex-col selection:bg-indigo-100">
 
-  <!-- TOP HEADER -->
-  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
-      
-      <!-- Brand & Title -->
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-lg shadow-md shadow-indigo-600/20">
+  <!-- HEADER ATAS -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-7xl mx-auto px-3.5 sm:px-6 py-3 flex items-center justify-between gap-2">
+
+      <!-- Jenama & Pilihan Sesi -->
+      <div class="flex items-center gap-2.5 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-base sm:text-lg shadow-md shadow-indigo-600/20">
           <i class="fa-solid fa-calendar-check"></i>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-none">PoliPlanner</h1>
-            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-200">
-              Sesi II: 2026/2027
-            </span>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <h1 class="text-base sm:text-lg font-extrabold text-slate-900 leading-none">PoliPlanner</h1>
+
+            <!-- Dropdown Pilih Sesi Pengajaran -->
+            <div class="relative inline-flex items-center shrink-0">
+              <select id="headerSessionSelect" aria-label="Pilih Sesi Pengajaran" class="appearance-none cursor-pointer text-[11px] sm:text-xs font-bold pl-2.5 pr-6 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/25 transition">
+                <option value="sesi_2_2627">Sesi II: 2026/2027</option>
+                <option value="sesi_1_2728">Sesi I: 2027/2028</option>
+                <option value="__add_custom__">+ Tambah / Set Sesi Custom...</option>
+              </select>
+              <i class="fa-solid fa-chevron-down text-[9px] text-indigo-600 pointer-events-none absolute right-2"></i>
+            </div>
           </div>
-          <p class="text-xs text-slate-500 mt-0.5">Politeknik Port Dickson • Takwim JHEP, Cuti Sekolah KPM & Cuti Umum</p>
+          <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 truncate">Politeknik Port Dickson • Takwim, Cuti Umum & KPM</p>
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2">
-        <button id="btnInstallApp" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-amber-500 hover:bg-amber-600 text-white shadow-sm transition active:scale-95 flex items-center gap-2">
-          <i class="fa-solid fa-download text-xs"></i>
-          <span>Pasang App</span>
-        </button>
-
-        <button id="btnOpenAddModal" class="px-4 py-2 rounded-lg text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition active:scale-95 flex items-center gap-2">
+      <!-- Butang Tambah Task -->
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" id="btnHeaderAddTask" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition active:scale-95 flex items-center gap-1.5" title="Tambah Tugasan Baru">
           <i class="fa-solid fa-plus text-xs"></i>
-          <span>Tambah Task</span>
+          <span>Task</span>
         </button>
       </div>
 
     </div>
   </header>
 
-  <!-- MAIN WORKSPACE -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+  <!-- RUANG KERJA UTAMA -->
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 pt-3 sm:pt-6 safe-pb w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
 
-    <!-- LEFT COLUMN: Forms & Selected Details (4 COLS) -->
-    <div class="lg:col-span-4 flex flex-col gap-5">
-      
-      <!-- Card: Jadual Tarikh Pilihan -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col gap-4">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <div>
-            <span class="text-[11px] font-bold text-indigo-600 uppercase tracking-wider">Tarikh Terpilih</span>
-            <h3 id="selectedDateTitle" class="text-base font-bold text-slate-900 mt-0.5">Memuatkan...</h3>
+    <!-- BAHAGIAN KALENDAR (Di atas pada Mobile, di kanan pada Desktop) -->
+    <div id="sectionCalendar" class="lg:col-span-8 lg:order-2 flex flex-col gap-3 sm:gap-4 w-full">
+
+      <!-- Navigasi Bulan & Petunjuk Warna -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-3 sm:p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+        <div class="flex items-center justify-between sm:justify-start gap-3 w-full sm:w-auto">
+          <h2 id="calendarMonthHeading" class="text-base sm:text-lg font-extrabold text-slate-900">
+            November 2026
+          </h2>
+
+          <div class="inline-flex rounded-xl border border-slate-200 bg-slate-50 p-0.5">
+            <button type="button" id="btnPrevMonth" class="w-9 h-8 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white rounded-lg text-slate-600 active:scale-90 transition" title="Bulan Sebelumnya">
+              <i class="fa-solid fa-chevron-left text-xs"></i>
+            </button>
+            <button type="button" id="btnTodayMonth" class="px-3 h-8 hover:bg-white rounded-lg text-xs font-bold text-indigo-600 active:scale-95 transition" title="Pergi ke Tarikh Hari Ini">
+              Hari Ini
+            </button>
+            <button type="button" id="btnNextMonth" class="w-9 h-8 sm:w-8 sm:h-8 flex items-center justify-center hover:bg-white rounded-lg text-slate-600 active:scale-90 transition" title="Bulan Seterusnya">
+              <i class="fa-solid fa-chevron-right text-xs"></i>
+            </button>
           </div>
-          <span id="selectedPoliWeekBadge" class="hidden text-xs font-bold px-2.5 py-1 rounded-md bg-indigo-600 text-white shadow-sm"></span>
         </div>
 
-        <!-- Task List & Schedule for Selected Date -->
-        <div>
-          <div class="flex items-center justify-between mb-2">
-            <span class="text-xs font-bold text-slate-700">Aktiviti & Maklumat Hari Ini</span>
-            <span id="dayTaskCount" class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">0</span>
-          </div>
-
-          <div id="selectedDateTaskList" class="flex flex-col gap-2 max-h-60 overflow-y-auto custom-scroll pr-1">
-            <!-- Dynamic task & holiday items -->
-          </div>
+        <!-- Petunjuk Warna -->
+        <div class="flex items-center gap-3 text-[11px] sm:text-xs overflow-x-auto no-scrollbar pt-1.5 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+          <span class="flex items-center gap-1.5 text-indigo-700 font-semibold shrink-0">
+            <span class="w-2 h-2 rounded-full bg-indigo-600"></span>
+            Takwim PPD
+          </span>
+          <span class="flex items-center gap-1.5 text-emerald-700 font-semibold shrink-0">
+            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            Cuti Malaysia
+          </span>
+          <span class="flex items-center gap-1.5 text-amber-700 font-semibold shrink-0">
+            <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+            Cuti KPM
+          </span>
         </div>
       </div>
 
-      <!-- Card: Pengisian Pantas -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col gap-4">
-        <div class="border-b border-slate-100 pb-3">
-          <h2 class="text-sm font-bold text-slate-900">Pengisian Pantas</h2>
-          <p class="text-xs text-slate-500">Tambah tugasan baru terus ke planner</p>
+      <!-- Bar Pilihan Paparan (View Filter Pills) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-2 shadow-sm flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <span class="text-[11px] font-bold text-slate-400 px-2 shrink-0 hidden sm:inline">
+          <i class="fa-solid fa-filter mr-1"></i>Paparan:
+        </span>
+        <button type="button" data-filter="all" class="view-filter-btn flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap bg-slate-900 text-white shadow-sm">
+          Semua
+        </button>
+        <button type="button" data-filter="malaysia" class="view-filter-btn flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap bg-slate-50 text-slate-600 hover:bg-emerald-50 hover:text-emerald-700">
+          🎉 Cuti Malaysia
+        </button>
+        <button type="button" data-filter="poli" class="view-filter-btn flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap bg-slate-50 text-slate-600 hover:bg-indigo-50 hover:text-indigo-700">
+          🎓 Takwim Poli
+        </button>
+        <button type="button" data-filter="kpm" class="view-filter-btn flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap bg-slate-50 text-slate-600 hover:bg-amber-50 hover:text-amber-700">
+          🎒 Takwim KPM
+        </button>
+      </div>
+
+      <!-- Grid Kalendar 7-Lajur -->
+      <div id="calendarSwipeContainer" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-2 sm:p-4 select-none">
+
+        <!-- Nama Hari (Isnin hingga Ahad) -->
+        <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-1.5 sm:mb-2 text-center">
+          <div class="py-1.5 text-[11px] sm:text-xs font-bold text-indigo-700 bg-indigo-50/80 rounded-lg">
+            <span class="sm:hidden">Isn</span><span class="hidden sm:inline">Isnin</span>
+          </div>
+          <div class="py-1.5 text-[11px] sm:text-xs font-semibold text-slate-600">
+            <span class="sm:hidden">Sel</span><span class="hidden sm:inline">Selasa</span>
+          </div>
+          <div class="py-1.5 text-[11px] sm:text-xs font-semibold text-slate-600">
+            <span class="sm:hidden">Rab</span><span class="hidden sm:inline">Rabu</span>
+          </div>
+          <div class="py-1.5 text-[11px] sm:text-xs font-semibold text-slate-600">
+            <span class="sm:hidden">Kha</span><span class="hidden sm:inline">Khamis</span>
+          </div>
+          <div class="py-1.5 text-[11px] sm:text-xs font-semibold text-slate-600">
+            <span class="sm:hidden">Jum</span><span class="hidden sm:inline">Jumaat</span>
+          </div>
+          <div class="py-1.5 text-[11px] sm:text-xs font-bold text-rose-600 bg-rose-50/60 rounded-lg">
+            <span class="sm:hidden">Sab</span><span class="hidden sm:inline">Sabtu</span>
+          </div>
+          <div class="py-1.5 text-[11px] sm:text-xs font-bold text-rose-600 bg-rose-50/60 rounded-lg">
+            <span class="sm:hidden">Aha</span><span class="hidden sm:inline">Ahad</span>
+          </div>
         </div>
 
-        <form id="quickAddForm" class="flex flex-col gap-3">
+        <!-- Sel Tarikh (Dirender terus melalui JS) -->
+        <div id="calendarGrid" class="grid grid-cols-7 gap-1 sm:gap-2"></div>
+
+        <p class="sm:hidden text-[10px] text-center text-slate-400 mt-2.5">
+          <i class="fa-solid fa-hand-pointer mr-1"></i>Ketik tarikh untuk butiran • Leret kiri/kanan tukar bulan
+        </p>
+      </div>
+
+    </div>
+
+    <!-- BAHAGIAN MAKLUMAT HARI TERPILIH & BORANG PANTAS (Di bawah pada Mobile, di kiri pada Desktop) -->
+    <div class="lg:col-span-4 lg:order-1 flex flex-col gap-4 sm:gap-5 w-full">
+
+      <!-- Kad Maklumat & Tugasan Hari Terpilih -->
+      <div id="sectionSelectedDetails" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 flex flex-col gap-3.5 scroll-mt-20">
+        <div class="flex items-start justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-[10px] sm:text-[11px] font-bold text-indigo-600 uppercase tracking-wider">Tarikh Terpilih</span>
+            <h3 id="selectedDateTitle" class="text-base font-extrabold text-slate-900 mt-0.5">Isnin, 23 November 2026</h3>
+          </div>
+          <span id="selectedPoliWeekBadge" class="hidden text-[11px] font-bold px-2.5 py-1 rounded-lg bg-indigo-600 text-white shadow-sm shrink-0"></span>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-2.5">
+            <span class="text-xs font-bold text-slate-700">Maklumat & Tugasan Hari Ini</span>
+            <div class="flex items-center gap-2">
+              <span id="selectedTaskCountBadge" class="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">0</span>
+              <button type="button" id="btnInlineAddTask" class="text-xs font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-lg active:scale-95 transition">
+                + Tambah
+              </button>
+            </div>
+          </div>
+
+          <div id="selectedDateAgendaList" class="flex flex-col gap-2.5 max-h-80 overflow-y-auto custom-scroll pr-0.5"></div>
+        </div>
+      </div>
+
+      <!-- Borang Pengisian Pantas (Paparan penuh pada Desktop) -->
+      <div class="hidden lg:flex bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex-col gap-3.5">
+        <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+          <div>
+            <h2 class="text-sm font-extrabold text-slate-900">Pengisian Pantas</h2>
+            <p class="text-xs text-slate-500">Daftar tugasan terus ke tarikh pilihan</p>
+          </div>
+          <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xs">
+            <i class="fa-solid fa-pen-to-square"></i>
+          </span>
+        </div>
+
+        <form id="desktopQuickForm" class="flex flex-col gap-3">
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Perkara / Tugasan</label>
-            <input 
-              type="text" 
-              id="quickTitle" 
-              placeholder="cth: Pemeriksaan Kesihatan / Kuliah DDT4A" 
-              required
-              class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
-            >
+            <input type="text" id="quickTitle" placeholder="cth: Kuliah DDT4A / Mesyuarat Jabatan" required class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
           </div>
 
           <div class="grid grid-cols-2 gap-2.5">
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh</label>
-              <input 
-                type="date" 
-                id="quickDate" 
-                required
-                class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
-              >
+              <input type="date" id="quickDate" required class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
             </div>
             <div>
               <label class="block text-xs font-semibold text-slate-700 mb-1">Masa (Pilihan)</label>
-              <input 
-                type="time" 
-                id="quickTime" 
-                class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
-              >
+              <input type="time" id="quickTime" class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
-            <select 
-              id="quickCategory" 
-              class="w-full text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition font-medium"
-            >
-              <option value="lecture">🎓 Kuliah / Kelas / Lab</option>
+            <select id="quickCategory" class="w-full text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition font-medium">
+              <option value="lecture">🎓 Kuliah</option>
               <option value="health">🏥 Pemeriksaan Kesihatan</option>
-              <option value="meeting">👥 Mesyuarat / Perbincangan</option>
-              <option value="exam">📋 Peperiksaan / Kuiz / PB</option>
-              <option value="grading">📑 Semakan Tugasan / Marking</option>
-              <option value="event">🏆 Program / Bengkel / Sukan</option>
-              <option value="deadline">⏰ Tarikh Akhir / Deadline</option>
-              <option value="admin">💼 Urusan Pejabat & Fail</option>
-              <option value="personal">🏡 Hal Peribadi / Keluarga</option>
-              <option value="general" selected>📝 Tugasan Am / To-Do</option>
+              <option value="meeting">👥 Mesyuarat</option>
+              <option value="exam">📋 Peperiksaan</option>
+              <option value="grading">📑 Marking</option>
+              <option value="event">🏆 Program</option>
+              <option value="deadline">⏰ Deadline</option>
+              <option value="admin">💼 Pejabat</option>
+              <option value="personal">🏡 Peribadi</option>
+              <option value="general" selected>📝 Tugasan Am</option>
             </select>
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Catatan / Lokasi</label>
-            <textarea 
-              id="quickNotes" 
-              rows="2" 
-              placeholder="Bilik kuliah, klinik, pautan atau catatan tambahan..."
-              class="w-full text-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition resize-none"
-            ></textarea>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Catatan</label>
+            <textarea id="quickNotes" rows="2" placeholder="Lokasi bilik kuliah, pautan atau nota tambahan..." class="w-full text-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition resize-none"></textarea>
           </div>
 
-          <button 
-            type="submit" 
-            class="w-full mt-1 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition active:scale-98 flex items-center justify-center gap-2"
-          >
+          <button type="submit" class="w-full mt-1 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition active:scale-98 flex items-center justify-center gap-2">
             <i class="fa-solid fa-check"></i>
             <span>Simpan ke Planner</span>
           </button>
@@ -179,238 +306,265 @@
 
     </div>
 
-    <!-- RIGHT COLUMN: Calendar Grid (8 COLS) -->
-    <div class="lg:col-span-8 flex flex-col gap-4">
-      
-      <!-- Top Calendar Header & Navigation -->
-      <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-wrap items-center justify-between gap-3">
-        <div class="flex items-center gap-3">
-          <div class="inline-flex rounded-lg border border-slate-200 bg-slate-50 p-0.5">
-            <button id="btnPrevMonth" class="px-2.5 py-1.5 hover:bg-white rounded-md text-slate-600 transition" title="Bulan Sebelumnya">
-              <i class="fa-solid fa-chevron-left text-xs"></i>
-            </button>
-            <button id="btnCurrentMonth" class="px-3 py-1.5 hover:bg-white rounded-md text-xs font-bold text-slate-700 transition" title="Kembali ke Hari Ini">
-              Hari Ini
-            </button>
-            <button id="btnNextMonth" class="px-2.5 py-1.5 hover:bg-white rounded-md text-slate-600 transition" title="Bulan Seterusnya">
-              <i class="fa-solid fa-chevron-right text-xs"></i>
-            </button>
-          </div>
-
-          <h2 id="calendarMonthHeading" class="text-base sm:text-lg font-bold text-slate-900">
-            November 2026
-          </h2>
-        </div>
-
-        <!-- Legend / Petunjuk Warna -->
-        <div class="flex flex-wrap items-center gap-3 text-xs">
-          <span class="flex items-center gap-1.5 text-indigo-700 font-semibold">
-            <span class="w-2.5 h-2.5 rounded-full bg-indigo-600"></span>
-            Isnin: Takwim PPD
-          </span>
-          <span class="flex items-center gap-1.5 text-emerald-700 font-semibold">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600"></span>
-            Cuti Umum
-          </span>
-          <span class="flex items-center gap-1.5 text-amber-700 font-semibold">
-            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
-            Cuti Sekolah KPM
-          </span>
-        </div>
-      </div>
-
-      <!-- Main Calendar Grid -->
-      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-3 sm:p-4">
-        
-        <!-- Day Names (Starts Monday) -->
-        <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center">
-          <div class="py-2 text-xs font-bold text-indigo-700 bg-indigo-50/70 rounded-lg">Isnin</div>
-          <div class="py-2 text-xs font-semibold text-slate-600">Selasa</div>
-          <div class="py-2 text-xs font-semibold text-slate-600">Rabu</div>
-          <div class="py-2 text-xs font-semibold text-slate-600">Khamis</div>
-          <div class="py-2 text-xs font-semibold text-slate-600">Jumaat</div>
-          <div class="py-2 text-xs font-bold text-rose-600 bg-rose-50/50 rounded-lg">Sabtu</div>
-          <div class="py-2 text-xs font-bold text-rose-600 bg-rose-50/50 rounded-lg">Ahad</div>
-        </div>
-
-        <!-- 35-42 Date Cells -->
-        <div id="calendarGrid" class="grid grid-cols-7 gap-1 sm:gap-2">
-          <!-- Calendar Days rendered via JS -->
-        </div>
-
-      </div>
-
-    </div>
-
   </main>
 
-  <!-- POPUP: SIMPAN BERJAYA -->
-  <div id="saveSuccessModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-xl border border-slate-100 flex flex-col items-center text-center animate-in fade-in zoom-in-95 duration-150">
-      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-3">
-        <i class="fa-solid fa-check"></i>
-      </div>
-      <h3 class="text-base font-bold text-slate-900 mb-1">Data Berjaya Disimpan!</h3>
-      <p id="saveSuccessDetail" class="text-xs text-slate-500 mb-5 leading-relaxed font-medium">
-        Aktiviti anda telah didaftarkan ke dalam kalendar planner.
-      </p>
-      <button 
-        type="button" 
-        id="btnCloseSaveSuccessModal"
-        class="w-full py-2.5 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition active:scale-98"
-      >
-        OK, Faham
-      </button>
-    </div>
-  </div>
+  <!-- BAR NAVIGASI BAWAH UNTUK ANDROID / MOBILE -->
+  <nav class="lg:hidden fixed bottom-0 inset-x-0 z-30 bg-white/95 backdrop-blur-md border-t border-slate-200 px-4 py-2 flex items-center justify-around shadow-[0_-4px_12px_rgba(0,0,0,0.04)]" style="padding-bottom: max(0.5rem, env(safe-area-inset-bottom));">
+    <button type="button" id="mobileNavCalendar" class="flex flex-col items-center justify-center gap-1 py-1 px-4 text-indigo-600 font-bold active:scale-95 transition">
+      <i class="fa-solid fa-calendar-days text-base"></i>
+      <span class="text-[10px]">Kalendar</span>
+    </button>
 
-  <!-- POPUP: TAMBAH TASK MODAL -->
-  <div id="addTaskModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-xl border border-slate-100 flex flex-col gap-4">
+    <button type="button" id="mobileNavFabAdd" class="-mt-7 w-14 h-14 rounded-2xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/35 flex items-center justify-center active:scale-90 transition border-4 border-slate-50" aria-label="Tambah Tugasan">
+      <i class="fa-solid fa-plus text-lg"></i>
+    </button>
+
+    <button type="button" id="mobileNavAgenda" class="flex flex-col items-center justify-center gap-1 py-1 px-4 text-slate-500 hover:text-indigo-600 font-semibold active:scale-95 transition">
+      <i class="fa-solid fa-list-check text-base"></i>
+      <span class="text-[10px]">Agenda Hari</span>
+    </button>
+  </nav>
+
+  <!-- MODAL / BOTTOM-SHEET: TAMBAH TASK BARU -->
+  <div id="addTaskModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+      <div class="w-10 h-1 bg-slate-200 rounded-full mx-auto sm:hidden -mt-1"></div>
+
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="text-sm font-bold text-slate-900">Tambah Task Baru</h3>
-        <button id="btnCloseModal" class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 flex items-center justify-center">
+        <h3 class="text-base sm:text-sm font-extrabold text-slate-900">Tambah Task Baru</h3>
+        <button type="button" id="btnCloseAddTaskModal" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <form id="modalTaskForm" class="flex flex-col gap-3">
+      <form id="modalAddTaskForm" class="flex flex-col gap-3.5">
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">Perkara</label>
-          <input 
-            type="text" 
-            id="modalTaskTitle" 
-            placeholder="cth: Pemeriksaan Kesihatan / Kuliah DDT4A" 
-            required
-            class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
-          >
+          <input type="text" id="modalTaskTitle" placeholder="cth: Kuliah DDT4A / Pemeriksaan Kesihatan" required class="w-full text-sm sm:text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
         </div>
 
         <div class="grid grid-cols-2 gap-2.5">
           <div>
             <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh</label>
-            <input 
-              type="date" 
-              id="modalTaskDate" 
-              required
-              class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
-            >
+            <input type="date" id="modalTaskDate" required class="w-full text-sm sm:text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-700 mb-1">Masa</label>
-            <input 
-              type="time" 
-              id="modalTaskTime" 
-              class="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition"
-            >
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Masa (Pilihan)</label>
+            <input type="time" id="modalTaskTime" class="w-full text-sm sm:text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-semibold text-slate-700 mb-1">Kategori</label>
-          <select 
-            id="modalTaskCategory" 
-            class="w-full text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition font-medium"
-          >
-            <option value="lecture">🎓 Kuliah / Kelas / Lab</option>
+          <select id="modalTaskCategory" class="w-full text-sm sm:text-xs px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition font-medium">
+            <option value="lecture">🎓 Kuliah</option>
             <option value="health">🏥 Pemeriksaan Kesihatan</option>
-            <option value="meeting">👥 Mesyuarat / Perbincangan</option>
-            <option value="exam">📋 Peperiksaan / Kuiz / PB</option>
-            <option value="grading">📑 Semakan Tugasan / Marking</option>
-            <option value="event">🏆 Program / Bengkel / Sukan</option>
-            <option value="deadline">⏰ Tarikh Akhir / Deadline</option>
-            <option value="admin">💼 Urusan Pejabat & Fail</option>
-            <option value="personal">🏡 Hal Peribadi / Keluarga</option>
-            <option value="general" selected>📝 Tugasan Am / To-Do</option>
+            <option value="meeting">👥 Mesyuarat</option>
+            <option value="exam">📋 Peperiksaan</option>
+            <option value="grading">📑 Marking</option>
+            <option value="event">🏆 Program</option>
+            <option value="deadline">⏰ Deadline</option>
+            <option value="admin">💼 Pejabat</option>
+            <option value="personal">🏡 Peribadi</option>
+            <option value="general" selected>📝 Tugasan Am</option>
           </select>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Nota</label>
-          <textarea 
-            id="modalTaskNotes" 
-            rows="2" 
-            placeholder="Maklumat tambahan..."
-            class="w-full text-xs px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition resize-none"
-          ></textarea>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Catatan</label>
+          <textarea id="modalTaskNotes" rows="2" placeholder="Maklumat lokasi atau catatan tambahan..." class="w-full text-sm sm:text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition resize-none"></textarea>
         </div>
 
-        <div class="pt-2 flex items-center justify-end gap-2">
-          <button type="button" id="btnCancelModal" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100">
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" id="btnCancelAddTaskModal" class="flex-1 py-3 sm:py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">
             Batal
           </button>
-          <button type="submit" class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm">
-            Simpan Jadual
+          <button type="submit" class="w-2/3 py-3 sm:py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm">
+            Simpan Tugasan
           </button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- POPUP: PASANG APP PANDUAN -->
-  <div id="installModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-xl border border-slate-100 flex flex-col gap-3">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
-        <h3 class="text-sm font-bold text-slate-900">Cara Pasang PoliPlanner</h3>
-        <button id="btnCloseInstallModal" class="w-7 h-7 rounded-lg hover:bg-slate-100 text-slate-400 flex items-center justify-center">
-          <i class="fa-solid fa-xmark text-sm"></i>
-        </button>
+  <!-- MODAL: NOTIFIKASI SIMPAN BERJAYA -->
+  <div id="successToastModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 flex flex-col items-center text-center">
+      <div class="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-3">
+        <i class="fa-solid fa-check"></i>
       </div>
-      <div class="space-y-2.5 text-xs text-slate-600">
-        <p><b>📱 Android:</b> Buka pelayar Chrome > Tekan butang menu (⋮) > Pilih <b>"Install app"</b> atau <b>"Add to Home screen"</b>.</p>
-        <p><b>🍎 iPhone (iOS):</b> Buka Safari > Tekan ikon <b>Share</b> > Pilih <b>"Add to Home Screen"</b>.</p>
-        <p><b>💻 Komputer / Laptop:</b> Klik butang install di hujung bar alamat pelayar Chrome atau Edge.</p>
-      </div>
+      <h3 class="text-base font-extrabold text-slate-900 mb-1">Berjaya Dikemas Kini!</h3>
+      <p id="successModalMessage" class="text-xs text-slate-500 mb-5 leading-relaxed font-medium">
+        Maklumat anda telah disimpan ke dalam PoliPlanner.
+      </p>
+      <button type="button" id="btnCloseSuccessModal" class="w-full py-3 rounded-xl text-xs font-bold text-white bg-slate-900 hover:bg-slate-800 transition active:scale-98">
+        OK, Faham
+      </button>
     </div>
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- MODAL / BOTTOM-SHEET: TAMBAH SESI CUSTOM -->
+  <div id="customSessionModal" class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
+    <div class="bg-white rounded-t-3xl sm:rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100 flex flex-col gap-4">
+      <div class="w-10 h-1 bg-slate-200 rounded-full mx-auto sm:hidden -mt-1"></div>
+
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="text-base sm:text-sm font-extrabold text-slate-900">Tambah Sesi Pengajaran Baru</h3>
+          <p class="text-[11px] text-slate-500">Jana minggu M0 hingga Peperiksaan Akhir secara automatik</p>
+        </div>
+        <button type="button" id="btnCloseCustomSessionModal" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <form id="customSessionForm" class="flex flex-col gap-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Sesi Pengajaran</label>
+          <input type="text" id="customSessionName" placeholder="cth: Sesi II: 2027/2028" required class="w-full text-sm sm:text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Tarikh Isnin M0 (Minggu Suai Kenal)</label>
+          <input type="date" id="customSessionStartDate" required class="w-full text-sm sm:text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition">
+          <p class="text-[11px] text-slate-400 mt-1">Sistem akan menyusun M1–M7, Cuti Pertengahan Sem, M8–M14, Ulangkaji & Peperiksaan Akhir.</p>
+        </div>
+
+        <div class="pt-2 flex items-center gap-2.5">
+          <button type="button" id="btnCancelCustomSession" class="flex-1 py-3 sm:py-2.5 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200">
+            Batal
+          </button>
+          <button type="submit" class="w-2/3 py-3 sm:py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm">
+            Simpan & Aktifkan Sesi
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- SKRIP LOGIK APLIKASI -->
   <script>
+    // Keadaan Global Aplikasi
     let currentYear = 2026;
-    let currentMonth = 10; // November
+    let currentMonth = 10; // 10 = November
     let selectedDateStr = "2026-11-23";
-    const storageKey = "ppd_planner_clean_v1";
+    let activeViewFilter = "all"; // 'all' | 'malaysia' | 'poli' | 'kpm'
+    let activeSessionId = "sesi_2_2627";
+
+    const TASKS_STORAGE_KEY = "ppd_planner_clean_v1";
+    const SESSIONS_STORAGE_KEY = "ppd_planner_custom_sessions_v1";
+    const ACTIVE_SESSION_KEY = "ppd_planner_active_session_v1";
     let tasks = [];
 
-    // Takwim Politeknik Port Dickson Sesi II (Hanya Isnin)
-    const PPD_MONDAYS = {
-      "2026-11-23": { label: "M0 Suai Kenal", color: "bg-indigo-600 text-white" },
-      "2026-11-30": { label: "M1 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2026-12-07": { label: "M2 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2026-12-14": { label: "M3 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2026-12-21": { label: "M4 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2026-12-28": { label: "M5 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-01-04": { label: "M6 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-01-11": { label: "M7 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-01-18": { label: "M8 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-01-25": { label: "M9 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-02-01": { label: "M10 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-02-08": { label: "Cuti Pertengahan Sem", color: "bg-amber-600 text-white" },
-      "2027-02-15": { label: "M11 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-02-22": { label: "M12 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-03-01": { label: "M13 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-03-08": { label: "Cuti Perayaan (Raya)", color: "bg-amber-600 text-white" },
-      "2027-03-15": { label: "M14 Perkuliahan", color: "bg-indigo-600 text-white" },
-      "2027-03-22": { label: "Minggu Ulangkaji", color: "bg-purple-600 text-white" },
-      "2027-03-29": { label: "Peperiksaan Akhir", color: "bg-rose-600 text-white" },
-      "2027-04-05": { label: "Peperiksaan Akhir", color: "bg-rose-600 text-white" },
-      "2027-04-12": { label: "Peperiksaan Akhir", color: "bg-rose-600 text-white" },
-      "2027-04-19": { label: "Cuti Akhir Semester", color: "bg-amber-600 text-white" }
+    const MONTHS_MS = [
+      "Januari", "Februari", "Mac", "April", "Mei", "Jun",
+      "Julai", "Ogos", "September", "Oktober", "November", "Disember"
+    ];
+
+    const DAYS_MS = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+
+    // Senarai Kategori Tugasan
+    const CATEGORY_MAP = {
+      lecture: { label: "Kuliah", bg: "bg-indigo-50", text: "text-indigo-700", border: "border-indigo-200", dot: "bg-indigo-600" },
+      health: { label: "Kesihatan", bg: "bg-teal-50", text: "text-teal-700", border: "border-teal-200", dot: "bg-teal-600" },
+      meeting: { label: "Mesyuarat", bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200", dot: "bg-blue-600" },
+      exam: { label: "Peperiksaan", bg: "bg-rose-50", text: "text-rose-700", border: "border-rose-200", dot: "bg-rose-600" },
+      grading: { label: "Marking", bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200", dot: "bg-amber-600" },
+      event: { label: "Program", bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200", dot: "bg-purple-600" },
+      deadline: { label: "Deadline", bg: "bg-red-50", text: "text-red-700", border: "border-red-200", dot: "bg-red-600" },
+      admin: { label: "Pejabat", bg: "bg-slate-100", text: "text-slate-700", border: "border-slate-200", dot: "bg-slate-600" },
+      personal: { label: "Peribadi", bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200", dot: "bg-emerald-600" },
+      general: { label: "Tugasan Am", bg: "bg-slate-50", text: "text-slate-700", border: "border-slate-200", dot: "bg-slate-500" }
     };
 
-    // Cuti Umum Persekutuan & Negeri Sembilan
+    // Senarai Sesi Takwim Politeknik Port Dickson (Bawaan)
+    const DEFAULT_PPD_SESSIONS = {
+      sesi_2_2627: {
+        name: "Sesi II: 2026/2027",
+        startDate: "2026-11-23",
+        mondays: {
+          "2026-11-23": { label: "M0 Suai Kenal", short: "M0", color: "bg-indigo-600 text-white" },
+          "2026-11-30": { label: "M1 Perkuliahan", short: "M1", color: "bg-indigo-600 text-white" },
+          "2026-12-07": { label: "M2 Perkuliahan", short: "M2", color: "bg-indigo-600 text-white" },
+          "2026-12-14": { label: "M3 Perkuliahan", short: "M3", color: "bg-indigo-600 text-white" },
+          "2026-12-21": { label: "M4 Perkuliahan", short: "M4", color: "bg-indigo-600 text-white" },
+          "2026-12-28": { label: "M5 Perkuliahan", short: "M5", color: "bg-indigo-600 text-white" },
+          "2027-01-04": { label: "M6 Perkuliahan", short: "M6", color: "bg-indigo-600 text-white" },
+          "2027-01-11": { label: "M7 Perkuliahan", short: "M7", color: "bg-indigo-600 text-white" },
+          "2027-01-18": { label: "M8 Perkuliahan", short: "M8", color: "bg-indigo-600 text-white" },
+          "2027-01-25": { label: "M9 Perkuliahan", short: "M9", color: "bg-indigo-600 text-white" },
+          "2027-02-01": { label: "M10 Perkuliahan", short: "M10", color: "bg-indigo-600 text-white" },
+          "2027-02-08": { label: "Cuti Pertengahan Sem", short: "Cuti Sem", color: "bg-amber-600 text-white" },
+          "2027-02-15": { label: "M11 Perkuliahan", short: "M11", color: "bg-indigo-600 text-white" },
+          "2027-02-22": { label: "M12 Perkuliahan", short: "M12", color: "bg-indigo-600 text-white" },
+          "2027-03-01": { label: "M13 Perkuliahan", short: "M13", color: "bg-indigo-600 text-white" },
+          "2027-03-08": { label: "Cuti Perayaan (Raya)", short: "Cuti Raya", color: "bg-amber-600 text-white" },
+          "2027-03-15": { label: "M14 Perkuliahan", short: "M14", color: "bg-indigo-600 text-white" },
+          "2027-03-22": { label: "Minggu Ulangkaji", short: "Ulangkaji", color: "bg-purple-600 text-white" },
+          "2027-03-29": { label: "Peperiksaan Akhir", short: "Exam 1", color: "bg-rose-600 text-white" },
+          "2027-04-05": { label: "Peperiksaan Akhir", short: "Exam 2", color: "bg-rose-600 text-white" },
+          "2027-04-12": { label: "Peperiksaan Akhir", short: "Exam 3", color: "bg-rose-600 text-white" },
+          "2027-04-19": { label: "Cuti Akhir Semester", short: "Cuti Akhir", color: "bg-amber-600 text-white" }
+        }
+      },
+      sesi_1_2728: {
+        name: "Sesi I: 2027/2028",
+        startDate: "2027-07-26",
+        mondays: {
+          "2027-07-26": { label: "M0 Suai Kenal", short: "M0", color: "bg-indigo-600 text-white" },
+          "2027-08-02": { label: "M1 Perkuliahan", short: "M1", color: "bg-indigo-600 text-white" },
+          "2027-08-09": { label: "M2 Perkuliahan", short: "M2", color: "bg-indigo-600 text-white" },
+          "2027-08-16": { label: "M3 Perkuliahan", short: "M3", color: "bg-indigo-600 text-white" },
+          "2027-08-23": { label: "M4 Perkuliahan", short: "M4", color: "bg-indigo-600 text-white" },
+          "2027-08-30": { label: "M5 Perkuliahan", short: "M5", color: "bg-indigo-600 text-white" },
+          "2027-09-06": { label: "M6 Perkuliahan", short: "M6", color: "bg-indigo-600 text-white" },
+          "2027-09-13": { label: "M7 Perkuliahan", short: "M7", color: "bg-indigo-600 text-white" },
+          "2027-09-20": { label: "Cuti Pertengahan Sem", short: "Cuti Sem", color: "bg-amber-600 text-white" },
+          "2027-09-27": { label: "M8 Perkuliahan", short: "M8", color: "bg-indigo-600 text-white" },
+          "2027-10-04": { label: "M9 Perkuliahan", short: "M9", color: "bg-indigo-600 text-white" },
+          "2027-10-11": { label: "M10 Perkuliahan", short: "M10", color: "bg-indigo-600 text-white" },
+          "2027-10-18": { label: "M11 Perkuliahan", short: "M11", color: "bg-indigo-600 text-white" },
+          "2027-10-25": { label: "M12 Perkuliahan", short: "M12", color: "bg-indigo-600 text-white" },
+          "2027-11-01": { label: "M13 Perkuliahan", short: "M13", color: "bg-indigo-600 text-white" },
+          "2027-11-08": { label: "M14 Perkuliahan", short: "M14", color: "bg-indigo-600 text-white" },
+          "2027-11-15": { label: "Minggu Ulangkaji", short: "Ulangkaji", color: "bg-purple-600 text-white" },
+          "2027-11-22": { label: "Peperiksaan Akhir", short: "Exam 1", color: "bg-rose-600 text-white" },
+          "2027-11-29": { label: "Peperiksaan Akhir", short: "Exam 2", color: "bg-rose-600 text-white" },
+          "2027-12-06": { label: "Peperiksaan Akhir", short: "Exam 3", color: "bg-rose-600 text-white" },
+          "2027-12-13": { label: "Cuti Akhir Semester", short: "Cuti Akhir", color: "bg-amber-600 text-white" }
+        }
+      }
+    };
+
+    let PPD_SESSIONS = JSON.parse(JSON.stringify(DEFAULT_PPD_SESSIONS));
+
+    // Cuti Umum Persekutuan & Negeri Sembilan (2026 - 2027)
     const MALAYSIA_HOLIDAYS = {
       // 2026
+      "2026-01-01": "Tahun Baru 2026",
+      "2026-01-14": "Hari Keputeraan YDPB N. Sembilan",
+      "2026-01-17": "Israk & Mikraj",
+      "2026-02-01": "Hari Thaipusam",
+      "2026-02-17": "Tahun Baru Cina (H1)",
+      "2026-02-18": "Tahun Baru Cina (H2)",
+      "2026-03-07": "Hari Nuzul Al-Quran",
+      "2026-03-21": "Hari Raya Aidilfitri (H1)",
+      "2026-03-22": "Hari Raya Aidilfitri (H2)",
+      "2026-03-23": "Cuti Ganti Hari Raya Aidilfitri",
+      "2026-05-01": "Hari Pekerja",
+      "2026-05-27": "Hari Raya Aidiladha",
+      "2026-05-31": "Hari Wesak",
+      "2026-06-01": "Hari Keputeraan YDP Agong & Cuti Ganti Wesak",
+      "2026-06-17": "Awal Muharram (Maal Hijrah)",
+      "2026-08-25": "Maulidur Rasul",
       "2026-08-31": "Hari Kebangsaan",
       "2026-09-16": "Hari Malaysia",
-      "2026-09-25": "Maulidur Rasul",
       "2026-11-08": "Hari Deepavali",
       "2026-11-09": "Cuti Ganti Deepavali",
       "2026-12-25": "Hari Krismas",
-
       // 2027
       "2027-01-01": "Tahun Baru 2027",
-      "2027-01-14": "Hari Keputeraan YDPB N.Sembilan",
+      "2027-01-14": "Hari Keputeraan YDPB N. Sembilan",
       "2027-01-16": "Israk & Mikraj",
       "2027-01-22": "Hari Thaipusam",
       "2027-02-06": "Tahun Baru Cina (H1)",
@@ -422,307 +576,650 @@
       "2027-05-01": "Hari Pekerja",
       "2027-05-17": "Hari Raya Aidiladha",
       "2027-05-20": "Hari Wesak",
-      "2027-06-06": "Awal Muharram",
-      "2027-06-07": "Hari Keputeraan YDP Agong",
+      "2027-06-06": "Awal Muharram (Maal Hijrah)",
+      "2027-06-07": "Hari Keputeraan YDP Agong & Cuti Ganti Awal Muharram",
+      "2027-08-15": "Maulidur Rasul",
       "2027-08-31": "Hari Kebangsaan",
-      "2027-09-16": "Hari Malaysia"
+      "2027-09-16": "Hari Malaysia",
+      "2027-10-28": "Hari Deepavali",
+      "2027-12-25": "Hari Krismas"
     };
 
-    // Kalendar Cuti Persekolahan KPM (Kumpulan B: Negeri Sembilan, Selangor, KL, Melaka, Johor dll)
-    const KPM_RANGES = [
-      { start: "2026-12-05", end: "2026-12-31", name: "Cuti Akhir Persekolahan 2026" },
-      { start: "2027-01-01", end: "2027-01-03", name: "Cuti Akhir Persekolahan 2026" },
-      { start: "2027-02-05", end: "2027-02-12", name: "Cuti Perayaan Tambahan KPM (TBC)" },
-      { start: "2027-03-06", end: "2027-03-14", name: "Cuti Penggal 1 KPM" },
-      { start: "2027-05-22", end: "2027-06-06", name: "Cuti Pertengahan Tahun KPM" },
-      { start: "2027-08-28", end: "2027-09-05", name: "Cuti Penggal 2 KPM" },
-      { start: "2027-12-04", end: "2027-12-31", name: "Cuti Akhir Persekolahan 2027" }
+    // Kalendar Cuti Persekolahan KPM (Kumpulan B: Negeri Sembilan, Selangor, KL, Melaka, Johor, dll.)
+    const KPM_HOLIDAY_RANGES = [
+      { start: "2026-03-21", end: "2026-03-29", name: "Cuti Penggal 1 KPM 2026" },
+      { start: "2026-05-23", end: "2026-06-07", name: "Cuti Pertengahan Tahun KPM 2026" },
+      { start: "2026-08-29", end: "2026-09-06", name: "Cuti Penggal 2 KPM 2026" },
+      { start: "2026-12-05", end: "2026-12-31", name: "Cuti Akhir Persekolahan KPM 2026" },
+      { start: "2027-01-01", end: "2027-01-03", name: "Cuti Akhir Persekolahan KPM 2026" },
+      { start: "2027-02-05", end: "2027-02-12", name: "Cuti Perayaan Tambahan KPM" },
+      { start: "2027-03-06", end: "2027-03-14", name: "Cuti Penggal 1 KPM 2027" },
+      { start: "2027-05-22", end: "2027-06-06", name: "Cuti Pertengahan Tahun KPM 2027" },
+      { start: "2027-08-28", end: "2027-09-05", name: "Cuti Penggal 2 KPM 2027" },
+      { start: "2027-12-04", end: "2027-12-31", name: "Cuti Akhir Persekolahan KPM 2027" }
     ];
 
-    function getKpmHolidayName(dateStr) {
-      for (const r of KPM_RANGES) {
-        if (dateStr >= r.start && dateStr <= r.end) {
-          return r.name;
+    // Fungsi Helper Format Tarikh YYYY-MM-DD
+    function formatDateStr(year, monthIndex, day) {
+      const m = String(monthIndex + 1).padStart(2, '0');
+      const d = String(day).padStart(2, '0');
+      return `${year}-${m}-${d}`;
+    }
+
+    function getKpmHolidayForDate(dateStr) {
+      for (const range of KPM_HOLIDAY_RANGES) {
+        if (dateStr >= range.start && dateStr <= range.end) {
+          return range.name;
         }
       }
       return null;
     }
 
-    const MONTHS = [
-      "Januari", "Februari", "Mac", "April", "Mei", "Jun", 
-      "Julai", "Ogos", "September", "Oktober", "November", "Disember"
-    ];
+    function getActiveSessionMondays() {
+      const session = PPD_SESSIONS[activeSessionId] || PPD_SESSIONS.sesi_2_2627;
+      return session.mondays || {};
+    }
 
-    const CATEGORY_MAP = {
-      lecture: { label: "Kuliah", bg: "bg-indigo-50", text: "text-indigo-700", border: "border-indigo-200" },
-      health: { label: "Kesihatan", bg: "bg-teal-50", text: "text-teal-700", border: "border-teal-200" },
-      meeting: { label: "Mesyuarat", bg: "bg-blue-50", text: "text-blue-700", border: "border-blue-200" },
-      exam: { label: "Peperiksaan", bg: "bg-rose-50", text: "text-rose-700", border: "border-rose-200" },
-      grading: { label: "Marking", bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200" },
-      event: { label: "Program", bg: "bg-purple-50", text: "text-purple-700", border: "border-purple-200" },
-      deadline: { label: "Deadline", bg: "bg-red-50", text: "text-red-700", border: "border-red-200" },
-      admin: { label: "Pejabat", bg: "bg-slate-100", text: "text-slate-700", border: "border-slate-200" },
-      personal: { label: "Peribadi", bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200" },
-      general: { label: "Tugasan", bg: "bg-slate-50", text: "text-slate-700", border: "border-slate-200" }
-    };
-
-    function initTasks() {
+    // Simpan & Muat Data dari localStorage
+    function loadTasks() {
       try {
-        const data = localStorage.getItem(storageKey);
-        tasks = data ? JSON.parse(data) : [];
+        const saved = localStorage.getItem(TASKS_STORAGE_KEY);
+        tasks = saved ? JSON.parse(saved) : [];
       } catch (e) {
         tasks = [];
       }
     }
 
-    function saveTasksToLocal() {
+    function saveTasks() {
       try {
-        localStorage.setItem(storageKey, JSON.stringify(tasks));
+        localStorage.setItem(TASKS_STORAGE_KEY, JSON.stringify(tasks));
       } catch (e) {}
     }
 
-    function formatDate(y, m, d) {
-      return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    function loadSessionsData() {
+      try {
+        const savedCustom = localStorage.getItem(SESSIONS_STORAGE_KEY);
+        if (savedCustom) {
+          const parsedCustom = JSON.parse(savedCustom);
+          PPD_SESSIONS = Object.assign({}, JSON.parse(JSON.stringify(DEFAULT_PPD_SESSIONS)), parsedCustom);
+        }
+        const savedActive = localStorage.getItem(ACTIVE_SESSION_KEY);
+        if (savedActive && PPD_SESSIONS[savedActive]) {
+          activeSessionId = savedActive;
+        }
+      } catch (e) {}
     }
 
+    function saveCustomSession(sessionId, sessionObj) {
+      PPD_SESSIONS[sessionId] = sessionObj;
+      try {
+        const customOnly = {};
+        Object.keys(PPD_SESSIONS).forEach(key => {
+          if (!DEFAULT_PPD_SESSIONS[key]) {
+            customOnly[key] = PPD_SESSIONS[key];
+          }
+        });
+        localStorage.setItem(SESSIONS_STORAGE_KEY, JSON.stringify(customOnly));
+      } catch (e) {}
+    }
+
+    function populateSessionDropdown() {
+      const selectEl = document.getElementById('headerSessionSelect');
+      if (!selectEl) return;
+      selectEl.innerHTML = '';
+
+      Object.keys(PPD_SESSIONS).forEach(key => {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = PPD_SESSIONS[key].name;
+        selectEl.appendChild(opt);
+      });
+
+      const addOpt = document.createElement('option');
+      addOpt.value = '__add_custom__';
+      addOpt.textContent = '+ Tambah / Set Sesi Custom...';
+      selectEl.appendChild(addOpt);
+
+      selectEl.value = activeSessionId;
+    }
+
+    function switchActiveSession(sessionId, jumpToStart = true) {
+      if (!PPD_SESSIONS[sessionId]) return;
+      activeSessionId = sessionId;
+      try {
+        localStorage.setItem(ACTIVE_SESSION_KEY, sessionId);
+      } catch (e) {}
+
+      const selectEl = document.getElementById('headerSessionSelect');
+      if (selectEl) selectEl.value = sessionId;
+
+      const session = PPD_SESSIONS[sessionId];
+      if (jumpToStart && session.startDate) {
+        const parts = session.startDate.split('-');
+        if (parts.length === 3) {
+          currentYear = parseInt(parts[0], 10);
+          currentMonth = parseInt(parts[1], 10) - 1;
+          selectDate(session.startDate, false);
+          return;
+        }
+      }
+      selectDate(selectedDateStr, false);
+    }
+
+    function generateAcademicMondaysFromM0(m0DateStr) {
+      const [y, m, d] = m0DateStr.split('-').map(Number);
+      const baseDate = new Date(y, m - 1, d);
+      // Betulkan kepada hari Isnin jika pengguna memilih hari lain dalam minggu tersebut
+      const dayOfWeek = baseDate.getDay();
+      const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
+      baseDate.setDate(baseDate.getDate() + diffToMonday);
+
+      const schedulePlan = [
+        { label: "M0 Suai Kenal", short: "M0", color: "bg-indigo-600 text-white" },
+        { label: "M1 Perkuliahan", short: "M1", color: "bg-indigo-600 text-white" },
+        { label: "M2 Perkuliahan", short: "M2", color: "bg-indigo-600 text-white" },
+        { label: "M3 Perkuliahan", short: "M3", color: "bg-indigo-600 text-white" },
+        { label: "M4 Perkuliahan", short: "M4", color: "bg-indigo-600 text-white" },
+        { label: "M5 Perkuliahan", short: "M5", color: "bg-indigo-600 text-white" },
+        { label: "M6 Perkuliahan", short: "M6", color: "bg-indigo-600 text-white" },
+        { label: "M7 Perkuliahan", short: "M7", color: "bg-indigo-600 text-white" },
+        { label: "Cuti Pertengahan Sem", short: "Cuti Sem", color: "bg-amber-600 text-white" },
+        { label: "M8 Perkuliahan", short: "M8", color: "bg-indigo-600 text-white" },
+        { label: "M9 Perkuliahan", short: "M9", color: "bg-indigo-600 text-white" },
+        { label: "M10 Perkuliahan", short: "M10", color: "bg-indigo-600 text-white" },
+        { label: "M11 Perkuliahan", short: "M11", color: "bg-indigo-600 text-white" },
+        { label: "M12 Perkuliahan", short: "M12", color: "bg-indigo-600 text-white" },
+        { label: "M13 Perkuliahan", short: "M13", color: "bg-indigo-600 text-white" },
+        { label: "M14 Perkuliahan", short: "M14", color: "bg-indigo-600 text-white" },
+        { label: "Minggu Ulangkaji", short: "Ulangkaji", color: "bg-purple-600 text-white" },
+        { label: "Peperiksaan Akhir", short: "Exam 1", color: "bg-rose-600 text-white" },
+        { label: "Peperiksaan Akhir", short: "Exam 2", color: "bg-rose-600 text-white" },
+        { label: "Peperiksaan Akhir", short: "Exam 3", color: "bg-rose-600 text-white" },
+        { label: "Cuti Akhir Semester", short: "Cuti Akhir", color: "bg-amber-600 text-white" }
+      ];
+
+      const mondays = {};
+      let normalizedStartStr = "";
+
+      schedulePlan.forEach((item, weekIdx) => {
+        const dt = new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() + (weekIdx * 7));
+        const key = formatDateStr(dt.getFullYear(), dt.getMonth(), dt.getDate());
+        if (weekIdx === 0) normalizedStartStr = key;
+        mondays[key] = item;
+      });
+
+      return { startDate: normalizedStartStr, mondays };
+    }
+
+    // Papar Grid Kalendar 7-Lajur
     function renderCalendar() {
       const heading = document.getElementById('calendarMonthHeading');
-      if (heading) heading.innerText = `${MONTHS[currentMonth]} ${currentYear}`;
+      if (heading) {
+        heading.textContent = `${MONTHS_MS[currentMonth]} ${currentYear}`;
+      }
 
       const grid = document.getElementById('calendarGrid');
       if (!grid) return;
       grid.innerHTML = '';
 
-      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
-      const offset = (firstDay + 6) % 7; // Isnin mula
-      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-      const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+      const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+      // Jadikan Isnin sebagai hari pertama (index 0)
+      const startOffset = (firstDayOfMonth + 6) % 7;
+      const daysInCurrentMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
-      // Ruang bulan lepas
-      for (let i = offset - 1; i >= 0; i--) {
-        const d = prevMonthDays - i;
+      const now = new Date();
+      const todayStr = formatDateStr(now.getFullYear(), now.getMonth(), now.getDate());
+      const activeMondays = getActiveSessionMondays();
+
+      const showPoli = activeViewFilter === 'all' || activeViewFilter === 'poli';
+      const showMalaysia = activeViewFilter === 'all' || activeViewFilter === 'malaysia';
+      const showKpm = activeViewFilter === 'all' || activeViewFilter === 'kpm';
+
+      // Sel hari bulan sebelumnya (kelabu)
+      for (let i = startOffset - 1; i >= 0; i--) {
+        const prevDayNum = daysInPrevMonth - i;
         const cell = document.createElement('div');
-        cell.className = 'cal-cell rounded-xl p-2 bg-slate-50/60 border border-slate-100 text-slate-300';
-        cell.innerHTML = `<span class="text-xs font-semibold">${d}</span>`;
+        cell.className = 'cal-cell rounded-xl p-1.5 sm:p-2 bg-slate-50/60 border border-slate-100 text-slate-300 flex flex-col justify-between';
+        cell.innerHTML = `<span class="text-[11px] sm:text-xs font-semibold">${prevDayNum}</span>`;
         grid.appendChild(cell);
       }
 
-      // Hari bulan semasa
-      for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = formatDate(currentYear, currentMonth, day);
+      // Sel hari bulan semasa
+      for (let day = 1; day <= daysInCurrentMonth; day++) {
+        const dateStr = formatDateStr(currentYear, currentMonth, day);
         const dayTasks = tasks.filter(t => t.date === dateStr);
-        const ppdMonday = PPD_MONDAYS[dateStr];
-        const holiday = MALAYSIA_HOLIDAYS[dateStr];
-        const kpmHoliday = getKpmHolidayName(dateStr);
+        const ppdMonday = showPoli ? activeMondays[dateStr] : null;
+        const malaysiaHoliday = showMalaysia ? MALAYSIA_HOLIDAYS[dateStr] : null;
+        const kpmHoliday = showKpm ? getKpmHolidayForDate(dateStr) : null;
         const isSelected = dateStr === selectedDateStr;
+        const isToday = dateStr === todayStr;
+
+        const dayOfWeekIndex = (startOffset + day - 1) % 7; // 5 = Sabtu, 6 = Ahad
+        const isWeekend = dayOfWeekIndex >= 5;
 
         const cell = document.createElement('div');
-        cell.className = `cal-cell rounded-xl p-2 border cursor-pointer flex flex-col justify-between ${
-          isSelected 
-            ? 'bg-indigo-50/70 border-indigo-400 ring-2 ring-indigo-500/20' 
-            : 'bg-white border-slate-200 hover:border-indigo-300'
+        cell.className = `cal-cell rounded-xl p-1.5 sm:p-2 border cursor-pointer flex flex-col justify-between overflow-hidden ${
+          isSelected
+            ? 'bg-indigo-50/80 border-indigo-500 ring-2 ring-indigo-500/20'
+            : isToday
+              ? 'bg-amber-50/40 border-amber-300 hover:border-indigo-300'
+              : 'bg-white border-slate-200 hover:border-indigo-300 hover:bg-slate-50/60'
         }`;
 
-        cell.onclick = () => selectDate(dateStr);
+        cell.addEventListener('click', () => {
+          selectDate(dateStr, true);
+        });
 
-        let topBadges = '';
+        // Lencana pada desktop & mobile
+        let badgesHtml = '';
         if (ppdMonday) {
-          topBadges += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded ${ppdMonday.color} truncate block mb-1" title="${ppdMonday.label}">${ppdMonday.label}</span>`;
+          badgesHtml += `
+            <span class="hidden sm:block text-[9px] font-bold px-1.5 py-0.5 rounded ${ppdMonday.color} truncate mb-0.5" title="${ppdMonday.label}">${ppdMonday.label}</span>
+            <span class="sm:hidden block text-[8px] font-extrabold px-1 py-0.2 rounded ${ppdMonday.color} truncate leading-tight mb-0.5">${ppdMonday.short}</span>
+          `;
         }
-        if (holiday) {
-          topBadges += `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 truncate block mb-1" title="${holiday}">🎉 ${holiday}</span>`;
+        if (malaysiaHoliday) {
+          badgesHtml += `
+            <span class="hidden sm:block text-[9px] font-semibold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 truncate mb-0.5" title="${malaysiaHoliday}">🎉 ${malaysiaHoliday}</span>
+            <span class="sm:hidden block text-[8px] font-bold px-1 py-0.2 rounded bg-emerald-100 text-emerald-800 truncate leading-tight mb-0.5">🎉 Cuti</span>
+          `;
         }
         if (kpmHoliday) {
-          topBadges += `<span class="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 truncate block mb-1" title="${kpmHoliday}">🎒 ${kpmHoliday}</span>`;
+          badgesHtml += `
+            <span class="hidden sm:block text-[9px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 text-amber-800 truncate mb-0.5" title="${kpmHoliday}">🎒 ${kpmHoliday}</span>
+          `;
         }
 
-        let taskItems = '';
+        // Paparan tugasan pengguna (pil pada desktop, titik warna pada mobile)
+        let tasksDesktopHtml = '';
+        let mobileDotsHtml = '';
+
+        if (kpmHoliday) {
+          mobileDotsHtml += `<span class="w-1.5 h-1.5 rounded-full bg-amber-500" title="${kpmHoliday}"></span>`;
+        }
+
         if (dayTasks.length > 0) {
           dayTasks.slice(0, 2).forEach(t => {
             const cat = CATEGORY_MAP[t.category] || CATEGORY_MAP.general;
-            taskItems += `
-              <div class="text-[10px] font-medium px-1.5 py-0.5 rounded ${cat.bg} ${cat.text} truncate mb-0.5 border ${cat.border}">
-                ${t.title}
+            tasksDesktopHtml += `
+              <div class="hidden sm:block text-[10px] font-medium px-1.5 py-0.5 rounded ${cat.bg} ${cat.text} truncate mb-0.5 border ${cat.border}">
+                ${escapeHtml(t.title)}
               </div>
             `;
           });
           if (dayTasks.length > 2) {
-            taskItems += `<span class="text-[9px] font-bold text-slate-400 pl-0.5">+${dayTasks.length - 2} lagi</span>`;
+            tasksDesktopHtml += `<span class="hidden sm:block text-[9px] font-bold text-slate-400 pl-0.5">+${dayTasks.length - 2} lagi</span>`;
           }
+
+          dayTasks.slice(0, 3).forEach(t => {
+            const cat = CATEGORY_MAP[t.category] || CATEGORY_MAP.general;
+            mobileDotsHtml += `<span class="w-1.5 h-1.5 rounded-full ${cat.dot}"></span>`;
+          });
         }
+
+        const dateNumColor = isSelected
+          ? 'text-indigo-700 font-extrabold'
+          : isWeekend
+            ? 'text-rose-600 font-bold'
+            : 'text-slate-700 font-bold';
 
         cell.innerHTML = `
           <div>
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-xs font-bold ${isSelected ? 'text-indigo-600' : 'text-slate-700'}">${day}</span>
-              ${dayTasks.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>` : ''}
+            <div class="flex items-center justify-between mb-0.5 sm:mb-1">
+              <span class="text-[11px] sm:text-xs ${dateNumColor} ${isToday ? 'underline decoration-amber-500 decoration-2 underline-offset-2' : ''}">${day}</span>
+              ${dayTasks.length > 0 ? `<span class="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-indigo-500"></span>` : ''}
             </div>
-            ${topBadges}
+            ${badgesHtml}
           </div>
           <div>
-            ${taskItems}
+            ${tasksDesktopHtml}
+            ${mobileDotsHtml ? `<div class="sm:hidden flex items-center gap-0.5 mt-0.5 flex-wrap">${mobileDotsHtml}</div>` : ''}
           </div>
         `;
 
         grid.appendChild(cell);
       }
+
+      // Lengkapkan baki sel supaya grid sentiasa kemas
+      const totalCells = startOffset + daysInCurrentMonth;
+      const trailingCells = (7 - (totalCells % 7)) % 7;
+      for (let t = 1; t <= trailingCells; t++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-cell rounded-xl p-1.5 sm:p-2 bg-slate-50/60 border border-slate-100 text-slate-300 flex flex-col justify-between';
+        cell.innerHTML = `<span class="text-[11px] sm:text-xs font-semibold">${t}</span>`;
+        grid.appendChild(cell);
+      }
     }
 
-    function selectDate(dateStr) {
+    // Pilih Tarikh & Kemas Kini Panel Butiran
+    function selectDate(dateStr, scrollOnMobile = false) {
       selectedDateStr = dateStr;
 
-      const qDate = document.getElementById('quickDate');
-      if (qDate) qDate.value = dateStr;
+      const quickDateEl = document.getElementById('quickDate');
+      if (quickDateEl) quickDateEl.value = dateStr;
 
-      const mDate = document.getElementById('modalTaskDate');
-      if (mDate) mDate.value = dateStr;
-
-      const titleEl = document.getElementById('selectedDateTitle');
-      const badgeEl = document.getElementById('selectedPoliWeekBadge');
+      const modalDateEl = document.getElementById('modalTaskDate');
+      if (modalDateEl) modalDateEl.value = dateStr;
 
       const parts = dateStr.split('-');
-      const dObj = new Date(parts[0], parseInt(parts[1]) - 1, parts[2]);
-      const dayNames = ["Ahad", "Isnin", "Selasa", "Rabu", "Khamis", "Jumaat", "Sabtu"];
+      const dObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
 
+      const titleEl = document.getElementById('selectedDateTitle');
       if (titleEl) {
-        titleEl.innerText = `${dayNames[dObj.getDay()]}, ${parts[2]} ${MONTHS[dObj.getMonth()]} ${parts[0]}`;
+        titleEl.textContent = `${DAYS_MS[dObj.getDay()]}, ${parseInt(parts[2], 10)} ${MONTHS_MS[dObj.getMonth()]} ${parts[0]}`;
       }
 
-      if (badgeEl) {
-        const ppdMonday = PPD_MONDAYS[dateStr];
+      const poliBadge = document.getElementById('selectedPoliWeekBadge');
+      const showPoli = activeViewFilter === 'all' || activeViewFilter === 'poli';
+      const activeMondays = getActiveSessionMondays();
+      const ppdMonday = showPoli ? activeMondays[dateStr] : null;
+
+      if (poliBadge) {
         if (ppdMonday) {
-          badgeEl.innerText = ppdMonday.label;
-          badgeEl.className = `text-xs font-bold px-2.5 py-1 rounded-md ${ppdMonday.color} shadow-sm`;
-          badgeEl.classList.remove('hidden');
+          poliBadge.textContent = ppdMonday.label;
+          poliBadge.className = `text-[11px] font-bold px-2.5 py-1 rounded-lg ${ppdMonday.color} shadow-sm shrink-0`;
+          poliBadge.classList.remove('hidden');
         } else {
-          badgeEl.classList.add('hidden');
+          poliBadge.classList.add('hidden');
         }
       }
 
-      renderSelectedTasks();
+      renderSelectedDateAgenda();
       renderCalendar();
+
+      if (scrollOnMobile && window.innerWidth < 1024) {
+        const detailsEl = document.getElementById('sectionSelectedDetails');
+        if (detailsEl) {
+          detailsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
     }
 
-    function renderSelectedTasks() {
-      const container = document.getElementById('selectedDateTaskList');
-      const countEl = document.getElementById('dayTaskCount');
+    // Papar Senarai Maklumat & Tugasan Hari Terpilih
+    function renderSelectedDateAgenda() {
+      const container = document.getElementById('selectedDateAgendaList');
+      const countBadge = document.getElementById('selectedTaskCountBadge');
       if (!container) return;
 
       const dayTasks = tasks.filter(t => t.date === selectedDateStr);
-      if (countEl) countEl.innerText = dayTasks.length;
+      if (countBadge) countBadge.textContent = dayTasks.length;
 
       container.innerHTML = '';
 
-      // Tunjuk Cuti Umum jika ada
-      const holiday = MALAYSIA_HOLIDAYS[selectedDateStr];
-      if (holiday) {
+      const showPoli = activeViewFilter === 'all' || activeViewFilter === 'poli';
+      const showMalaysia = activeViewFilter === 'all' || activeViewFilter === 'malaysia';
+      const showKpm = activeViewFilter === 'all' || activeViewFilter === 'kpm';
+
+      const activeMondays = getActiveSessionMondays();
+      const ppdMonday = showPoli ? activeMondays[selectedDateStr] : null;
+      const malaysiaHoliday = showMalaysia ? MALAYSIA_HOLIDAYS[selectedDateStr] : null;
+      const kpmHoliday = showKpm ? getKpmHolidayForDate(selectedDateStr) : null;
+
+      if (ppdMonday) {
+        const pEl = document.createElement('div');
+        pEl.className = 'p-3 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs font-semibold flex items-center gap-2.5';
+        pEl.innerHTML = `<i class="fa-solid fa-graduation-cap text-indigo-600 text-sm"></i><span><b>Takwim PPD:</b> ${escapeHtml(ppdMonday.label)}</span>`;
+        container.appendChild(pEl);
+      }
+
+      if (malaysiaHoliday) {
         const hEl = document.createElement('div');
-        hEl.className = 'p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold flex items-center gap-2';
-        hEl.innerHTML = `<i class="fa-solid fa-gift text-emerald-600"></i><span><b>Cuti Umum:</b> ${holiday}</span>`;
+        hEl.className = 'p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-semibold flex items-center gap-2.5';
+        hEl.innerHTML = `<i class="fa-solid fa-gift text-emerald-600 text-sm"></i><span><b>Cuti Umum:</b> ${escapeHtml(malaysiaHoliday)}</span>`;
         container.appendChild(hEl);
       }
 
-      // Tunjuk Cuti Persekolahan KPM jika ada
-      const kpmHoliday = getKpmHolidayName(selectedDateStr);
       if (kpmHoliday) {
         const kEl = document.createElement('div');
-        kEl.className = 'p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-2';
-        kEl.innerHTML = `<i class="fa-solid fa-school text-amber-600"></i><span><b>Cuti Sekolah KPM:</b> ${kpmHoliday}</span>`;
+        kEl.className = 'p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs font-semibold flex items-center gap-2.5';
+        kEl.innerHTML = `<i class="fa-solid fa-school text-amber-600 text-sm"></i><span><b>Cuti Sekolah KPM:</b> ${escapeHtml(kpmHoliday)}</span>`;
         container.appendChild(kEl);
       }
 
-      if (dayTasks.length === 0 && !holiday && !kpmHoliday) {
+      if (dayTasks.length === 0 && !ppdMonday && !malaysiaHoliday && !kpmHoliday) {
         container.innerHTML = `
-          <div class="py-6 text-center text-slate-400">
-            <i class="fa-regular fa-calendar-xmark text-xl mb-1 block"></i>
-            <p class="text-xs">Tiada aktiviti didaftarkan.</p>
+          <div class="py-7 text-center text-slate-400 bg-slate-50/70 rounded-xl border border-dashed border-slate-200">
+            <i class="fa-regular fa-calendar-check text-2xl mb-1.5 block text-slate-300"></i>
+            <p class="text-xs font-medium">Tiada aktiviti atau cuti pada paparan ini.</p>
           </div>
         `;
         return;
       }
 
-      dayTasks.forEach(t => {
-        const cat = CATEGORY_MAP[t.category] || CATEGORY_MAP.general;
-        const item = document.createElement('div');
-        item.className = `p-2.5 rounded-xl bg-slate-50 border ${cat.border} flex items-start justify-between gap-2`;
-        item.innerHTML = `
-          <div>
-            <h4 class="text-xs font-bold text-slate-900 leading-tight">${t.title}</h4>
-            <div class="flex items-center gap-2 mt-1 text-[11px] text-slate-500">
-              ${t.time ? `<span><i class="fa-regular fa-clock"></i> ${t.time}</span>` : ''}
-              <span class="px-1.5 py-0.5 rounded ${cat.bg} ${cat.text} text-[10px] font-semibold border ${cat.border}">${cat.label}</span>
+      dayTasks.forEach(task => {
+        const cat = CATEGORY_MAP[task.category] || CATEGORY_MAP.general;
+        const card = document.createElement('div');
+        card.className = `p-3 rounded-xl bg-slate-50 border ${cat.border} flex items-start justify-between gap-2.5`;
+        card.innerHTML = `
+          <div class="min-w-0 flex-1">
+            <h4 class="text-xs font-bold text-slate-900 leading-snug break-words">${escapeHtml(task.title)}</h4>
+            <div class="flex items-center flex-wrap gap-2 mt-1.5 text-[11px] text-slate-500">
+              ${task.time ? `<span class="font-medium text-slate-600"><i class="fa-regular fa-clock mr-1"></i>${escapeHtml(task.time)}</span>` : ''}
+              <span class="px-2 py-0.5 rounded-md ${cat.bg} ${cat.text} text-[10px] font-bold border ${cat.border}">${cat.label}</span>
             </div>
-            ${t.notes ? `<p class="text-[11px] text-slate-500 mt-1 italic">${t.notes}</p>` : ''}
+            ${task.notes ? `<p class="text-[11px] text-slate-600 mt-1.5 bg-white/80 p-2 rounded-lg border border-slate-100 break-words">${escapeHtml(task.notes)}</p>` : ''}
           </div>
-          <button onclick="deleteTask('${t.id}')" class="text-slate-300 hover:text-rose-500 p-1 transition" title="Padam">
+          <button type="button" data-delete-id="${task.id}" class="btn-delete-task w-8 h-8 shrink-0 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition" title="Padam Tugasan">
             <i class="fa-regular fa-trash-can text-xs"></i>
           </button>
         `;
-        container.appendChild(item);
+        container.appendChild(card);
+      });
+
+      // Pasang listener padam tugasan
+      container.querySelectorAll('.btn-delete-task').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-delete-id');
+          deleteTask(id);
+        });
       });
     }
 
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // Tambah & Padam Tugasan
     function addTask(title, date, time, category, notes) {
+      const cleanTitle = title.trim();
+      if (!cleanTitle || !date) return;
+
       const newTask = {
-        id: 'task_' + Date.now(),
-        title,
-        date,
+        id: 'task_' + Date.now() + '_' + Math.floor(Math.random() * 1000),
+        title: cleanTitle,
+        date: date,
         time: time || '',
         category: category || 'general',
-        notes: notes || ''
+        notes: (notes || '').trim()
       };
 
       tasks.push(newTask);
-      saveTasksToLocal();
-      selectDate(date);
+      saveTasks();
 
-      // Trigger Save Success Modal
-      const modal = document.getElementById('saveSuccessModal');
-      const detail = document.getElementById('saveSuccessDetail');
-      if (modal) {
-        if (detail) {
-          detail.innerText = `"${title}" pada ${date} berjaya didaftarkan ke dalam planner.`;
-        }
-        modal.classList.remove('hidden');
+      // Lompat kalendar ke bulan tugasan baharu
+      const parts = date.split('-');
+      if (parts.length === 3) {
+        currentYear = parseInt(parts[0], 10);
+        currentMonth = parseInt(parts[1], 10) - 1;
       }
+
+      selectDate(date, false);
+      showSuccessModal(`"${cleanTitle}" pada ${date} berjaya didaftarkan ke dalam planner.`);
     }
 
     function deleteTask(id) {
       tasks = tasks.filter(t => t.id !== id);
-      saveTasksToLocal();
-      renderSelectedTasks();
+      saveTasks();
+      renderSelectedDateAgenda();
       renderCalendar();
     }
 
-    function setupEventListeners() {
-      document.getElementById('btnPrevMonth').onclick = () => {
-        currentMonth--;
-        if (currentMonth < 0) {
-          currentMonth = 11;
-          currentYear--;
+    function showSuccessModal(messageText) {
+      const modal = document.getElementById('successToastModal');
+      const msgEl = document.getElementById('successModalMessage');
+      if (msgEl) msgEl.textContent = messageText;
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function openAddTaskModal() {
+      const modal = document.getElementById('addTaskModal');
+      const dateInput = document.getElementById('modalTaskDate');
+      const titleInput = document.getElementById('modalTaskTitle');
+      if (dateInput) dateInput.value = selectedDateStr;
+      if (modal) modal.classList.remove('hidden');
+      if (titleInput) {
+        setTimeout(() => titleInput.focus(), 80);
+      }
+    }
+
+    function closeAddTaskModal() {
+      const modal = document.getElementById('addTaskModal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    // Penapis Paparan (Semua / Cuti Malaysia / Takwim Poli / Takwim KPM)
+    function setViewFilter(filterKey) {
+      activeViewFilter = filterKey;
+
+      document.querySelectorAll('.view-filter-btn').forEach(btn => {
+        const btnFilter = btn.getAttribute('data-filter');
+        if (btnFilter === filterKey) {
+          btn.className = 'view-filter-btn flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-bold transition whitespace-nowrap bg-slate-900 text-white shadow-sm';
+        } else {
+          btn.className = 'view-filter-btn flex-1 sm:flex-none px-3 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap bg-slate-50 text-slate-600 hover:bg-slate-100';
         }
-        renderCalendar();
-      };
+      });
 
-      document.getElementById('btnNextMonth').onclick = () => {
-        currentMonth++;
-        if (currentMonth > 11) {
-          currentMonth = 0;
-          currentYear++;
-        }
-        renderCalendar();
-      };
+      selectDate(selectedDateStr, false);
+    }
 
-      document.getElementById('btnCurrentMonth').onclick = () => {
-        const today = new Date();
-        currentYear = today.getFullYear();
-        currentMonth = today.getMonth();
-        selectDate(formatDate(today.getFullYear(), today.getMonth(), today.getDate()));
-      };
+    function goPrevMonth() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    }
 
-      const quickForm = document.getElementById('quickAddForm');
-      if (quickForm) {
-        quickForm.onsubmit = (e) => {
+    function goNextMonth() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    }
+
+    // Pasang Semua Event Listeners
+    function bindAllEvents() {
+      // Dropdown Pilih Sesi di Header
+      const sessionSelect = document.getElementById('headerSessionSelect');
+      const customSessionModal = document.getElementById('customSessionModal');
+
+      if (sessionSelect) {
+        sessionSelect.addEventListener('change', (e) => {
+          const val = e.target.value;
+          if (val === '__add_custom__') {
+            sessionSelect.value = activeSessionId;
+            if (customSessionModal) customSessionModal.classList.remove('hidden');
+          } else {
+            switchActiveSession(val, true);
+          }
+        });
+      }
+
+      if (customSessionModal) {
+        document.getElementById('btnCloseCustomSessionModal').addEventListener('click', () => customSessionModal.classList.add('hidden'));
+        document.getElementById('btnCancelCustomSession').addEventListener('click', () => customSessionModal.classList.add('hidden'));
+        customSessionModal.addEventListener('click', (e) => {
+          if (e.target === customSessionModal) customSessionModal.classList.add('hidden');
+        });
+      }
+
+      const customSessionForm = document.getElementById('customSessionForm');
+      if (customSessionForm) {
+        customSessionForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const nameVal = document.getElementById('customSessionName').value.trim();
+          const startVal = document.getElementById('customSessionStartDate').value;
+          if (!nameVal || !startVal) return;
+
+          const generated = generateAcademicMondaysFromM0(startVal);
+          const newId = 'custom_' + Date.now();
+          saveCustomSession(newId, {
+            name: nameVal,
+            startDate: generated.startDate,
+            mondays: generated.mondays
+          });
+
+          populateSessionDropdown();
+          customSessionModal.classList.add('hidden');
+          customSessionForm.reset();
+          switchActiveSession(newId, true);
+          showSuccessModal(`Sesi "${nameVal}" berjaya dijana dan diaktifkan!`);
+        });
+      }
+
+      // Navigasi Bulan
+      document.getElementById('btnPrevMonth').addEventListener('click', goPrevMonth);
+      document.getElementById('btnNextMonth').addEventListener('click', goNextMonth);
+      document.getElementById('btnTodayMonth').addEventListener('click', () => {
+        const now = new Date();
+        currentYear = now.getFullYear();
+        currentMonth = now.getMonth();
+        selectDate(formatDateStr(now.getFullYear(), now.getMonth(), now.getDate()), false);
+      });
+
+      // Penapis Paparan
+      document.querySelectorAll('.view-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          setViewFilter(btn.getAttribute('data-filter'));
+        });
+      });
+
+      // Butang Buka Modal Tambah Task
+      document.getElementById('btnHeaderAddTask').addEventListener('click', openAddTaskModal);
+      document.getElementById('btnInlineAddTask').addEventListener('click', openAddTaskModal);
+      document.getElementById('mobileNavFabAdd').addEventListener('click', openAddTaskModal);
+      document.getElementById('btnCloseAddTaskModal').addEventListener('click', closeAddTaskModal);
+      document.getElementById('btnCancelAddTaskModal').addEventListener('click', closeAddTaskModal);
+
+      const addTaskModal = document.getElementById('addTaskModal');
+      if (addTaskModal) {
+        addTaskModal.addEventListener('click', (e) => {
+          if (e.target === addTaskModal) closeAddTaskModal();
+        });
+      }
+
+      // Borang Modal Tambah Task
+      const modalForm = document.getElementById('modalAddTaskForm');
+      if (modalForm) {
+        modalForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          addTask(
+            document.getElementById('modalTaskTitle').value,
+            document.getElementById('modalTaskDate').value,
+            document.getElementById('modalTaskTime').value,
+            document.getElementById('modalTaskCategory').value,
+            document.getElementById('modalTaskNotes').value
+          );
+          closeAddTaskModal();
+          modalForm.reset();
+        });
+      }
+
+      // Borang Pengisian Pantas Desktop
+      const desktopForm = document.getElementById('desktopQuickForm');
+      if (desktopForm) {
+        desktopForm.addEventListener('submit', (e) => {
           e.preventDefault();
           addTask(
             document.getElementById('quickTitle').value,
@@ -732,68 +1229,94 @@
             document.getElementById('quickNotes').value
           );
           document.getElementById('quickTitle').value = '';
+          document.getElementById('quickTime').value = '';
           document.getElementById('quickNotes').value = '';
-        };
+        });
       }
 
-      const addModal = document.getElementById('addTaskModal');
-      document.getElementById('btnOpenAddModal').onclick = () => {
-        document.getElementById('modalTaskDate').value = selectedDateStr;
-        addModal.classList.remove('hidden');
-      };
-      document.getElementById('btnCloseModal').onclick = () => addModal.classList.add('hidden');
-      document.getElementById('btnCancelModal').onclick = () => addModal.classList.add('hidden');
-
-      const modalForm = document.getElementById('modalTaskForm');
-      if (modalForm) {
-        modalForm.onsubmit = (e) => {
-          e.preventDefault();
-          addTask(
-            document.getElementById('modalTaskTitle').value,
-            document.getElementById('modalTaskDate').value,
-            document.getElementById('modalTaskTime').value,
-            document.getElementById('modalTaskCategory').value,
-            document.getElementById('modalTaskNotes').value
-          );
-          addModal.classList.add('hidden');
-          modalForm.reset();
-        };
+      // Tutup Modal Notifikasi Berjaya
+      const successModal = document.getElementById('successToastModal');
+      document.getElementById('btnCloseSuccessModal').addEventListener('click', () => {
+        if (successModal) successModal.classList.add('hidden');
+      });
+      if (successModal) {
+        successModal.addEventListener('click', (e) => {
+          if (e.target === successModal) successModal.classList.add('hidden');
+        });
       }
 
-      const saveModal = document.getElementById('saveSuccessModal');
-      const btnCloseSave = document.getElementById('btnCloseSaveSuccessModal');
-      if (btnCloseSave) {
-        btnCloseSave.onclick = () => saveModal.classList.add('hidden');
-      }
-      if (saveModal) {
-        saveModal.onclick = (e) => {
-          if (e.target === saveModal) saveModal.classList.add('hidden');
-        };
+      // Navigasi Bawah Mobile (Android)
+      const navCal = document.getElementById('mobileNavCalendar');
+      const navAgenda = document.getElementById('mobileNavAgenda');
+
+      if (navCal) {
+        navCal.addEventListener('click', () => {
+          navCal.classList.add('text-indigo-600', 'font-bold');
+          navCal.classList.remove('text-slate-500', 'font-semibold');
+          if (navAgenda) {
+            navAgenda.classList.remove('text-indigo-600', 'font-bold');
+            navAgenda.classList.add('text-slate-500', 'font-semibold');
+          }
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
       }
 
-      const installModal = document.getElementById('installModal');
-      document.getElementById('btnInstallApp').onclick = () => installModal.classList.remove('hidden');
-      document.getElementById('btnCloseInstallModal').onclick = () => installModal.classList.add('hidden');
+      if (navAgenda) {
+        navAgenda.addEventListener('click', () => {
+          navAgenda.classList.add('text-indigo-600', 'font-bold');
+          navAgenda.classList.remove('text-slate-500', 'font-semibold');
+          if (navCal) {
+            navCal.classList.remove('text-indigo-600', 'font-bold');
+            navCal.classList.add('text-slate-500', 'font-semibold');
+          }
+          const detailsEl = document.getElementById('sectionSelectedDetails');
+          if (detailsEl) detailsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+
+      // Gerak Isyarat Leret (Touch Swipe) Kiri/Kanan Tukar Bulan pada Kalendar
+      const swipeArea = document.getElementById('calendarSwipeContainer');
+      if (swipeArea) {
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        swipeArea.addEventListener('touchstart', (e) => {
+          if (e.touches.length === 1) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+          }
+        }, { passive: true });
+
+        swipeArea.addEventListener('touchend', (e) => {
+          if (e.changedTouches.length === 1) {
+            const deltaX = e.changedTouches[0].clientX - touchStartX;
+            const deltaY = e.changedTouches[0].clientY - touchStartY;
+            if (Math.abs(deltaX) > 55 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+              if (deltaX < 0) {
+                goNextMonth();
+              } else {
+                goPrevMonth();
+              }
+            }
+          }
+        }, { passive: true });
+      }
     }
 
-    function initApp() {
-      initTasks();
-      setupEventListeners();
-      // Terus buka sesi takwim PPD bermula November 2026 (M0/M1)
-      currentYear = 2026;
-      currentMonth = 10;
-      selectDate("2026-11-23");
+    // Permulaan Aplikasi
+    function startPoliPlanner() {
+      loadTasks();
+      loadSessionsData();
+      populateSessionDropdown();
+      bindAllEvents();
+      switchActiveSession(activeSessionId, true);
     }
 
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initApp);
+      document.addEventListener('DOMContentLoaded', startPoliPlanner);
     } else {
-      initApp();
+      startPoliPlanner();
     }
   </script>
 </body>
 </html>
-```
-
-Sekarang fail ini telah ditukar kepada `.html`. Sila klik semula butang **`Preview`** di penjuru atas kanan — aplikasi kalendar visual penuh, lengkap dengan takwim PPD, cuti umum, cuti KPM dan borang pengisian akan terus terpapar!
-```
